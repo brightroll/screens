@@ -1,1 +1,6 @@
-Run 'bundle install --local' using Bundler 1.0 or higher.
+Get Bundler 1.1.rc, then install gems locally:
+
+$ gem install bundler -v "> 1.0.50" --pre
+$ bundle install --local --standalone
+
+
