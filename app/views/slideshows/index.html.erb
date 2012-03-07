@@ -1,0 +1,23 @@
+<h1>Listing slideshows</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @slideshows.each do |slideshow| %>
+  <tr>
+    <td><%= slideshow.name %></td>
+    <td><%= link_to 'Show', slideshow %></td>
+    <td><%= link_to 'Edit', edit_slideshow_path(slideshow) %></td>
+    <td><%= link_to 'Destroy', slideshow, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Slideshow', new_slideshow_path %>

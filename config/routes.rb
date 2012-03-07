@@ -1,4 +1,10 @@
 HaxAirplayWall::Application.routes.draw do
+  resources :devices
+
+  resources :slideshows
+
+  resources :slides
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
