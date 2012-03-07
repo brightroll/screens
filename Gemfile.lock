@@ -1,0 +1,16 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    airplay (0.2.6)
+      dnssd
+      net-http-digest_auth
+      net-http-persistent
+    dnssd (2.0)
+    net-http-digest_auth (1.2)
+    net-http-persistent (2.5.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  airplay
