@@ -3,7 +3,7 @@ class CreateSlides < ActiveRecord::Migration
     create_table :slides do |t|
       t.string :name
       t.string :url
-      t.int :display_time
+      t.integer :display_time
       t.string :transition
 
       t.timestamps
