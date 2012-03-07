@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'airplay'
+gem 'airplay', '0.2.7.sodabrew'
 gem 'imgkit'
 gem 'rails', '3.2.2'
 
