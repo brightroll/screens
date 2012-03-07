@@ -5,4 +5,4 @@ require 'vendor/bundle/bundler/setup.rb'
 require 'airplay'
 
 airplay = Airplay::Client.new
-airplay.browse
+puts airplay.browse.inspect
