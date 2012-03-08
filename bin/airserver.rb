@@ -23,14 +23,18 @@ end
 
 # Take arg by name, rather than by object, to prevent instances crossing threads
 def begin_slideshow(node_name)
-  puts "Looking for #{node_name} in the slideshow database..."
   device = Device.find_by_name(node_name)
-  return unless device
-
-  puts "Connecting to device: #{device.inspect}"
+  unless device
+    puts "Device is not in the database"
+    return
+  end
 
   slideshow = device.slideshow
-  puts "Beginning slideshow #{slideshow.name} #{slideshow.inspect}"
+  unless slideshow
+    puts "Device has no slideshow"
+    return
+  end
+  puts "Beginning slideshow #{slideshow.name} on device #{device.name} "
 
   airplay = Airplay::Client.new
   airplay.use node_name
@@ -40,20 +44,17 @@ def begin_slideshow(node_name)
 
   slideshow.slides.each do |slide|
     puts "Displaying slide #{slide.inspect}"
-    if slide.respond_to? :type
-      case slide.type
-      when :image
-        airplay.send_image(slide.url, slide.transition)
-      when :video
-        airplay.send_video(slide.url) # second arg is scrub position
-      when :audio
-        airplay.send_audio(slide.url) # second arg is scrub position
-      when :html
-        airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, :raw => true)
-      end
-    else
-      # Screw it, pretend it's an image
+    case slide.type
+    when :image
       airplay.send_image(slide.url, slide.transition)
+    when :video
+      airplay.send_video(slide.url) # second arg is scrub position
+    when :audio
+      airplay.send_audio(slide.url) # second arg is scrub position
+    else
+      # Anything else gets rendered through WebKit
+      puts "Rendering url #{slide.url}"
+      airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, :raw => true)
     end
 
     sleep slide.display_time
