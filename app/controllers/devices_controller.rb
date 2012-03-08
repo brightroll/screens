@@ -10,6 +10,15 @@ class DevicesController < ApplicationController
     end
   end
 
+  def browse
+    @devices = Airplay::Client.new.browse
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @devices }
+    end
+  end
+
   # GET /devices/1
   # GET /devices/1.json
   def show
@@ -24,7 +33,8 @@ class DevicesController < ApplicationController
   # GET /devices/new
   # GET /devices/new.json
   def new
-    @device = Device.new
+    @device = Device.new :name => params[:name]
+    @slideshows = Slideshow.all
 
     respond_to do |format|
       format.html # new.html.erb

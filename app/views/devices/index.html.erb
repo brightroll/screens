@@ -3,15 +3,15 @@
 <table>
   <tr>
     <th>Name</th>
-    <th></th>
+    <th>Slideshow Name</th>
     <th></th>
     <th></th>
   </tr>
 
 <% @devices.each do |device| %>
   <tr>
-    <td><%= device.name %></td>
-    <td><%= link_to 'Show', device %></td>
+    <td><%= link_to device.name, device %></td>
+    <td><%= device_slideshow_link(device) %></td>
     <td><%= link_to 'Edit', edit_device_path(device) %></td>
     <td><%= link_to 'Destroy', device, confirm: 'Are you sure?', method: :delete %></td>
   </tr>

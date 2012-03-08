@@ -1,5 +1,10 @@
 HaxAirplayWall::Application.routes.draw do
-  resources :devices
+  resources :devices do
+    collection do
+      get 'browse'
+    end
+  end
+
 
   resources :slideshows
 

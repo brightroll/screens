@@ -15,6 +15,14 @@
     <%= f.label :name %><br />
     <%= f.text_field :name %>
   </div>
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.text_field :password %>
+  </div>
+  <div class="field">
+    <%= f.label :slideshow %><br />
+    <%= select :device, :slideshow_id, @slideshows.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

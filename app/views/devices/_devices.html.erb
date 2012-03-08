@@ -1,0 +1,3 @@
+<% @devices.each do |dev| %>
+<%= link_to dev.name, new_device_path(:name => dev.name) %>
+<% end %>
