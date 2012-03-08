@@ -36,6 +36,8 @@ class SlideshowsController < ApplicationController
   # GET /slideshows/1/edit
   def edit
     @slideshow = Slideshow.find(params[:id])
+    @slides = @slideshow.slides
+    @slide = Slide.new
   end
 
   # POST /slideshows
@@ -58,10 +60,11 @@ class SlideshowsController < ApplicationController
   # PUT /slideshows/1.json
   def update
     @slideshow = Slideshow.find(params[:id])
+    @slideshow.slides = params[:existing_slides].map{|es| Slide.find(es)} if params[:existing_slides]
 
     respond_to do |format|
       if @slideshow.update_attributes(params[:slideshow])
-        format.html { redirect_to @slideshow, notice: 'Slideshow was successfully updated.' }
+        format.html { redirect_to (params[:existing_slides] ? edit_slideshow_path(@slideshow) : @slideshow), notice: 'Slideshow was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
