@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120308004255) do
+ActiveRecord::Schema.define(:version => 20120308025034) do
 
   create_table "devices", :force => true do |t|
     t.string   "name"
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(:version => 20120308004255) do
     t.integer  "slideshow_id"
     t.string   "password"
   end
+
+  add_index "devices", ["name"], :name => "index_devices_on_name"
 
   create_table "slides", :force => true do |t|
     t.string   "name"
