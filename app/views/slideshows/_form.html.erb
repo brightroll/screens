@@ -17,8 +17,7 @@
     <%= f.text_field :name %>
   </div>
 
-
-  <% unless @slideshow.new_record?%>
+  <% unless @slideshow.new_record? %>
   <div class="slides">
     <%= f.label 'existing_slides', :for => :existing_slides %>
     <%= select_tag(:existing_slides, options_from_collection_for_select(Slide.find(:all), :id, :name, proc{|slyde| @slideshow.slides.collect(&:id).include?(slyde.id)}), :multiple => true) %>

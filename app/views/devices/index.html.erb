@@ -14,7 +14,7 @@
   <tr>
     <td><%= link_to device.name, device %></td>
     <td><%= device_slideshow_link(device) %></td>
-    <td><%= link_to raw('<i class="icon-edit"></i>'), edit_slide_path(device), :class=>'btn btn-mini', :title=>'Edit' %></td>
+    <td><%= link_to raw('<i class="icon-edit"></i>'), edit_device_path(device), :class=>'btn btn-mini', :title=>'Edit' %></td>
     <td><%= link_to raw('<i class="icon-trash"></i>'), device, confirm: 'Are you sure?', method: :delete, :class=>'btn btn-mini', :title=>'Delete', %></td>
   </tr>
 <% end %>

@@ -1,0 +1,27 @@
+<table class="table table-bordered table-striped">
+  <thead>
+  <tr>
+    <th>Slide Name</th>
+    <th>Url</th>
+    <th>Display time</th>
+    <th>Transition</th>
+    <th width="28px"></th>
+    <th width="28px"></th>
+  </tr>
+  </thead>
+  <tbody>
+<% @slides.each do |slide| %>
+  <tr>
+    <td><%= link_to slide.name, slide %></td>
+    <td><%= slide.url %></td>
+    <td><%= slide.display_time %></td>
+    <td><%= slide.transition %></td>
+    <td><%= link_to raw('<i class="icon-edit"></i>'), edit_slide_path(slide), :class=>'btn btn-mini', :title=>'Edit' %></td>
+    <td><%= link_to raw('<i class="icon-trash"></i>'), slide, confirm: 'Are you sure?', method: :delete, :class=>'btn btn-mini', :title=>'Delete', %></td>
+  </tr>
+<% end unless @slides.nil? %>
+<% if @slides.nil? or @slides.empty? %>
+  <tr><td colspan="7">No slides were found.</td></tr>
+<% end %>
+  </tbody>
+</table>

@@ -13,9 +13,9 @@
   
   <%= hidden_field_tag :slideshow_id, @slideshow.id %>
 
-  <br />
-  <div class="well">
-  <h2>New Slide</h2>
+<br />
+<div class="well">
+<h2>New Slide</h2>
   <div class="field">
     <%= f.label :name %>
     <%= f.text_field :name %>
@@ -29,11 +29,11 @@
     <%= f.text_field :display_time %>
   </div>
   <div class="field">
-    <%= f.label :transition %><br />
+    <%= f.label :transition %>
     <%= select("slide", "transition", Slide.transition_syms.collect { |t, s| [ Slide.transition_names.fetch(s), s ] }) %>
   </div>
   <div class="actions">
     <%= f.submit %>
   </div>
-  </div>
+</div>
 <% end %>

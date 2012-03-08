@@ -25,7 +25,7 @@
     <%= f.text_field :display_time %>
   </div>
   <div class="field">
-    <%= f.label :transition %><br />
+    <%= f.label :transition %>
     <%= select("slide", "transition", Slide.transition_syms.collect { |t, s| [ Slide.transition_names.fetch(s), s ] }) %>
   </div>
   <div class="actions">
