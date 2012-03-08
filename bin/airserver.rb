@@ -38,7 +38,7 @@ def begin_slideshow(node_name)
 
   puts "Connected to device: #{airplay.inspect}"
 
-  while slide = slideshow.next_slide!
+  slideshow.slides.each do |slide|
     case slide.type
     when :image
       airplay.send_image(slide.url, slide.transition)
