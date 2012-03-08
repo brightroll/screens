@@ -11,7 +11,14 @@ class DevicesController < ApplicationController
   end
 
   def browse
-    @devices = Airplay::Client.new.browse
+    @devices = begin
+      Airplay::Client.new.browse
+    rescue Airplay::Client::ServerNotFoundError => e
+      []
+    rescue
+      flash.now[:error] = "An error occurred while retrieving the list of Airplay devices on the network!"
+      []
+    end
 
     respond_to do |format|
       format.html # index.html.erb
