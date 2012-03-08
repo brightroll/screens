@@ -1,6 +1,7 @@
 <h1>Listing slides</h1>
 
-<table>
+<table class="table table-bordered table-striped">
+  <thead>
   <tr>
     <th>Name</th>
     <th>Url</th>
@@ -10,7 +11,8 @@
     <th></th>
     <th></th>
   </tr>
-
+  </thead>
+  <tbody>
 <% @slides.each do |slide| %>
   <tr>
     <td><%= slide.name %></td>
@@ -22,6 +24,10 @@
     <td><%= link_to 'Destroy', slide, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
+<% if @slides.empty? %>
+  <tr><td colspan="7">No slides were found.</td></tr>
+<% end %>
+  </tbody>
 </table>
 
 <br />

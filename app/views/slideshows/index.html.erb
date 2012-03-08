@@ -1,13 +1,15 @@
 <h1>Listing slideshows</h1>
 
-<table>
+<table class="table table-bordered table-striped">
+  <thead>
   <tr>
     <th>Name</th>
     <th></th>
     <th></th>
     <th></th>
   </tr>
-
+  </thead>
+  <tbody>
 <% @slideshows.each do |slideshow| %>
   <tr>
     <td><%= slideshow.name %></td>
@@ -16,6 +18,10 @@
     <td><%= link_to 'Destroy', slideshow, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
+<% if @slideshows.empty? %>
+  <tr><td colspan="4">No slideshows were found.</td></tr>
+<% end %>
+  </tbody>
 </table>
 
 <br />

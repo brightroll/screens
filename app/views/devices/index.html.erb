@@ -1,13 +1,15 @@
 <h1>Listing devices</h1>
 
-<table>
+<table class="table table-bordered table-striped">
+  <thead>
   <tr>
     <th>Name</th>
     <th>Slideshow Name</th>
     <th></th>
     <th></th>
   </tr>
-
+  </thead>
+  <tbody>
 <% @devices.each do |device| %>
   <tr>
     <td><%= link_to device.name, device %></td>
@@ -16,6 +18,10 @@
     <td><%= link_to 'Destroy', device, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
+<% if @devices.empty? %>
+  <tr><td colspan="4">No devices were found.</td></tr>
+<% end %>
+  </tbody>
 </table>
 
 <br />
