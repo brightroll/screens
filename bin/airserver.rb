@@ -2,11 +2,14 @@
 $: << File.expand_path(File.join(File.dirname(__FILE__), ".."))
 require 'vendor/bundle/bundler/setup.rb'
 
+ENV['RAILS_ENV'] = ARGV.first || ENV['RAILS_ENV'] || 'development'
+require File.expand_path('../../config/environment',  __FILE__)
+
 require 'airplay'
 require 'imgkit'
 
 node_threads = {}
-loop_time = 50
+LOOP_TIME = 50
 STANDARD_DISPLAY_TIME = 5
 
 IMGKit.configure do |config|
@@ -18,54 +21,22 @@ IMGKit.configure do |config|
   }
 end
 
-class MockSlide
-  attr_reader :id, :type, :url, :transition, :display_time
-
-  def initialize(args)
-    @type = args[:type]
-    @url = args[:url]
-    @transition = args[:transition]
-    @display_time = args[:display_time]
-  end
-end
-
-class MockSlideshow
-  attr_reader :id, :pos, :name, :slides
-
-  def initialize(args)
-    @name = args[:name]
-    @pos = -1
-    @slides = [
-      MockSlide.new(:type => :html, :display_time => STANDARD_DISPLAY_TIME, :transition => :dissolve, :url => "http://www.brightroll.com"),
-      MockSlide.new(:type => :html, :display_time => STANDARD_DISPLAY_TIME, :transition => :dissolve, :url => "http://www.cnn.com"),
-      MockSlide.new(:type => :image, :display_time => STANDARD_DISPLAY_TIME, :transition => :dissolve, :url => "Monitor.png"),
-      MockSlide.new(:type => :image, :display_time => STANDARD_DISPLAY_TIME, :transition => :dissolve, :url => "Coffee.jpg"),
-    ]
-  end
-
-  def next_slide!
-    @slides[@pos += 1]
-  end
-
-  def next_slide
-    @slides[@pos + 1]
-  end
-
-  def self.find(name)
-    new :name => name
-  end
-end
-
 # Take arg by name, rather than by object, to prevent instances crossing threads
 def begin_slideshow(node_name)
   puts "Looking for #{node_name} in the slideshow database..."
-  slideshow = MockSlideshow.find(node_name)
+  device = Device.find_by_name(node_name)
+  return unless device
+
+  puts "Connecting to device: #{device.inspect}"
+
+  slideshow = device.slideshow
   puts "Beginning slideshow #{slideshow.name} #{slideshow.inspect}"
 
   airplay = Airplay::Client.new
   airplay.use node_name
+  airplay.password device.password
 
-  puts airplay.inspect
+  puts "Connected to device: #{airplay.inspect}"
 
   while slide = slideshow.next_slide!
     case slide.type
@@ -76,7 +47,7 @@ def begin_slideshow(node_name)
     when :audio
       airplay.send_audio(slide.url) # second arg is scrub position
     when :html
-      airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, true)
+      airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, :raw => true)
     end
 
     sleep slide.display_time
@@ -89,6 +60,7 @@ loop do
   # Every $loop_time seconds, look for airplay nodes.
   # If a node is found and there isn't a thread
   # for that node, spin one up!
+  puts "Searching for AirPlay devices"
 
   airplay = Airplay::Client.new
   airplay.browse.each do |node|
@@ -99,6 +71,11 @@ loop do
   end
 
   # Give the threads a moment to spin up and try connecting
+  node_threads.each do |name, thr|
+    thr.run
+  end
+
+  Thread.pass
   sleep 10
 
   node_threads.delete_if do |name, thr|
@@ -109,5 +86,5 @@ loop do
     end
   end
 
-  sleep loop_time
+  sleep LOOP_TIME
 end
