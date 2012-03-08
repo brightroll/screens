@@ -6,3 +6,8 @@ $ bundle install --local --standalone
 Install imgkit's wkhtmltoimage at /usr/local/bin
 
 $ bundle exec rvmsudo imgkit --install-wkhtmltoimage
+
+
+Airplay Icon:
+http://images.apple.com/ipad/features/airplay/images/airplay_icon.jpg
+
