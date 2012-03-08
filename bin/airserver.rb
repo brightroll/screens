@@ -30,8 +30,12 @@ class MockSlideshow
     ]
   end
 
-  def next_slide
+  def next_slide!
     @slides[@pos += 1]
+  end
+
+  def next_slide
+    @slides[@pos + 1]
   end
 
   def self.find(name)
@@ -50,7 +54,7 @@ def begin_slideshow(node_name)
 
   puts airplay.inspect
 
-  while slide = slideshow.next_slide
+  while slide = slideshow.next_slide!
     case slide.type
     when :image
       airplay.send_image(slide.url, slide.transition)
