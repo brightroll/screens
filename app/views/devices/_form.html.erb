@@ -11,16 +11,17 @@
     </div>
   <% end %>
 
+  <br />
   <div class="field">
-    <%= f.label :name %><br />
+    <%= f.label :name %>
     <%= f.text_field :name %>
   </div>
   <div class="field">
-    <%= f.label :password %><br />
+    <%= f.label :password %>
     <%= f.text_field :password %>
   </div>
   <div class="field">
-    <%= f.label :slideshow %><br />
+    <%= f.label :slideshow %>
     <%= select :device, :slideshow_id, Slideshow.all.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %>
   </div>
   <div class="actions">

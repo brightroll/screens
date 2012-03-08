@@ -1,5 +1,7 @@
-<p id="notice"><%= notice %></p>
+<h1>Slide Details</h1>
 
+<br />
+<div class="well">
 <p>
   <b>Name:</b>
   <%= @slide.name %>
@@ -19,7 +21,7 @@
   <b>Transition:</b>
   <%= @slide.transition %>
 </p>
+</div>
 
-
-<%= link_to 'Edit', edit_slide_path(@slide) %> |
-<%= link_to 'Back', slides_path %>
+<%= link_to 'Edit', edit_slide_path(@slide), :class=>'btn' %>
+<%= link_to 'Back', slides_path, :class=>'btn' %>

@@ -1,12 +1,12 @@
-<h1>Listing devices</h1>
+<h1>Listing Devices</h1>
 
 <table class="table table-bordered table-striped">
   <thead>
   <tr>
     <th>Name</th>
     <th>Slideshow Name</th>
-    <th></th>
-    <th></th>
+    <th width="28px"></th>
+    <th width="28px"></th>
   </tr>
   </thead>
   <tbody>
@@ -14,8 +14,8 @@
   <tr>
     <td><%= link_to device.name, device %></td>
     <td><%= device_slideshow_link(device) %></td>
-    <td><%= link_to 'Edit', edit_device_path(device) %></td>
-    <td><%= link_to 'Destroy', device, confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= link_to raw('<i class="icon-edit"></i>'), edit_slide_path(device), :class=>'btn btn-mini', :title=>'Edit' %></td>
+    <td><%= link_to raw('<i class="icon-trash"></i>'), device, confirm: 'Are you sure?', method: :delete, :class=>'btn btn-mini', :title=>'Delete', %></td>
   </tr>
 <% end %>
 <% if @devices.empty? %>
@@ -26,5 +26,5 @@
 
 <br />
 
-<%= link_to 'New Device', new_device_path %>
-<%= link_to 'Browse Network', '/devices/browse' %>
+<%= link_to 'New Device', new_device_path, :class=>'btn' %>
+<%= link_to 'Browse Network', '/devices/browse', :class=>'btn' %>

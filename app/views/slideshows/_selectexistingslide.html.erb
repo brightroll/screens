@@ -1,25 +1,13 @@
 <%= form_for(@slideshow) do |f| %>
-  <% if @slideshow.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@slideshow.errors.count, "error") %> prohibited this slideshow from being saved:</h2>
-
-      <ul>
-      <% @slideshow.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="field">
-    <%= f.label :name %><br />
+    <%= f.label :name %>
     <%= f.text_field :name %>
   </div>
   
   <div class="slides">
+    <%= f.label 'existing_slides', :for => :existing_slides %>
     <%= select_tag(:existing_slides, options_from_collection_for_select(Slide.find(:all), :id, :name, proc{|slyde| @slideshow.slides.collect(&:id).include?(slyde.id)}), :multiple => true) %>
-    
-  </div>  
+  </div>
   
   <div class="actions">
     <%= f.submit %>

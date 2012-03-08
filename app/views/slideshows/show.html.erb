@@ -1,10 +1,13 @@
-<p id="notice"><%= notice %></p>
+<h1>Slideshow Details</h1>
 
+<br />
+<div class="well">
 <p>
   <b>Name:</b>
   <%= @slideshow.name %>
 </p>
+</div>
 
 
-<%= link_to 'Edit', edit_slideshow_path(@slideshow) %> |
-<%= link_to 'Back', slideshows_path %>
+<%= link_to 'Edit', edit_slideshow_path(@slideshow), :class=>'btn' %>
+<%= link_to 'Back', slideshows_path, :class=>'btn' %>

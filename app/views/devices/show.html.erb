@@ -1,10 +1,12 @@
-<p id="notice"><%= notice %></p>
+<h1>Device Details</h1>
 
+<br />
+<div class="well">
 <p>
   <b>Name:</b>
   <%= @device.name %>
 </p>
+</div>
 
-
-<%= link_to 'Edit', edit_device_path(@device) %> |
-<%= link_to 'Back', devices_path %>
+<%= link_to 'Edit', edit_device_path(@device), :class=>'btn' %>
+<%= link_to 'Back', devices_path, :class=>'btn' %>

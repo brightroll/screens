@@ -11,31 +11,24 @@
     </div>
   <% end %>
 
+  <br />
   <div class="field">
-    <%= f.label :name %><br />
+    <%= f.label :name %>
     <%= f.text_field :name %>
   </div>
-  
-  
-  <table>
-    <tr>
-      <th>Name</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
 
-  <% if @slides %>
-  <% @slides.each do |slide| %>
-    <tr>
-      <td><%= slide.name %></td>
-      <td><%= link_to 'Show', slide %></td>
-      <td><%= link_to 'Edit', edit_slide_path(slide) %></td>
-<!--      <td><%= link_to 'Destroy', slide, confirm: 'Are you sure?', method: :delete %></td> -->
-    </tr>
+
+  <% unless @slideshow.new_record?%>
+  <div class="slides">
+    <%= f.label 'existing_slides', :for => :existing_slides %>
+    <%= select_tag(:existing_slides, options_from_collection_for_select(Slide.find(:all), :id, :name, proc{|slyde| @slideshow.slides.collect(&:id).include?(slyde.id)}), :multiple => true) %>
+  </div>
+
+  <%   unless @slides.empty?%>
+  <br /><br />
+  <%=  render 'slide_list' %>
+  <%   end%>
   <% end %>
-  <% end %>
-  </table>
 
   <div class="actions">
     <%= f.submit %>
