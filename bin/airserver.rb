@@ -8,7 +8,9 @@ require File.expand_path('../../config/environment',  __FILE__)
 require 'airplay'
 require 'imgkit'
 
-node_threads = {}
+am_parent = 1
+my_node = ""
+node_pids = {}
 LOOP_TIME = 50
 STANDARD_DISPLAY_TIME = 5
 
@@ -21,7 +23,8 @@ IMGKit.configure do |config|
   }
 end
 
-# Take arg by name, rather than by object, to prevent instances crossing threads
+
+# Take arg by name, rather than by object, to prevent instances crossing pids
 def begin_slideshow(node_name)
   device = Device.find_by_name(node_name)
   unless device
@@ -63,32 +66,43 @@ def begin_slideshow(node_name)
   puts "Ending slideshow for #{node_name}"
 end
 
+# Special function called by Kernel::at_exit
+def at_exit
+  if am_parent
+    puts "Cleaning up children: #{node_pids.inspect}"
+    node_pids.each do |node, pid|
+      Process.kill("TERM", pid)
+      Process.wait
+    end
+  else
+    puts "Child exiting for device: #{my_node}."
+  end
+end
+
 loop do
   # Every $loop_time seconds, look for airplay nodes.
-  # If a node is found and there isn't a thread
+  # If a node is found and there isn't a child process
   # for that node, spin one up!
   puts "Searching for AirPlay devices"
 
   airplay = Airplay::Client.new
   airplay.browse.each do |node|
     puts node.inspect
-    unless node_threads.has_key? node.name
-      node_threads[node.name] = Thread.new { begin_slideshow node.name }
+    unless node_pids.has_key? node.name
+      node_pids[node.name] = Process.fork do
+        am_parent = 0
+        my_node = node.name
+        begin_slideshow node.name
+      end
     end
   end
 
-  # Give the threads a moment to spin up and try connecting
-  node_threads.each do |name, thr|
-    thr.run
-  end
-
-  Thread.pass
+  # Give the processes a moment to spin up and try connecting
   sleep 10
 
-  node_threads.delete_if do |name, thr|
-    unless thr.alive?
-      puts "Reaping thread for node #{name}"
-      thr.join(0.50) # shouldn't block, but just in case, timeout.
+  node_pids.delete_if do |name, pid|
+    unless Process.waitpid(pid, Process::WNOHANG)
+      puts "Reaping child for node #{name}"
       true
     end
   end
