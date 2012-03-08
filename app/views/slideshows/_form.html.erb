@@ -15,6 +15,26 @@
     <%= f.label :name %><br />
     <%= f.text_field :name %>
   </div>
+  
+  
+  <table>
+    <tr>
+      <th>Name</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+
+  <% @slides.each do |slide| %>
+    <tr>
+      <td><%= slide.name %></td>
+      <td><%= link_to 'Show', slide %></td>
+      <td><%= link_to 'Edit', edit_slide_path(slide) %></td>
+<!--      <td><%= link_to 'Destroy', slide, confirm: 'Are you sure?', method: :delete %></td> -->
+    </tr>
+  <% end %>
+  </table>
+  
   <div class="actions">
     <%= f.submit %>
   </div>
