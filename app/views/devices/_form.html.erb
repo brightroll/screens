@@ -21,7 +21,7 @@
   </div>
   <div class="field">
     <%= f.label :slideshow %><br />
-    <%= select :device, :slideshow_id, @slideshows.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %>
+    <%= select :device, :slideshow_id, Slideshow.all.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %>
   </div>
   <div class="actions">
     <%= f.submit %>

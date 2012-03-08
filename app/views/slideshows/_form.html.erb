@@ -25,6 +25,7 @@
       <th></th>
     </tr>
 
+  <% if @slides %>
   <% @slides.each do |slide| %>
     <tr>
       <td><%= slide.name %></td>
@@ -33,8 +34,9 @@
 <!--      <td><%= link_to 'Destroy', slide, confirm: 'Are you sure?', method: :delete %></td> -->
     </tr>
   <% end %>
+  <% end %>
   </table>
-  
+
   <div class="actions">
     <%= f.submit %>
   </div>

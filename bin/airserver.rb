@@ -39,15 +39,21 @@ def begin_slideshow(node_name)
   puts "Connected to device: #{airplay.inspect}"
 
   slideshow.slides.each do |slide|
-    case slide.type
-    when :image
+    puts "Displaying slide #{slide.inspect}"
+    if slide.respond_to? :type
+      case slide.type
+      when :image
+        airplay.send_image(slide.url, slide.transition)
+      when :video
+        airplay.send_video(slide.url) # second arg is scrub position
+      when :audio
+        airplay.send_audio(slide.url) # second arg is scrub position
+      when :html
+        airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, :raw => true)
+      end
+    else
+      # Screw it, pretend it's an image
       airplay.send_image(slide.url, slide.transition)
-    when :video
-      airplay.send_video(slide.url) # second arg is scrub position
-    when :audio
-      airplay.send_audio(slide.url) # second arg is scrub position
-    when :html
-      airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, :raw => true)
     end
 
     sleep slide.display_time

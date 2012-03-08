@@ -34,7 +34,6 @@ class DevicesController < ApplicationController
   # GET /devices/new.json
   def new
     @device = Device.new :name => params[:name]
-    @slideshows = Slideshow.all
 
     respond_to do |format|
       format.html # new.html.erb

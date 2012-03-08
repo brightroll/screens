@@ -25,7 +25,7 @@
   </div>
   <div class="field">
     <%= f.label :transition %><br />
-    <%= f.text_field :transition %>
+    <%= select("slide", "transition", Slide.transitions.collect { |t, s| [ t, t ] }) %>
   </div>
   <div class="actions">
     <%= f.submit %>
