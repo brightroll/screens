@@ -19,7 +19,7 @@
     <td><%= slide.display_time %></td>
     <td><%= slide.transition %></td>
     <td><%= link_to raw('<i class="icon-edit"></i>'), edit_slide_path(slide), :class=>'btn btn-mini', :title=>'Edit' %></td>
-    <td><%= link_to raw('<i class="icon-trash"></i>'), slide, confirm: 'Are you sure?', method: :delete, :class=>'btn btn-mini', :title=>'Delete', %></td>
+    <td><%= link_to raw('<i class="icon-trash"></i>'), slide, confirm: 'Are you sure?', method: :delete, :class=>'btn btn-mini', :title=>'Delete' %></td>
   </tr>
 <% end unless @slides.nil? %>
 <% if @slides.nil? or @slides.empty? %>
