@@ -3,9 +3,20 @@ $: << File.expand_path(File.join(File.dirname(__FILE__), ".."))
 require 'vendor/bundle/bundler/setup.rb'
 
 require 'airplay'
+require 'imgkit'
 
 node_threads = {}
 loop_time = 50
+STANDARD_DISPLAY_TIME = 5
+
+IMGKit.configure do |config|
+  config.default_options = {
+    :format => :png,
+    :height => 1080,
+    :width => 1920,
+    :quality => 10
+  }
+end
 
 class MockSlide
   attr_reader :id, :type, :url, :transition, :display_time
@@ -25,8 +36,10 @@ class MockSlideshow
     @name = args[:name]
     @pos = -1
     @slides = [
-      MockSlide.new(:type => :image, :display_time => 5, :transition => :dissolve, :url => "Monitor.png"),
-      MockSlide.new(:type => :image, :display_time => 5, :transition => :dissolve, :url => "Coffee.jpg"),
+      MockSlide.new(:type => :html, :display_time => STANDARD_DISPLAY_TIME, :transition => :dissolve, :url => "http://www.brightroll.com"),
+      MockSlide.new(:type => :html, :display_time => STANDARD_DISPLAY_TIME, :transition => :dissolve, :url => "http://www.cnn.com"),
+      MockSlide.new(:type => :image, :display_time => STANDARD_DISPLAY_TIME, :transition => :dissolve, :url => "Monitor.png"),
+      MockSlide.new(:type => :image, :display_time => STANDARD_DISPLAY_TIME, :transition => :dissolve, :url => "Coffee.jpg"),
     ]
   end
 
@@ -62,6 +75,8 @@ def begin_slideshow(node_name)
       airplay.send_video(slide.url) # second arg is scrub position
     when :audio
       airplay.send_audio(slide.url) # second arg is scrub position
+    when :html
+      airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, true)
     end
 
     sleep slide.display_time
