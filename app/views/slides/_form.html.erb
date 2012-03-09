@@ -11,6 +11,10 @@
     </div>
   <% end %>
 
+  <% if @slideshow %>
+  <%= hidden_field_tag :slideshow_id, @slideshow.id %>
+  <% end %>
+
   <br />
   <div class="field">
     <%= f.label :name %>

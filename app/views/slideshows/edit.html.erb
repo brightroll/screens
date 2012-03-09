@@ -1,8 +1,11 @@
 <h1>Editing Slideshow</h1>
 
 <%= render 'form' %>
-<%= render 'addnewslide'%>
-<%###= render 'selectexistingslide'%>
+
+<div class="well">
+<h2>New Slide</h2>
+<%= render :partial => '/slides/form', :slideshow => @slideshow %>
+</div>
 
 <%= link_to 'Show', @slideshow, :class=>'btn' %>
 <%= link_to 'Back', slideshows_path, :class=>'btn' %>
