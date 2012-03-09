@@ -2,10 +2,34 @@
 
 <%= render 'form' %>
 
-<div class="well">
-<h2>New Slide</h2>
-<%= render :partial => '/slides/form', :slideshow => @slideshow %>
+<script>
+$('#slideshow-tabs').tab('show')
+</script>
+
+<div id="showshow-tabs" class="tabbable">
+  <ul class="nav nav-tabs">
+    <li><a href="#tabs-1" data-toggle="tab">Add new slide</a></li>
+    <li><a href="#tabs-2" data-toggle="tab">Add existing slide</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane" id="tabs-1">
+      <div class="well">
+      <%= render :partial => '/slides/form', :slideshow => @slideshow %>
+      </div>
+    </div>
+    <div class="tab-pane" id="tabs-2">
+      <div class="slides well">
+        <%= label 'existing_slides', :for => :existing_slides %>
+        <%= select_tag(:existing_slides, options_from_collection_for_select(Slide.find(:all), :id, :name, proc{|slyde| @slideshow.slides.collect(&:id).include?(slyde.id)}), :multiple => true) %>
+      </div>
+    </div>
+  </div>
 </div>
+
+<% unless @slides.empty?%>
+<br /><br />
+<%= render 'slide_list' %>
+<% end %>
 
 <%= link_to 'Show', @slideshow, :class=>'btn' %>
 <%= link_to 'Back', slideshows_path, :class=>'btn' %>
