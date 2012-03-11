@@ -7,7 +7,7 @@
   <tbody>
 <% @devices.each do |dev| %>
   <tr>
-    <td><%= link_to dev.name, new_device_path(:name => dev.name) %></td>
+    <td><%= browsed_device_link(dev, @saved_device_hash) %></td>
   </tr>
 <% end %>
 <% if @devices.empty? %>
