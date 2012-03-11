@@ -17,9 +17,9 @@
     <td><%= slide.display_time %></td>
     <td><%= slide.type %></td>
     <td><%= slide.transition %></td>
-    <td><%= link_to raw('<i class="icon-edit"></i>'), edit_slide_path(slide), :class=>'btn btn-mini', :title=>'Edit' %></td>
-    <td><%= link_to raw('<i class="icon-remove"></i>'), slide, method: :remove, :class=>'btn btn-mini', :title=>'Remove' %></td>
-    <td><%= link_to raw('<i class="icon-move"></i>'), slide, method: :show, :class=>'btn btn-mini', :title=>'Drag to change order' %></td>
+    <td class="col-edit"><%= link_to raw('<i class="icon-edit"></i>'), edit_slide_path(slide), :class=>'btn btn-mini', :title=>'Edit' %></td>
+    <td class="col-remove"><%= link_to raw('<i class="icon-remove"></i>'), slide, method: :remove, :class=>'btn btn-mini', :title=>'Remove' %></td>
+    <td class="col-move"><%= link_to raw('<i class="icon-move"></i>'), slide, method: :show, :class=>'btn btn-mini', :title=>'Drag to change order' %></td>
   </tr>
 <% end unless @slides.nil? %>
 <% if @slides.nil? or @slides.empty? %>

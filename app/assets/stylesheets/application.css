@@ -13,3 +13,11 @@
  *= require_self
  *= require_tree .
 */
+.margin_right_8{margin-right: 8px;}
+
+/* Table Customizations */
+.table th.col-delete, .table td.col-delete,
+.table th.col-edit,   .table td.col-edit,
+.table th.col-move,   .table td.col-move,
+.table th.col-remove, .table td.col-remove
+{width: 28px;}
