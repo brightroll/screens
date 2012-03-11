@@ -20,7 +20,7 @@ $('#slideshow-tabs').tab('show')
     <div class="tab-pane" id="tabs-2">
       <div class="slides well">
         <%= form_for(@slideshow) do |f| %>
-          <%= label 'existing_slides', :for => :existing_slides %>
+          <%= label 'existing_slides', 'Existing Slides', :for => :existing_slides %>
           <%= select_tag(:existing_slides, options_from_collection_for_select(Slide.find(:all), :id, :name, proc{|slyde| @slideshow.slides.collect(&:id).include?(slyde.id)}), :multiple => true) %>
           <div class="actions">
             <%= f.submit :value=>'Update Slides in Slideshow'%>
