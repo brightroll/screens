@@ -19,8 +19,13 @@ $('#slideshow-tabs').tab('show')
     </div>
     <div class="tab-pane" id="tabs-2">
       <div class="slides well">
-        <%= label 'existing_slides', :for => :existing_slides %>
-        <%= select_tag(:existing_slides, options_from_collection_for_select(Slide.find(:all), :id, :name, proc{|slyde| @slideshow.slides.collect(&:id).include?(slyde.id)}), :multiple => true) %>
+        <%= form_for(@slideshow) do |f| %>
+          <%= label 'existing_slides', :for => :existing_slides %>
+          <%= select_tag(:existing_slides, options_from_collection_for_select(Slide.find(:all), :id, :name, proc{|slyde| @slideshow.slides.collect(&:id).include?(slyde.id)}), :multiple => true) %>
+          <div class="actions">
+            <%= f.submit :value=>'Update Slides in Slideshow'%>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
@@ -28,6 +33,7 @@ $('#slideshow-tabs').tab('show')
 
 <% unless @slides.empty?%>
 <br /><br />
+<h3>Slides in this Slideshow</h3>
 <%= render 'slide_list' %>
 <% end %>
 
