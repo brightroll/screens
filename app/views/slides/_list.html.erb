@@ -1,0 +1,33 @@
+<table class="table table-bordered table-striped">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Source URL</th>
+    <th>Display time (seconds)</th>
+    <th>Type</th>
+    <th>Transition</th>
+    <% if action_links %>
+    <th></th>
+    <% end %>
+  </tr>
+  </thead>
+  <tbody>
+<% if !slides.nil? and !slides.empty? %>
+<%   slides.each do |slide| %>
+  <tr>
+    <td><%= link_to slide.name, slide %></td>
+    <td><%= slide.url %></td>
+    <td><%= slide.display_time %></td>
+    <td><%= slide.type %></td>
+    <td><%= slide.transition %></td>
+
+    <% if action_links %>
+    <td style="white-space: nowrap;"> <%= action_links.call(slide) %></td>
+    <% end %>
+  </tr>
+<%   end %>
+<% else %>
+  <tr><td colspan="7">No slides found.</td></tr>
+<% end %>
+  </tbody>
+</table>

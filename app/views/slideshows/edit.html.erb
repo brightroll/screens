@@ -14,18 +14,12 @@ $('#slideshow-tabs').tab('show')
   <div class="tab-content">
     <div class="tab-pane" id="tabs-1">
       <div class="well">
-      <%= render :partial => '/slides/form', :slideshow => @slideshow %>
+      <%= render :partial => '/slides/form', :locals => {:slides => Slide.all} %>
       </div>
     </div>
     <div class="tab-pane" id="tabs-2">
       <div class="slides well">
-        <%= form_for(@slideshow) do |f| %>
-          <%= label 'existing_slides', 'Existing Slides', :for => :existing_slides %>
-          <%= select_tag(:existing_slides, options_from_collection_for_select(Slide.find(:all), :id, :name, proc{|slyde| @slideshow.slides.collect(&:id).include?(slyde.id)}), :multiple => true) %>
-          <div class="actions">
-            <%= f.submit :value=>'Update Slides in Slideshow'%>
-          </div>
-        <% end %>
+        <%= render :partial => '/slides/list', :locals => {:slides => Slide.all, :action_links => false} %>
       </div>
     </div>
   </div>
@@ -33,8 +27,11 @@ $('#slideshow-tabs').tab('show')
 
 <% unless @slides.empty?%>
 <br /><br />
-<h3>Slides in this Slideshow</h3>
-<%= render 'slide_list' %>
+<%= render :partial => '/slides/list', :locals => {:slides => @slideshow.slides, :action_links => lambda { |slide|
+      link_to(raw('<i class="icon-edit"></i>'), edit_slide_path(slide), :class=>'btn btn-mini', :title=>'Edit') + \
+      link_to(raw('<i class="icon-remove"></i>'), slide, method: :remove, :class=>'btn btn-mini', :title=>'Remove') + \
+      link_to(raw('<i class="icon-move"></i>'), slide, method: :show, :class=>'btn btn-mini', :title=>'Drag to change order')
+    } } %>
 <% end %>
 
 <%= link_to 'Show', @slideshow, :class=>'btn' %>
