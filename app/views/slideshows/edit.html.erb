@@ -19,7 +19,9 @@ $('#slideshow-tabs').tab('show')
     </div>
     <div class="tab-pane" id="tabs-2">
       <div class="slides well">
-        <%= render :partial => '/slides/list', :locals => {:slides => Slide.all, :action_links => false} %>
+        <%= render :partial => '/slides/list', :locals => {:slides => Slide.all, :action_links => lambda { |slide|
+              link_to(raw('<i class="icon-plus"></i>'), @slideshow, method: :add, :class=>'btn btn-mini', :title=>'Add to slideshow')
+            } } %>
       </div>
     </div>
   </div>
@@ -28,9 +30,8 @@ $('#slideshow-tabs').tab('show')
 <% unless @slides.empty?%>
 <br /><br />
 <%= render :partial => '/slides/list', :locals => {:slides => @slideshow.slides, :action_links => lambda { |slide|
-      link_to(raw('<i class="icon-edit"></i>'), edit_slide_path(slide), :class=>'btn btn-mini', :title=>'Edit') + \
-      link_to(raw('<i class="icon-remove"></i>'), slide, method: :remove, :class=>'btn btn-mini', :title=>'Remove') + \
-      link_to(raw('<i class="icon-move"></i>'), slide, method: :show, :class=>'btn btn-mini', :title=>'Drag to change order')
+      link_to(raw('<i class="icon-edit"></i>'), edit_slide_path(slide), :class=>'btn btn-mini', :title=>'Edit slide') + \
+      link_to(raw('<i class="icon-remove"></i>'), @slideshow, method: :remove, :class=>'btn btn-mini', :title=>'Remove from slideshow')
     } } %>
 <% end %>
 
