@@ -22,11 +22,12 @@ class Slide < ActiveRecord::Base
   # Infer media type from url
   def type
     begin
-      t = MIME::Types.type_for(url).first.media_type
-      self.class.media_types.fetch(t, :none)
+      # Prioritized order of media types
+      types = MIME::Types.type_for(url).collect { |t| t.media_type }
+      ['video', 'audio', 'image'].each { |t| return self.class.media_types.fetch(t) if types.include? t }
     rescue
-      :none
     end
+    :none
   end
 
   # Media types that are natively supported by AirPlay
