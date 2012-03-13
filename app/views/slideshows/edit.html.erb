@@ -4,32 +4,56 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  $('#slideshow-tabs').tab('show')
-
   $('.remove_slide').bind('ajax:success', function() {
     $(this).closest('tr').fadeOut();
+  });
+
+  $('#add-new').on('hidden', function () {
+    window.location.reload();
+  });
+
+  $('#add-existing').on('hidden', function () {
+    window.location.reload();
+  });
+
+  $('.modal-close').bind('click', function() {
+    $(this).closest('div.modal').modal('hide')
   });
 });
 </script>
 
-<div id="showshow-tabs" class="tabbable">
-  <ul class="nav nav-tabs">
-    <li><a href="#tabs-1" data-toggle="tab">Add new slide</a></li>
-    <li><a href="#tabs-2" data-toggle="tab">Add existing slide</a></li>
-  </ul>
-  <div class="tab-content">
-    <div class="tab-pane" id="tabs-1">
+<a class="btn" data-toggle="modal" href="#add-new">Add new slide</a>
+<a class="btn" data-toggle="modal" href="#add-existing">Add existing slide</a>
+
+<div class="modal hide fade" id="add-new">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Create new slide</h3>
+  </div>
+  <div class="modal-body">
       <div class="well">
       <%= render :partial => '/slides/form' %>
       </div>
-    </div>
-    <div class="tab-pane" id="tabs-2">
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary modal-close">Done</a>
+  </div>
+</div>
+
+<div class="modal hide fade" id="add-existing" style="width: 800px; left: 40%;">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Choose a slide</h3>
+  </div>
+  <div class="modal-body">
       <div class="slides well">
         <%= render :partial => '/slides/list', :locals => {:slides => Slide.all, :action_links => lambda { |slide|
               link_to(raw('<i class="icon-plus"></i>'), url_for(:action => :update, :id => @slideshow.id, :add_slides => [ slide.id ]), method: :put, :class=>'btn btn-mini', :title=>'Add to slideshow', :remote => true)
             } } %>
       </div>
-    </div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary modal-close">Done</a>
   </div>
 </div>
 
