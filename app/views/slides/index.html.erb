@@ -2,9 +2,8 @@
 
 <%= render :partial => 'list', :locals => {:slides => @slides, :action_links => lambda { |slide|
       link_to(raw('<i class="icon-edit"></i>'), edit_slide_path(slide), :class=>'btn btn-mini', :title=>'Edit') + \
-      link_to(raw('<i class="icon-trash"></i>'), slide, confirm: 'Are you sure?', method: :delete, :class=>'btn btn-mini', :title=>'Delete')
+      link_to(raw('<i class="icon-trash"></i>'), slide, confirm: "Delete slide #{slide.name}?", method: :delete, :class=>'btn btn-mini', :title=>'Delete')
     } } %>
 
 <br />
-
 <%= link_to 'New Slide', new_slide_path, :class=>'btn' %>

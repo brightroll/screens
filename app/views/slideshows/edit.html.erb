@@ -2,8 +2,14 @@
 
 <%= render 'form' %>
 
-<script>
-$('#slideshow-tabs').tab('show')
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#slideshow-tabs').tab('show')
+
+  $('.remove_slide').bind('ajax:success', function() {
+    $(this).closest('tr').fadeOut();
+  });
+});
 </script>
 
 <div id="showshow-tabs" class="tabbable">
@@ -14,13 +20,13 @@ $('#slideshow-tabs').tab('show')
   <div class="tab-content">
     <div class="tab-pane" id="tabs-1">
       <div class="well">
-      <%= render :partial => '/slides/form', :locals => {:slides => Slide.all} %>
+      <%= render :partial => '/slides/form' %>
       </div>
     </div>
     <div class="tab-pane" id="tabs-2">
       <div class="slides well">
         <%= render :partial => '/slides/list', :locals => {:slides => Slide.all, :action_links => lambda { |slide|
-              link_to(raw('<i class="icon-plus"></i>'), @slideshow, method: :add, :class=>'btn btn-mini', :title=>'Add to slideshow')
+              link_to(raw('<i class="icon-plus"></i>'), url_for(:action => :update, :id => @slideshow.id, :add_slides => [ slide.id ]), method: :put, :class=>'btn btn-mini', :title=>'Add to slideshow', :remote => true)
             } } %>
       </div>
     </div>
@@ -29,9 +35,9 @@ $('#slideshow-tabs').tab('show')
 
 <% unless @slides.empty?%>
 <br /><br />
-<%= render :partial => '/slides/list', :locals => {:slides => @slideshow.slides, :action_links => lambda { |slide|
+<%= render :partial => '/slides/list', :locals => {:slides => @slides, :action_links => lambda { |slide|
       link_to(raw('<i class="icon-edit"></i>'), edit_slide_path(slide), :class=>'btn btn-mini', :title=>'Edit slide') + \
-      link_to(raw('<i class="icon-remove"></i>'), @slideshow, method: :remove, :class=>'btn btn-mini', :title=>'Remove from slideshow')
+      link_to(raw('<i class="icon-remove"></i>'), url_for(:action => :update, :id => @slideshow.id, :del_slides => [ slide.id ]), method: :put, :class=>'btn btn-mini remove_slide', :title=>'Remove from slideshow', :remote => true)
     } } %>
 <% end %>
 

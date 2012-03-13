@@ -60,13 +60,26 @@ class SlideshowsController < ApplicationController
   # PUT /slideshows/1.json
   def update
     @slideshow = Slideshow.find(params[:id])
-    @slideshow.slides = params[:existing_slides].map{|es| Slide.find(es)} if params[:existing_slides]
+
+    # Old method with a single multi-select box
+    # @slideshow.slides = params[:existing_slides].map{|es| Slide.find(es)} if params[:existing_slides]
+
+    @slideshow.slides += params[:add_slides].map{ |es| Slide.find(es) } if params[:add_slides]
+
+    # Doesn't work: @slideshow.slides -= slide_id
+    if params[:del_slides]
+      params[:del_slides].each do |slide_id|
+        @slideshow.slideshow_slides.where(:slide_id => slide_id).delete_all
+      end
+    end
 
     respond_to do |format|
       if @slideshow.update_attributes(params[:slideshow])
+        format.js { render :nothing => true }
         format.html { redirect_to (params[:existing_slides] ? edit_slideshow_path(@slideshow) : @slideshow), notice: 'Slideshow was successfully updated.' }
         format.json { head :no_content }
       else
+        format.js { render :nothing => true }
         format.html { render action: "edit" }
         format.json { render json: @slideshow.errors, status: :unprocessable_entity }
       end
