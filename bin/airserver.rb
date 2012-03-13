@@ -101,8 +101,17 @@ loop do
   sleep 10
 
   node_pids.delete_if do |name, pid|
-    unless Process.waitpid(pid, Process::WNOHANG)
-      puts "Reaping child for node #{name}"
+    begin
+      unless Process.waitpid(pid, Process::WNOHANG)
+        puts "Reaping child for node #{name}"
+        true
+      end
+    rescue Errno::ESRCH # No such process
+      true
+    rescue Errno::ECHILD # Process already exited
+      true
+    rescue # Anything else
+      puts "WARN: Possibly lost track of child pid #{pid}"
       true
     end
   end
