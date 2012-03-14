@@ -23,18 +23,29 @@ IMGKit.configure do |config|
   }
 end
 
+def sleep_while_playing(player)
+  for r in 1..5
+    scrub = player.scrub
+    if scrub and scrub.fetch('duration', 0) > 0
+      puts "Got scrub on try #{r}"
+      sleep scrub['duration']
+      return
+    end
+    sleep 1
+  end
+end
 
 # Take arg by name, rather than by object, to prevent instances crossing pids
-def begin_slideshow(node_name)
+def loop_slideshow(node_name)
   device = Device.find_by_name(node_name)
   unless device
-    puts "Device is not in the database"
+    puts "Device #{node_name} is not in the database"
     return
   end
 
   slideshow = device.slideshow
   unless slideshow
-    puts "Device has no slideshow"
+    puts "Device #{node_name} has no slideshow"
     return
   end
   puts "Beginning slideshow #{slideshow.name} on device #{device.name} "
@@ -45,22 +56,34 @@ def begin_slideshow(node_name)
 
   puts "Connected to device: #{airplay.inspect}"
 
-  slideshow.slides.each do |slide|
-    puts "Displaying slide #{slide.inspect}"
-    case slide.type
-    when :image
-      airplay.send_image(slide.url, slide.transition)
-    when :video
-      airplay.send_video(slide.url) # second arg is scrub position
-    when :audio
-      airplay.send_audio(slide.url) # second arg is scrub position
-    else
-      # Anything else gets rendered through WebKit
-      puts "Rendering url #{slide.url}"
-      airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, :raw => true)
+  loop do
+    slideshow.slides.each do |slide|
+      # puts "Displaying slide #{slide.inspect}"
+      case slide.type
+      when :video
+        puts "Sending video #{slide.url}"
+        player = airplay.send_video(slide.url) # second arg is scrub position
+        sleep_while_playing player
+      when :audio
+        puts "Sending audio #{slide.url}"
+        player = airplay.send_audio(slide.url) # second arg is scrub position
+        sleep_while_playing player
+      when :image
+        puts "Sending image #{slide.url}"
+        airplay.send_image(slide.url, slide.transition)
+        # sleep while the image is on the screen
+        sleep slide.display_time
+      else
+        # Anything else gets rendered through WebKit
+        puts "Rendering url #{slide.url}"
+        airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, :raw => true)
+        # sleep while the image is on the screen
+        sleep slide.display_time
+      end
     end
 
-    sleep slide.display_time
+    # Reload the slideshow to pick up any changes
+    slideshow = device.slideshow
   end
 
   puts "Ending slideshow for #{node_name}"
@@ -92,8 +115,10 @@ loop do
       node_pids[node.name] = Process.fork do
         am_parent = 0
         my_node = node.name
-        begin_slideshow node.name
+        loop_slideshow node.name
       end
+    else
+      puts "Slideshow already running on device #{node.name}"
     end
   end
 
@@ -102,8 +127,10 @@ loop do
 
   node_pids.delete_if do |name, pid|
     begin
-      unless Process.waitpid(pid, Process::WNOHANG)
-        puts "Reaping child for node #{name}"
+      wpid, status = Process.waitpid2(pid, Process::WNOHANG)
+
+      if wpid
+        puts "Reaping child for node #{name}: #{status.to_i} #{status.exitstatus}"
         true
       end
     rescue Errno::ESRCH # No such process
