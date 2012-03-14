@@ -6,6 +6,11 @@ class AuthController < ApplicationController
     google_apps_authenticate ::Rails.application.config.googleapps_auth_domain, 'finish', [:email]
   end
 
+  def logout
+    reset_session
+    redirect_to :root
+  end
+
   def finish
     response = google_apps_handle_auth
     if response.failed? or response.canceled?

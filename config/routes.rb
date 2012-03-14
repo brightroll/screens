@@ -15,6 +15,7 @@ HaxAirplayWall::Application.routes.draw do
   resources :auth do
     collection do
       get 'login'
+      get 'logout'
       get 'finish'
     end
   end
