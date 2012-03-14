@@ -7,7 +7,11 @@ Install imgkit's wkhtmltoimage at /usr/local/bin
 
 $ bundle exec rvmsudo imgkit --install-wkhtmltoimage
 
+Install a set of CA Certificates to verify Google Apps over SSL:
+
+(Max OS X with MacPorts)
+$ sudo port install curl-ca-bundle
+
 
 Airplay Icon:
 http://images.apple.com/ipad/features/airplay/images/airplay_icon.jpg
-
