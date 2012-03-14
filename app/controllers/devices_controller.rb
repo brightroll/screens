@@ -1,6 +1,8 @@
 require 'ostruct'
 
 class DevicesController < ApplicationController
+  before_filter :login_required, :except => [:index, :show]
+
   # GET /devices
   # GET /devices.json
   def index
@@ -9,6 +11,17 @@ class DevicesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @devices }
+    end
+  end
+
+  # GET /devices/1
+  # GET /devices/1.json
+  def show
+    @device = Device.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @device }
     end
   end
 
@@ -29,17 +42,6 @@ class DevicesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @devices }
-    end
-  end
-
-  # GET /devices/1
-  # GET /devices/1.json
-  def show
-    @device = Device.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @device }
     end
   end
 
