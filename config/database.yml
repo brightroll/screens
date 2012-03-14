@@ -11,7 +11,7 @@ development:
   database: hax_airplay_wall_development
   pool: 5
   username: root
-  password:
+  password: root
   socket: *find_mysql_socket
 
 # Warning: The database defined as "test" will be erased and
@@ -24,7 +24,7 @@ test:
   database: hax_airplay_wall_test
   pool: 5
   username: root
-  password:
+  password: root
   socket: *find_mysql_socket
 
 production:
@@ -34,5 +34,5 @@ production:
   database: hax_airplay_wall_production
   pool: 5
   username: root
-  password:
+  password: root
   socket: *find_mysql_socket

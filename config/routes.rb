@@ -12,6 +12,13 @@ HaxAirplayWall::Application.routes.draw do
 
   resources :slides
 
+  resources :auth do
+    collection do
+      get 'login'
+      get 'finish'
+    end
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
