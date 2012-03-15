@@ -109,8 +109,14 @@ loop do
   puts "Searching for AirPlay devices"
 
   airplay = Airplay::Client.new
-  airplay.browse.each do |node|
-    puts node.inspect
+  servers = begin
+    airplay.browse
+  rescue Airplay::Client::ServerNotFoundError
+    []
+  end
+
+  servers.each do |node|
+    # puts node.inspect
     unless node_pids.has_key? node.name
       node_pids[node.name] = Process.fork do
         am_parent = 0
