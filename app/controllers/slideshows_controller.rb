@@ -1,6 +1,4 @@
 class SlideshowsController < ApplicationController
-  before_filter :login_required, :except => [:index, :show]
-
   # GET /slideshows
   # GET /slideshows.json
   def index

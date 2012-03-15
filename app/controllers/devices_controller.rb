@@ -1,8 +1,6 @@
 require 'ostruct'
 
 class DevicesController < ApplicationController
-  before_filter :login_required, :except => [:index, :show]
-
   # GET /devices
   # GET /devices.json
   def index

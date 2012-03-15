@@ -1,4 +1,6 @@
 class AuthController < ApplicationController
+  skip_before_filter :login_required
+
   def login
     google_apps_auth_begin :attrs => [:firstname, :lastname, :email]
   end

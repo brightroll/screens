@@ -1,4 +1,7 @@
 class ApplicationController < ActionController::Base
+  # Subclasses beware, your index and show methods are un-authenticated!
+  before_filter :login_required, :except => [:index, :show]
+
   protect_from_forgery
 
   def login_required
