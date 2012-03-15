@@ -30,12 +30,14 @@ div {
 */
 
 #notice {
-  color: green; }
+  color: green;
+}
 
 .field_with_errors {
   padding: 2px;
   background-color: red;
-  display: table; }
+  display: table;
+}
 
 #error_explanation {
   width: 450px;
@@ -55,4 +57,5 @@ div {
     color: #fff; }
   ul li {
     font-size: 12px;
-    list-style: square; } }
+    list-style: square; }
+}
