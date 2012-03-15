@@ -1,5 +1,3 @@
-require 'ostruct'
-
 class DevicesController < ApplicationController
   # GET /devices
   # GET /devices.json
@@ -26,9 +24,6 @@ class DevicesController < ApplicationController
   def browse
     @devices = begin
       Airplay::Client.new.browse
-
-      # Using OpenStruct to mock a list of Airplay devices on the network.
-      #### %w(IndikaAirplay Gamunu Parakum Vijaya Device1).sort.map{|name| OpenStruct.new :name => name }
     rescue Airplay::Client::ServerNotFoundError => e
       []
     rescue => e
