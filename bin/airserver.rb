@@ -106,16 +106,17 @@ loop do
   # Every $loop_time seconds, look for airplay nodes.
   # If a node is found and there isn't a child process
   # for that node, spin one up!
-  puts "Searching for AirPlay devices"
 
-  airplay = Airplay::Client.new
-  servers = begin
-    airplay.browse
+  airplay = begin
+    puts "Searching for AirPlay devices"
+    Airplay::Client.new
   rescue Airplay::Client::ServerNotFoundError
-    []
+    puts "No devices found, sleeping #{LOOP_TIME} seconds"
+    sleep LOOP_TIME
+    next
   end
 
-  servers.each do |node|
+  airplay.servers.each do |node|
     # puts node.inspect
     unless node_pids.has_key? node.name
       node_pids[node.name] = Process.fork do
