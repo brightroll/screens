@@ -1,9 +1,6 @@
 class AuthController < ApplicationController
   def login
-    # user will immediately be redirected to google to log in.
-    # args are 1) your domain, 2) your "finish" controller action, and
-    # 3) any required ax params (email/firstname/lastname/language)
-    google_apps_authenticate ::Rails.application.config.googleapps_auth_domain, 'finish', [:email]
+    google_apps_auth_begin :attrs => [:firstname, :lastname, :email]
   end
 
   def logout
@@ -12,7 +9,7 @@ class AuthController < ApplicationController
   end
 
   def finish
-    response = google_apps_handle_auth
+    response = google_apps_auth_finish
     if response.failed? or response.canceled?
       flash[:notice] = "Could not authenticate: #{response.error}"
     else
