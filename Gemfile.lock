@@ -28,7 +28,7 @@ GEM
     activesupport (3.2.2)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    airplay (0.2.7.sodabrew)
+    airplay (0.2.8.sodabrew)
       dnssd
       net-http-digest_auth
       net-http-persistent
@@ -37,7 +37,7 @@ GEM
     builder (3.0.0)
     dnssd (2.0)
     erubis (2.7.0)
-    googleapps-auth (0.0.6.sodabrew)
+    googleapps-auth (0.0.7.sodabrew)
       actionpack (>= 2.3.5)
       ruby-openid (= 2.1.8)
     hike (1.2.1)
@@ -100,8 +100,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airplay (= 0.2.7.sodabrew)
-  googleapps-auth (= 0.0.6.sodabrew)
+  airplay (= 0.2.8.sodabrew)
+  googleapps-auth (= 0.0.7.sodabrew)
   imgkit
   jquery-rails
   mysql2
