@@ -7,7 +7,7 @@ class AuthController < ApplicationController
 
   def logout
     reset_session
-    redirect_to :root
+    redirect_to :back
   end
 
   def finish
@@ -19,7 +19,7 @@ class AuthController < ApplicationController
       session[:user] = response[:email].first
       flash[:notice] = "Thanks for logging in, #{response[:email].first}"
     end
-    redirect_to :root
+    redirect_to :back
   end
 
 # Default is in-memory store. Uncomment this method to use another OpenID store.
