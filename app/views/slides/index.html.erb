@@ -1,4 +1,6 @@
-<h1>Listing Slides</h1>
+<%= render :partial => 'breadcrumbs', :object => [
+           { :url => '', :name => 'Slides'},
+           ] %>
 
 <%= render :partial => 'list', :locals => {:slides => @slides, :action_links => lambda { |slide|
       link_to(raw('<i class="icon-edit"></i>'), edit_slide_path(slide), :class=>'btn btn-mini', :title=>'Edit') + \

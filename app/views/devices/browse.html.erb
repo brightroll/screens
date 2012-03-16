@@ -1,2 +1,6 @@
-<h1>Devices on the Network</h1>
+<%= render :partial => 'breadcrumbs', :object => [
+           { :url => '/devices', :name => 'Devices'},
+           { :url => '/devices/browse', :name => 'Browse the Network'}
+           ] %>
+
 <%= render 'devices' %>

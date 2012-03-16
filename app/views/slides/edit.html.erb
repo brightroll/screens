@@ -1,4 +1,7 @@
-<h1>Edit Slide</h1>
+<%= render :partial => 'breadcrumbs', :object => [
+           { :url => 'slides', :name => 'Slides'},
+           { :url => '', :name => 'Edit Slide'}
+           ] %>
 
 <%= render 'form' %>
 
