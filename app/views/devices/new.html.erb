@@ -1,4 +1,7 @@
-<h1>New Device</h1>
+<%= render :partial => 'breadcrumbs', :object => [
+           { :url => '/devices', :name => 'Devices'},
+           { :url => '', :name => 'New Device'}
+           ] %>
 
 <%= render 'form' %>
 

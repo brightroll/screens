@@ -1,4 +1,7 @@
-<h1>New Slideshow</h1>
+<%= render :partial => 'breadcrumbs', :object => [
+           { :url => '/slideshows', :name => 'Slideshows'},
+           { :url => '', :name => 'New Slideshow'}
+           ] %>
 
 <%= render 'form' %>
 
