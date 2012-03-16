@@ -11,10 +11,6 @@ $(document).ready(function() {
   $('#add-new, #add-existing, #edit-slide').on('hidden', function () {
     window.location.reload();
   });
-
-  $('.modal-close').bind('click', function() {
-    $(this).closest('div.modal').modal('hide')
-  });
 });
 </script>
 
@@ -23,56 +19,48 @@ $(document).ready(function() {
 
 <div class="modal hide fade" id="add-new">
   <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
+    <a class="btn btn-primary modal-close" data-dismiss="modal">Close</a>
     <h3>Create new slide</h3>
   </div>
   <div class="modal-body">
-      <div class="well">
       <%= render :partial => '/slides/form' %>
-      </div>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn btn-primary modal-close">Done</a>
   </div>
 </div>
 
 <div class="modal hide fade" id="add-existing" style="width: 800px; left: 40%;">
   <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
+    <a class="btn btn-primary modal-close" data-dismiss="modal">Close</a>
     <h3>Choose a slide</h3>
   </div>
-  <div class="modal-body">
-      <div class="slides well">
-        <%= render :partial => '/slides/list', :locals => {
-              :slides => Slide.all,
-              :action_links => lambda { |slide|
-                link_to(raw('<i class="icon-plus"></i>'),
-                        url_for(:action => :update,
-                                :id => @slideshow.id,
-                                :add_slides => [ slide.id ]),
-                        :method => :put,
-                        :class => 'btn btn-mini',
-                        :title => 'Add to slideshow',
-                        :remote => true) }
-            } %>
-      </div>
+  <div class="modal-body slides">
+      <%= render :partial => '/slides/list', :locals => {
+            :slides => Slide.all,
+            :action_links => lambda { |slide|
+              link_to(raw('<i class="icon-plus"></i>'),
+                      url_for(:action => :update,
+                              :id => @slideshow.id,
+                              :add_slides => [ slide.id ]),
+                      :method => :put,
+                      :class => 'btn btn-mini',
+                      :title => 'Add to slideshow',
+                      :remote => true) }
+          } %>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn btn-primary modal-close">Done</a>
   </div>
 </div>
 
 <div class="modal hide fade" id="edit-slide">
   <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
+    <a class="btn btn-primary modal-close" data-dismiss="modal">Close</a>
     <h3>Edit slide</h3>
   </div>
-  <div class="modal-body">
-      <div class="well" id="edit-slide-body">
-      </div>
+  <div class="modal-body" id="edit-slide-body">
+
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn btn-primary modal-close">Done</a>
   </div>
 </div>
 

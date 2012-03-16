@@ -18,3 +18,7 @@ body {
 .table th.col-move,   .table td.col-move,
 .table th.col-remove, .table td.col-remove
 {width: 28px;}
+
+.modal-close {
+  float: right;
+}
