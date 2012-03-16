@@ -5,6 +5,8 @@ class Slide < ActiveRecord::Base
   has_many :slideshow_slides
   has_many :slideshows, :through => :slideshow_slides
 
+  attr_accessible :name, :url, :transition, :display_time
+
   require 'mime/types'
 
   def transition=(t)

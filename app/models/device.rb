@@ -3,6 +3,8 @@ class Device < ActiveRecord::Base
   validates_uniqueness_of :name, :message => "A device with that name already exists"
   belongs_to :slideshow
 
+  attr_accessible :name, :slideshow_id, :password
+
   def slideshow_name
     slideshow.name if slideshow
   end
