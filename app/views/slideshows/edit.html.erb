@@ -1,4 +1,4 @@
-<h1>Editing Slideshow</h1>
+<h1>Edit Slideshow</h1>
 
 <%= render 'form' %>
 
@@ -8,11 +8,7 @@ $(document).ready(function() {
     $(this).closest('tr').fadeOut();
   });
 
-  $('#add-new').on('hidden', function () {
-    window.location.reload();
-  });
-
-  $('#add-existing').on('hidden', function () {
+  $('#add-new, #add-existing, #edit-slide').on('hidden', function () {
     window.location.reload();
   });
 
