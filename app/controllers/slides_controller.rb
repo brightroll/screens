@@ -35,12 +35,21 @@ class SlidesController < ApplicationController
   # GET /slides/1/edit
   def edit
     @slide = Slide.find(params[:id])
+
+    respond_to do |format|
+      format.html # edit.html.erb
+      # javascript-encoded partial to go into a hover window
+      format.js { render :inline => "$('<%= params[:update] %>').html('<%= escape_javascript(render :partial => 'slides/form' ) %>')" }
+    end
   end
 
   # POST /slides
   # POST /slides.json
   def create
     @slide = Slide.new(params[:slide])
+
+    # If we're creating a new slide from the slideshow editing page, add the
+    # slide to the slideshow and then redirect to the slideshow edit screen.
     @slide.slideshows << (@slideshow = Slideshow.find(params[:slideshow_id])) if params[:slideshow_id]
 
     respond_to do |format|
@@ -61,7 +70,7 @@ class SlidesController < ApplicationController
 
     respond_to do |format|
       if @slide.update_attributes(params[:slide])
-        format.html { redirect_to @slide, notice: 'Slide was successfully updated.' }
+        format.html { redirect_to :back, notice: 'Slide was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
