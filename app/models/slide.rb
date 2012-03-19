@@ -5,7 +5,7 @@ class Slide < ActiveRecord::Base
   has_many :slideshow_slides
   has_many :slideshows, :through => :slideshow_slides
 
-  attr_accessible :name, :url, :transition, :display_time
+  attr_accessible :name, :url, :transition, :display_time, :type, :feed_path, :scrub_time
 
   require 'mime/types'
 
@@ -60,6 +60,21 @@ class Slide < ActiveRecord::Base
       :slide_right  => "Slide Right",
       :dissolve     => "Dissolve"
     }
+  end
+
+  def type=(t)
+  end
+
+  def feed_path=(t)
+  end
+
+  def feed_path
+  end
+
+  def scrub_time=(t)
+  end
+
+  def scrub_time
   end
 
 end
