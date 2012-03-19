@@ -6,7 +6,7 @@
     <th>Display time (seconds)</th>
     <th>Type</th>
     <th>Transition</th>
-    <% if action_links %>
+    <% if defined? action_links %>
     <th></th>
     <% end %>
   </tr>
@@ -21,7 +21,7 @@
     <td><%= slide.type %></td>
     <td><%= slide.transition %></td>
 
-    <% if action_links %>
+    <% if defined? action_links %>
     <td style="white-space: nowrap;"> <%= action_links.call(slide) %></td>
     <% end %>
   </tr>

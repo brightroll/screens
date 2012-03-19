@@ -1,6 +1,6 @@
 <%= render :partial => 'breadcrumbs', :object => [
            { :url => '/slides', :name => 'Slides'},
-           { :url => '', :name => 'Show Slide'}
+           { :url => '', :name => 'Slide: ' + @slide.name }
            ] %>
 
 <div class="well">
@@ -16,14 +16,13 @@
 
 <p>
   <b>Display time:</b>
-  <%= @slide.display_time %>
+  <%= @slide.display_time %> seconds
 </p>
 
 <p>
   <b>Transition:</b>
-  <%= @slide.transition %>
+  <%= @slide.transition_name %>
 </p>
 </div>
 
 <%= link_to 'Edit', edit_slide_path(@slide), :class=>'btn' %>
-<%= link_to 'Slide List', slides_path, :class=>'btn' %>

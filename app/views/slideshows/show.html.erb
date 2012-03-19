@@ -1,14 +1,11 @@
 <%= render :partial => 'breadcrumbs', :object => [
            { :url => '/slideshows', :name => 'Slideshows'},
-           { :url => '', :name => 'Show Slideshow'}
+           { :url => '', :name => 'Slideshow: ' + @slideshow.name }
            ] %>
 
-<div class="well">
-<p>
-  <b>Name:</b>
-  <%= @slideshow.name %>
-</p>
-</div>
-
 <%= link_to 'Edit', edit_slideshow_path(@slideshow), :class=>'btn' %>
-<%= link_to 'Slideshow List', slideshows_path, :class=>'btn' %>
+
+<br /><br />
+<% unless @slides.empty?%>
+<%= render :partial => '/slides/list', :locals => { :slides => @slides } %>
+<% end %>

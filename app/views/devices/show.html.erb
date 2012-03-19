@@ -1,14 +1,16 @@
 <%= render :partial => 'breadcrumbs', :object => [
            { :url => '/devices', :name => 'Devices'},
-           { :url => '', :name => 'Show Device'}
+           { :url => '', :name => 'Device: ' + @device.name }
            ] %>
 
-<div class="well">
 <p>
   <b>Name:</b>
   <%= @device.name %>
 </p>
-</div>
+
+<p>
+  <b>Slideshow:</b>
+  <%= @device.slideshow.name %>
+</p>
 
 <%= link_to 'Edit', edit_device_path(@device), :class=>'btn' %>
-<%= link_to 'Device List', devices_path, :class=>'btn' %>
