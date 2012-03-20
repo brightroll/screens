@@ -1,6 +1,7 @@
-<%= render :partial => 'breadcrumbs', :object => [
-           { :url => '/slides', :name => 'Slides'},
-           { :url => '', :name => 'Edit Slide'}
-           ] %>
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Slides', '/slides'),
+             link_to('Edit slide: ' + @slide.name, '', :class => 'active')
+           ] } %>
 
 <%= render 'form' %>

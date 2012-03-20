@@ -1,16 +1,14 @@
-<%= render :partial => 'breadcrumbs', :object => [
-           { :url => '/slideshows', :name => 'Slideshows'},
-           { :url => '', :name => 'Slideshow: ' + @slideshow.name }
-           ] %>
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Slideshows', '/slideshows'),
+             link_to('Slideshows: ' + @slideshow.name, '', :class => 'active')
+           ],
+           :action_links => [
+             link_to('Edit', edit_slideshow_path(@slide))
+           ] } %>
 
-<div class="form-horizontal">
   <legend>Slideshow: <%= @slideshow.name %></legend>
 
   <% unless @slides.empty?%>
     <%= render :partial => '/slides/list', :locals => { :slides => @slides } %>
   <% end %>
-
-  <div class="form-actions">
-    <%= link_to 'Edit', edit_slideshow_path(@slideshow), :class=>'btn btn-primary' %>
-  </div>
-</div>

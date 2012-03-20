@@ -1,6 +1,11 @@
-<%= render :partial => 'breadcrumbs', :object => [
-           { :url => '', :name => 'Devices'},
-           ] %>
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Devices', '/devices', :class => 'active')
+           ],
+           :action_links => [
+             link_to('New Device', new_device_path),
+             link_to('Browse Network', '/devices/browse')
+           ] } %>
 
 <table class="table table-bordered table-striped">
   <thead>
@@ -24,8 +29,3 @@
 <% end %>
   </tbody>
 </table>
-
-<br />
-
-<%= link_to 'New Device', new_device_path, :class=>'btn' %>
-<%= link_to 'Browse Network', '/devices/browse', :class=>'btn' %>

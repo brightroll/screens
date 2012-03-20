@@ -1,6 +1,10 @@
-<%= render :partial => 'breadcrumbs', :object => [
-           { :url => '', :name => 'Slideshows'},
-           ] %>
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Slideshows', '/slideshows', :class => 'active')
+           ],
+           :action_links => [
+             link_to('New Slideshow', new_slideshow_path)
+           ] } %>
 
 <table class="table table-bordered table-striped">
   <thead>
@@ -22,7 +26,3 @@
 <% end %>
   </tbody>
 </table>
-
-<br />
-
-<%= link_to 'New Slideshow', new_slideshow_path, :class=>'btn' %>

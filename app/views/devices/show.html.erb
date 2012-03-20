@@ -1,8 +1,15 @@
-<%= render :partial => 'breadcrumbs', :object => [
-           { :url => '/devices', :name => 'Devices'},
-           { :url => '', :name => 'Device: ' + @device.name }
-           ] %>
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Devices', '/devices'),
+             link_to('Device: ' + @device.name, '', :class => 'active')
+           ],
+           :action_links => [
+             link_to('Edit', edit_device_path(@device))
+           ] } %>
 
+  <legend>Device: <%= @device.name %></legend>
+
+<div class="well">
 <p>
   <b>Name:</b>
   <%= @device.name %>
@@ -12,5 +19,4 @@
   <b>Slideshow:</b>
   <%= @device.slideshow.name %>
 </p>
-
-<%= link_to 'Edit', edit_device_path(@device), :class=>'btn' %>
+</div>

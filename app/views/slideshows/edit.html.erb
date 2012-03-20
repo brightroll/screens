@@ -1,7 +1,8 @@
-<%= render :partial => 'breadcrumbs', :object => [
-           { :url => '/slideshows', :name => 'Slideshows'},
-           { :url => '', :name => 'Edit Slideshow'}
-           ] %>
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Slideshows', '/slideshows'),
+             link_to('Edit slideshow: ' + @slideshow.name, '', :class => 'active')
+           ] } %>
 
 <%= render 'form' %>
 
@@ -89,4 +90,6 @@ $(document).ready(function() {
     } %>
 <% end %>
 
-<%= link_to 'Done', @slideshow, :class=>'btn' %>
+  <div class="form-actions">
+    <%= link_to 'Done', @slideshow, :class=>'btn btn-primary' %>
+  </div>

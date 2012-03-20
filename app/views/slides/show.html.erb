@@ -1,7 +1,13 @@
-<%= render :partial => 'breadcrumbs', :object => [
-           { :url => '/slides', :name => 'Slides'},
-           { :url => '', :name => 'Slide: ' + @slide.name }
-           ] %>
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Slides', '/slides'),
+             link_to('Slide: ' + @slide.name, '', :class => 'active')
+           ],
+           :action_links => [
+             link_to('Edit', edit_slide_path(@slide))
+           ] } %>
+
+  <legend>Slide: <%= @slide.name %></legend>
 
 <div class="well">
 <p>
@@ -24,5 +30,3 @@
   <%= @slide.transition_name %>
 </p>
 </div>
-
-<%= link_to 'Edit', edit_slide_path(@slide), :class=>'btn' %>

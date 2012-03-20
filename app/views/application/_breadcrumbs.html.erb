@@ -1,22 +1,30 @@
 <% separator ||= '/' %>
   <ul class="breadcrumb">
-<% if breadcrumbs %>
     <li>
-      <a href="<%= url_for :root %>">Home</a>
-      <span class="divider"><%= separator %></span>
-    </li>
+      <%= link_to 'Home', url_for(:root) %>
+
+  <% if defined? breadcrumbs and breadcrumbs %>
     <% breadcrumbs[0..-2].each do |crumb| %>
-      <li>
-        <a href="<%= crumb[:url] %>"><%= crumb[:name] %></a>
-        <span class="divider"><%= separator %></span>
-      </li>
+      <span class="divider"><%= separator %></span>
+      <%= crumb %>
     <% end %>
-    <li class="active">
-      <a href="<%= breadcrumbs.last[:url] %>"><%= breadcrumbs.last[:name] %></a>
+
+    <% breadcrumbs.last(1).each do |crumb| %>
+      <span class="divider"><%= separator %></span>
+      <%= crumb %>
+    <% end %>
+  <% end %>
     </li>
-<% else %>
-    <li class="active">
-      <a href="<%= url_for :root %>">Home</a>
+
+<% if defined? action_links and action_links %>
+    <li style="float:right;">
+      <% action_links[0..-2].each do |action| %>
+        <%= action %>
+        <span class="divider"><%= separator %></span>
+      <% end %>
+      <% action_links.last(1).each do |action| %>
+        <%= action %>
+      <% end %>
     </li>
 <% end %>
   </ul>
