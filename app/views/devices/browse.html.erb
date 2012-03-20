@@ -1,6 +1,7 @@
-<%= render :partial => 'breadcrumbs', :object => [
-           { :url => '/devices', :name => 'Devices'},
-           { :url => '/devices/browse', :name => 'Browse the Network'}
-           ] %>
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Devices', '/devices'),
+             link_to('Browse the Network', '/devices/browse', :class => 'active'),
+           ] } %>
 
 <%= render 'devices' %>

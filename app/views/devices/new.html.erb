@@ -1,7 +1,8 @@
-<%= render :partial => 'breadcrumbs', :object => [
-           { :url => '/devices', :name => 'Devices'},
-           { :url => '', :name => 'New Device'}
-           ] %>
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Devices', '/devices'),
+             link_to('New Device', '', :class => 'active')
+           ] } %>
 
 <%= render 'form' %>
 
