@@ -2926,6 +2926,9 @@ input[type="submit"].btn.small {
 .breadcrumb .active a {
   color: #333333;
 }
+.breadcrumb a.active {
+  color: #333333;
+}
 .pagination {
   height: 36px;
   margin: 18px 0;
