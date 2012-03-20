@@ -1,4 +1,4 @@
-<%= form_for(@slideshow) do |f| %>
+<%= form_for(@slideshow, :html => {:class => 'well form-inline edit_slideshow'}) do |f| %>
   <% if @slideshow.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@slideshow.errors.count, "error") %> prohibited this slideshow from being saved:</h2>
@@ -11,13 +11,11 @@
     </div>
   <% end %>
 
-  <br />
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
+  <legend>Edit Slideshow</legend>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+  <%= f.label :name, :class => "control-label" %>
+  <%= f.text_field :name, :class => "input-xlarge span4" %>
+
+  <%= f.submit :class => "btn btn-primary" %>
+
 <% end %>

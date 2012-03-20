@@ -3,9 +3,14 @@
            { :url => '', :name => 'Slideshow: ' + @slideshow.name }
            ] %>
 
-<%= link_to 'Edit', edit_slideshow_path(@slideshow), :class=>'btn' %>
+<div class="form-horizontal">
+  <legend>Edit Slide</legend>
 
-<br /><br />
-<% unless @slides.empty?%>
-<%= render :partial => '/slides/list', :locals => { :slides => @slides } %>
-<% end %>
+  <% unless @slides.empty?%>
+    <%= render :partial => '/slides/list', :locals => { :slides => @slides } %>
+  <% end %>
+
+  <div class="form-actions">
+    <%= link_to 'Edit', edit_slideshow_path(@slideshow), :class=>'btn btn-primary' %>
+  </div>
+</div>
