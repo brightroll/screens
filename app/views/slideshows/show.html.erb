@@ -4,7 +4,7 @@
            ] %>
 
 <div class="form-horizontal">
-  <legend>Edit Slide</legend>
+  <legend>Slideshow: <%= @slideshow.name %></legend>
 
   <% unless @slides.empty?%>
     <%= render :partial => '/slides/list', :locals => { :slides => @slides } %>
