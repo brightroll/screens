@@ -38,9 +38,9 @@
           <a class="brand" href="/">Airplay Wall</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li<%= is_current_controller('devices') %>><a href="/devices">Devices</a></li>
-              <li<%= is_current_controller('slideshows') %>><a href="/slideshows">Slideshows</a></li>
-              <li<%= is_current_controller('slides') %>><a href="/slides">Slides</a></li>
+              <li<%= raw is_current_controller('devices') %>><a href="/devices">Devices</a></li>
+              <li<%= raw is_current_controller('slideshows') %>><a href="/slideshows">Slideshows</a></li>
+              <li<%= raw is_current_controller('slides') %>><a href="/slides">Slides</a></li>
             </ul>
             <ul class="nav pull-right">
               <% if session[:user] %>

@@ -2,16 +2,14 @@
   <ul class="breadcrumb">
     <li>
       <%= link_to 'Home', url_for(:root) %>
-
   <% if defined? breadcrumbs and breadcrumbs %>
     <% breadcrumbs[0..-2].each do |crumb| %>
       <span class="divider"><%= separator %></span>
-      <%= crumb %>
+      <%= raw crumb %>
     <% end %>
-
     <% breadcrumbs.last(1).each do |crumb| %>
       <span class="divider"><%= separator %></span>
-      <%= crumb %>
+      <%= raw crumb %>
     <% end %>
   <% end %>
     </li>
@@ -19,11 +17,11 @@
 <% if defined? action_links and action_links %>
     <li style="float:right;">
       <% action_links[0..-2].each do |action| %>
-        <%= action %>
+        <%= raw action %>
         <span class="divider"><%= separator %></span>
       <% end %>
       <% action_links.last(1).each do |action| %>
-        <%= action %>
+        <%= raw action %>
       <% end %>
     </li>
 <% end %>
