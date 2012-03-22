@@ -50,8 +50,7 @@ def loop_slideshow(node_name)
   end
   puts "Beginning slideshow #{slideshow.name} on device #{device.name} "
 
-  airplay = Airplay::Client.new
-  airplay.use node_name
+  airplay = Airplay::Client.new node_name
   airplay.password device.password
 
   puts "Connected to device: #{airplay.inspect}"
