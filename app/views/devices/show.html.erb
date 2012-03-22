@@ -9,14 +9,9 @@
 
   <legend>Device: <%= @device.name %></legend>
 
-<div class="well">
-<p>
-  <b>Name:</b>
-  <%= @device.name %>
-</p>
-
-<p>
-  <b>Slideshow:</b>
-  <%= @device.slideshow.name %>
-</p>
-</div>
+<% if @device.slideshow.nil? %>
+  <b>No associated slideshow</b>
+<% else %>
+  <b>Slideshow</b>: <%= @device.slideshow.name %><br /><br />
+  <%= render :partial => '/slides/list', :locals => { :slides => @device.slideshow.slides } %>
+<% end %>

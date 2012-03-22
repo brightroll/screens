@@ -9,6 +9,4 @@
 
   <legend>Slideshow: <%= @slideshow.name %></legend>
 
-  <% unless @slides.empty?%>
-    <%= render :partial => '/slides/list', :locals => { :slides => @slides } %>
-  <% end %>
+  <%= render :partial => '/slides/list', :locals => { :slides => @slides } %>
