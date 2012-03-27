@@ -81,8 +81,10 @@ def loop_slideshow(node_name)
       end
     end
 
-    # Reload the slideshow to pick up any changes
-    slideshow.reload
+    # Reload the device as it may have a new slideshow associated
+    device.reload
+    # Reload the slideshow to pick up slide changes
+    slideshow = device.slideshow
   end
 
   puts "Ending slideshow for #{node_name}"
