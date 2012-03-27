@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  $('.remove_slide').bind('ajax:success', function() {
+  $('.hide_row').bind('ajax:success', function() {
     $(this).closest('tr').fadeOut();
   });
 
@@ -47,7 +47,7 @@ $(document).ready(function() {
                               :id => @slideshow.id,
                               :add_slides => [ slide.id ]),
                       :method => :put,
-                      :class => 'btn btn-mini',
+                      :class => 'btn btn-mini hide_row',
                       :title => 'Add to slideshow',
                       :remote => true) }
           } %>
@@ -84,7 +84,7 @@ $(document).ready(function() {
                         :id => @slideshow.id,
                         :del_slides => [ slide.id ]),
                 :method => :put,
-                :class => 'btn btn-mini remove_slide',
+                :class => 'btn btn-mini hide_row',
                 :title => 'Remove from slideshow',
                 :remote => true) }
     } %>
