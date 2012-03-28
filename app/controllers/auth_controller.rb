@@ -2,6 +2,7 @@ class AuthController < ApplicationController
   skip_before_filter :login_required
 
   def login
+    session[:return_to] ||= request.referer
     google_apps_auth_begin :attrs => [:firstname, :lastname, :email]
   end
 
@@ -19,7 +20,8 @@ class AuthController < ApplicationController
       session[:user] = response[:email].first
       flash[:notice] = "Thanks for logging in, #{response[:email].first}"
     end
-    redirect_to :back
+
+    redirect_to session[:return_to]
   end
 
 # Default is in-memory store. Uncomment this method to use another OpenID store.
