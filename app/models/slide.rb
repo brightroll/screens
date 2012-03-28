@@ -2,6 +2,13 @@ class Slide < ActiveRecord::Base
   validates :name, :presence => true
   validates_uniqueness_of :name, :message => "A slide already exists with that name"
   validates :url, :presence => true
+  validates :display_time, :numericality => {
+    :only_integer => true,
+    :greater_than => 0, # At least 1 second
+    :less_than => 1800 # And up to 30 minutes
+  }, :unless => Proc.new { |a| [:audio, :video].include? a.type } # These types don't need a time
+  validates :transition, :inclusion => { :in => Proc.new { Slide.transition_syms.values } }
+
   has_many :slideshow_slides
   has_many :slideshows, :through => :slideshow_slides
 
