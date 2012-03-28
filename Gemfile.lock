@@ -28,11 +28,11 @@ GEM
     activesupport (3.2.2)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    airplay (0.2.8.sodabrew)
-      dnssd
-      net-http-digest_auth
-      net-http-persistent
-      plist
+    airplay (0.2.9.sodabrew)
+      dnssd (~> 2.0)
+      net-http-digest_auth (~> 1.2)
+      net-http-persistent (>= 2.6)
+      plist (~> 3.1.0)
     arel (3.0.2)
     builder (3.0.0)
     dnssd (2.0)
@@ -100,7 +100,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airplay (= 0.2.8.sodabrew)
+  airplay (= 0.2.9.sodabrew)
   googleapps-auth (= 0.0.7.sodabrew)
   imgkit
   jquery-rails
