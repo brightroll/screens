@@ -63,10 +63,12 @@ def loop_slideshow(node_name)
         puts "Sending video #{slide.url}"
         player = airplay.send_video(slide.url) # second arg is scrub position
         sleep_while_playing player
+        player.stop
       when :audio
         puts "Sending audio #{slide.url}"
         player = airplay.send_audio(slide.url) # second arg is scrub position
         sleep_while_playing player
+        player.stop
       when :image
         puts "Sending image #{slide.url}"
         airplay.send_image(slide.url, slide.transition)
