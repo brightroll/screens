@@ -75,11 +75,17 @@ def loop_slideshow(node_name)
         # sleep while the image is on the screen
         sleep slide.display_time
       else
-        # Anything else gets rendered through WebKit
-        puts "Rendering url #{slide.url}"
-        airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, :raw => true)
-        # sleep while the image is on the screen
-        sleep slide.display_time
+        begin
+          # Anything else gets rendered through WebKit
+          puts "Rendering url #{slide.url}"
+          airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, :raw => true)
+          # sleep while the image is on the screen
+          sleep slide.display_time
+        rescue IMGKit::CommandFailedError
+          puts "Failed to render url with IMGKit: #{slide.url}"
+        rescue
+          puts "Failed to render url (other error): #{slide.url}"
+        end
       end
     end
 
