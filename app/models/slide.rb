@@ -7,8 +7,8 @@ class Slide < ActiveRecord::Base
     :greater_than => 0, # At least 1 second
     :less_than => 1800 # And up to 30 minutes
   }, :unless => Proc.new { |a| [:audio, :video, :feed].include? a.media_type } # These types don't need a time
-  validates :transition, :inclusion => { :in => Proc.new { Slide.transition_syms.values } }
-  validates :media_type, :inclusion => { :in => Proc.new { Slide.media_type_syms.values } }
+  validates :transition, :presence => true, :inclusion => { :in => Proc.new { Slide.transition_syms.values } }
+  validates :media_type, :presence => true, :inclusion => { :in => Proc.new { Slide.media_type_syms.values } }
 
   has_many :slideshow_slides
   has_many :slideshows, :through => :slideshow_slides

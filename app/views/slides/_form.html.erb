@@ -41,7 +41,7 @@ $(function() {
     <div class="control-group">
       <%= f.label :url, :class => "control-label" %>
       <div class="controls">
-        <%= f.text_field :url, :class => "input-xlarge span4" %>
+        <%= f.text_area :url, :class => "input-xlarge span4", :rows => 6 %>
       </div>
     </div>
 
@@ -66,8 +66,8 @@ $(function() {
       </div>
     </div>
 
-<!-- image options -->
-<div class="options-all-media-types options-image" style="display: none;">
+<!-- image and html options -->
+<div class="options-all-media-types options-image options-html" style="display: none;">
     <div class="control-group">
       <%= f.label :display_time, :class => "control-label" %>
       <div class="controls input-append">
@@ -87,8 +87,8 @@ $(function() {
     </div>
 <!-- /image options -->
 
-<!-- video options -->
-    <div class="options-all-media-types options-video" style="display: none;">
+<!-- video and audio options -->
+    <div class="options-all-media-types options-video options-audio" style="display: none;">
     <div class="control-group">
       <%= f.label :scrub_time, :class => "control-label" %>
       <div class="controls input-append">
@@ -98,39 +98,6 @@ $(function() {
     </div>
     </div>
 <!-- /video options -->
-
-<!-- audio options -->
-    <div class="options-all-media-types options-audio" style="display: none;">
-    <div class="control-group">
-      <%= f.label :scrub_time, :class => "control-label" %>
-      <div class="controls input-append">
-        <%= f.text_field :scrub_time, :class => "input-xlarge span2" %>
-        <span class="add-on">seconds</span>
-      </div>
-    </div>
-    </div>
-<!-- /audio options -->
-
-<!-- html options -->
-    <div class="options-all-media-types options-html" style="display: none;">
-    <div class="control-group">
-      <%= f.label :display_time, :class => "control-label" %>
-      <div class="controls input-append">
-        <%= f.text_field :display_time, :class => "input-xlarge span2" %>
-        <span class="add-on">seconds</span>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <%= f.label :transition, :class => "control-label" %>
-      <div class="controls">
-        <%= select("slide", "transition",
-                   Slide.transition_syms.collect { |t, s| [ Slide.transition_names.fetch(s), s ] },
-                   :class => "input-xlarge") %>
-      </div>
-    </div>
-    </div>
-<!-- /html options -->
 
 <!-- feed options -->
     <div class="options-all-media-types options-feed" style="display: none;">
