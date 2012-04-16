@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120308025034) do
+ActiveRecord::Schema.define(:version => 20120416180721) do
 
   create_table "devices", :force => true do |t|
     t.string   "name"
@@ -25,11 +25,12 @@ ActiveRecord::Schema.define(:version => 20120308025034) do
 
   create_table "slides", :force => true do |t|
     t.string   "name"
-    t.string   "url"
+    t.text     "url"
     t.integer  "display_time"
-    t.string   "transition"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.string   "transition",   :limit => 16, :default => "none", :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+    t.string   "media_type",   :limit => 16, :default => "none", :null => false
   end
 
   create_table "slideshow_slides", :force => true do |t|

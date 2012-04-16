@@ -1,7 +1,7 @@
 <script type="text/javascript">
 $(function() {
   $('.options-toggle').change(function(){
-    $('.options-all-types').hide('slow');
+    $('.options-all-media-types').hide('slow');
     $('.options-'+$(this).val()).show('slow');
   });
 
@@ -46,25 +46,28 @@ $(function() {
     </div>
 
     <div class="control-group">
-      <%= f.label :type, :class => "control-label" %>
+      <%= f.label :media_type, :class => "control-label" %>
       <div class="controls">
         <label class="radio">
-          <%= f.radio_button :type, :image, :class => 'options-toggle' %>Image
+          <%= f.radio_button :media_type, :image, :class => 'options-toggle' %>Image
         </label>
         <label class="radio">
-          <%= f.radio_button :type, :video, :class => 'options-toggle' %>Video
+          <%= f.radio_button :media_type, :video, :class => 'options-toggle' %>Video
         </label>
         <label class="radio">
-          <%= f.radio_button :type, :audio, :class => 'options-toggle' %>Audio
+          <%= f.radio_button :media_type, :audio, :class => 'options-toggle' %>Audio
+        </label>
+        <label class="radio">
+          <%= f.radio_button :media_type, :html, :class => 'options-toggle' %>Web URL
         </label>
         <!--label class="radio">
-          <%= f.radio_button :type, :feed, :class => 'options-toggle' %>Feed URL
+          <%= f.radio_button :media_type, :feed, :class => 'options-toggle' %>Feed URL
         </label-->
       </div>
     </div>
 
 <!-- image options -->
-    <div class="options-all-types options-image" style="display: none;">
+<div class="options-all-media-types options-image" style="display: none;">
     <div class="control-group">
       <%= f.label :display_time, :class => "control-label" %>
       <div class="controls input-append">
@@ -85,7 +88,7 @@ $(function() {
 <!-- /image options -->
 
 <!-- video options -->
-    <div class="options-all-types options-video" style="display: none;">
+    <div class="options-all-media-types options-video" style="display: none;">
     <div class="control-group">
       <%= f.label :scrub_time, :class => "control-label" %>
       <div class="controls input-append">
@@ -97,7 +100,7 @@ $(function() {
 <!-- /video options -->
 
 <!-- audio options -->
-    <div class="options-all-types options-audio" style="display: none;">
+    <div class="options-all-media-types options-audio" style="display: none;">
     <div class="control-group">
       <%= f.label :scrub_time, :class => "control-label" %>
       <div class="controls input-append">
@@ -108,8 +111,29 @@ $(function() {
     </div>
 <!-- /audio options -->
 
+<!-- html options -->
+    <div class="options-all-media-types options-html" style="display: none;">
+    <div class="control-group">
+      <%= f.label :display_time, :class => "control-label" %>
+      <div class="controls input-append">
+        <%= f.text_field :display_time, :class => "input-xlarge span2" %>
+        <span class="add-on">seconds</span>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :transition, :class => "control-label" %>
+      <div class="controls">
+        <%= select("slide", "transition",
+                   Slide.transition_syms.collect { |t, s| [ Slide.transition_names.fetch(s), s ] },
+                   :class => "input-xlarge") %>
+      </div>
+    </div>
+    </div>
+<!-- /html options -->
+
 <!-- feed options -->
-    <div class="options-all-types options-feed" style="display: none;">
+    <div class="options-all-media-types options-feed" style="display: none;">
     <div class="control-group">
       <%= f.label :feed_path, :class => "control-label" %>
       <div class="controls">

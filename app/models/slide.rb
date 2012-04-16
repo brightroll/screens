@@ -1,21 +1,54 @@
 class Slide < ActiveRecord::Base
   validates :name, :presence => true
-  validates_uniqueness_of :name, :message => "A slide already exists with that name"
+  validates_uniqueness_of :name, :message => "A slide with that name already exists"
   validates :url, :presence => true
   validates :display_time, :numericality => {
     :only_integer => true,
     :greater_than => 0, # At least 1 second
     :less_than => 1800 # And up to 30 minutes
-  }, :unless => Proc.new { |a| [:audio, :video, :feed].include? a.type } # These types don't need a time
+  }, :unless => Proc.new { |a| [:audio, :video, :feed].include? a.media_type } # These types don't need a time
   validates :transition, :inclusion => { :in => Proc.new { Slide.transition_syms.values } }
-  validates :type, :presence => true
+  validates :media_type, :inclusion => { :in => Proc.new { Slide.media_type_syms.values } }
 
   has_many :slideshow_slides
   has_many :slideshows, :through => :slideshow_slides
 
-  attr_accessible :name, :url, :transition, :display_time, :type, :feed_path, :scrub_time
+  attr_accessible :name, :url, :transition, :display_time, :media_type, :feed_path, :scrub_time
 
-  require 'mime/types'
+  def media_type=(t)
+    self[:media_type] = self.class.media_type_syms.fetch(t, :none)
+  end
+
+  def media_type
+    self.class.media_type_syms.fetch(self[:media_type], :none)
+  end
+
+  def media_type_name
+    self.class.media_type_names.fetch(media_type)
+  end
+
+  def self.media_type_syms
+    {
+      'image' => :image,
+      'video' => :video,
+      'audio' => :audio,
+      'html' => :html,
+      'none' => :none,
+      # 'feed' => :feed,
+    }
+  end
+
+  # TODO: use i18n for these
+  def self.media_type_names
+    {
+      :image =>'Image',
+      :video =>'Video',
+      :audio =>'Audio',
+      :html => 'Web URL',
+      :none => 'None',
+      # 'feed' => :feed,
+    }
+  end
 
   def transition=(t)
     self[:transition] = self.class.transition_syms.fetch(t, :none)
@@ -27,26 +60,6 @@ class Slide < ActiveRecord::Base
 
   def transition_name
     self.class.transition_names.fetch(transition)
-  end
-
-  # Infer media type from url
-  def type
-    begin
-      # Prioritized order of media types
-      types = MIME::Types.type_for(url).collect { |t| t.media_type }
-      ['video', 'audio', 'image'].each { |t| return self.class.media_types.fetch(t) if types.include? t }
-    rescue
-    end
-    :none
-  end
-
-  # Media types that are natively supported by AirPlay
-  def self.media_types
-    {
-      'image' => :image,
-      'video' => :video,
-      'audio' => :audio,
-    }
   end
 
   # See Airplay::Protocol::Image.transitions
@@ -68,9 +81,6 @@ class Slide < ActiveRecord::Base
       :slide_right  => "Slide Right",
       :dissolve     => "Dissolve"
     }
-  end
-
-  def type=(t)
   end
 
   def feed_path=(t)

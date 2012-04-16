@@ -58,7 +58,7 @@ def loop_slideshow(node_name)
   loop do
     slideshow.slides.each do |slide|
       # puts "Displaying slide #{slide.inspect}"
-      case slide.type
+      case slide.media_type
       when :video
         puts "Sending video #{slide.url}"
         player = airplay.send_video(slide.url) # second arg is scrub position
