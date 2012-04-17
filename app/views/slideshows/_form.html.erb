@@ -1,15 +1,5 @@
 <%= form_for(@slideshow, :html => {:class => 'form-inline edit_slideshow'}) do |f| %>
-  <% if @slideshow.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@slideshow.errors.count, "error") %> prohibited this slideshow from being saved:</h2>
-
-      <ul>
-      <% @slideshow.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render :partial => 'errors', :locals => { :form => f, :obj => @slide } %>
 
   <legend>Edit Slideshow</legend>
 

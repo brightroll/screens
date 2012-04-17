@@ -1,15 +1,5 @@
 <%= form_for(@device, :html => {:class => 'form-horizontal edit_device'}) do |f| %>
-  <% if @device.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@device.errors.count, "error") %> prohibited this device from being saved:</h2>
-
-      <ul>
-      <% @device.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render :partial => 'errors', :locals => { :form => f, :obj => @device } %>
 
   <fieldset>
     <legend>Edit Device</legend>

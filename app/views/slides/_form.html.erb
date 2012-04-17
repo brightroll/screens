@@ -12,17 +12,7 @@ $(function() {
 </script>
 
 <%= form_for(@slide, :html => {:class => 'form-horizontal edit_slide'}) do |f| %>
-  <% if @slide.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@slide.errors.count, "error") %> saving this slide:</h2>
-
-      <ul>
-      <% @slide.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render :partial => 'errors', :locals => { :form => f, :obj => @slide } %>
 
   <% if @slideshow %>
   <%= hidden_field_tag :slideshow_id, @slideshow.id %>
