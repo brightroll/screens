@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'airplay', '0.2.9.sodabrew'
 gem 'imgkit'
-gem 'rails', '3.2.2'
+gem 'formtastic-bootstrap', :git => 'git://github.com/cgunther/formtastic-bootstrap.git', :branch => 'bootstrap2-rails3-2-formtastic-2-1', :require => 'formtastic-bootstrap'
 
 # Gem is cached locally, but sourced from git
 gem 'googleapps-auth', '0.0.7.sodabrew', :require => 'googleapps_auth'
