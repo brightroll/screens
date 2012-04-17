@@ -28,7 +28,7 @@
 <%   slides.each do |slide| %>
   <tr>
     <td><%= link_to slide.name, slide %></td>
-    <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= slide.url %></td>
+    <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><a href="<%= slide.url %>" title="<%= slide.url %>" target="_blank"><%= slide.url %></a></td>
     <td><%= slide.display_time %></td>
     <td><%= slide.media_type %></td>
     <td><%= slide.transition %></td>
