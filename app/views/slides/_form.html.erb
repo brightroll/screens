@@ -12,7 +12,7 @@ $(function() {
 </script>
 
 <%= semantic_form_for(@slide, :html => {:class => 'form-horizontal edit_slide'}) do |f| %>
-  <%= render :partial => 'errors', :locals => { :form => f, :obj => @slide } %>
+  <%= f.semantic_errors %>
 
   <% if @slideshow %>
   <%= hidden_field_tag :slideshow_id, @slideshow.id %>

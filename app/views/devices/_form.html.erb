@@ -1,32 +1,15 @@
-<%= form_for(@device, :html => {:class => 'form-horizontal edit_device'}) do |f| %>
-  <%= render :partial => 'errors', :locals => { :form => f, :obj => @device } %>
+<%= semantic_form_for(@device, :html => {:class => 'form-horizontal edit_device'}) do |f| %>
+  <%= f.semantic_errors %>
 
-  <fieldset>
+  <%= f.inputs do %>
     <legend>Edit Device</legend>
+    <%= f.input :name %>
+    <%= f.input :password %>
+    <%= f.input :slideshow %>
+  <% end %>
 
-    <div class="control-group">
-      <%= f.label :name, :class => "control-label" %>
-      <div class="controls">
-        <%= f.text_field :name, :class => "input-xlarge span4" %>
-      </div>
-    </div>
+  <%= f.actions do %>
+    <%= f.action :submit, :as => :button %>
+  <% end %>
 
-    <div class="control-group">
-      <%= f.label :password, :class => "control-label" %>
-      <div class="controls">
-        <%= f.text_field :password, :class => "input-xlarge span4" %>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <%= f.label :slideshow, :class => "control-label" %>
-      <div class="controls">
-        <%= select :device, :slideshow_id, Slideshow.all.collect {|p| [ p.name, p.id ] }, { :include_blank => true } %>
-      </div>
-    </div>
-
-    <div class="form-actions">
-      <%= f.submit :class => "btn btn-primary" %>
-    </div>
-  </fieldset>
 <% end %>

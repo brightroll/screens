@@ -1,13 +1,13 @@
-<%= form_for(@slideshow, :html => {:class => 'form-inline edit_slideshow'}) do |f| %>
-  <%= render :partial => 'errors', :locals => { :form => f, :obj => @slide } %>
+<%= semantic_form_for(@slideshow, :html => {:class => 'form-inline edit_slideshow'}) do |f| %>
+  <%= f.semantic_errors %>
 
   <legend>Edit Slideshow</legend>
 
-  <div class="well"
-  <%= f.label :name, :class => "control-label" %>
-  <%= f.text_field :name, :class => "input-xlarge span4" %>
-
-  <%= f.submit :class => "btn btn-primary" %>
+  <div class="well">
+    <%= f.inputs do %>
+      <%= f.inputs :name %>
+      <%= f.action :submit, :as => :button %>
+    <% end %>
   </div>
 
 <% end %>
