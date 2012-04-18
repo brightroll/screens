@@ -11,97 +11,44 @@ $(function() {
 });
 </script>
 
-<%= form_for(@slide, :html => {:class => 'form-horizontal edit_slide'}) do |f| %>
+<%= semantic_form_for(@slide, :html => {:class => 'form-horizontal edit_slide'}) do |f| %>
   <%= render :partial => 'errors', :locals => { :form => f, :obj => @slide } %>
 
   <% if @slideshow %>
   <%= hidden_field_tag :slideshow_id, @slideshow.id %>
   <% end %>
 
-  <fieldset>
+  <%= f.inputs do %>
+
     <legend>Edit Slide</legend>
 
-    <div class="control-group">
-      <%= f.label :name, :class => "control-label" %>
-      <div class="controls">
-        <%= f.text_field :name, :class => "input-xlarge span4" %>
-      </div>
-    </div>
+    <%= f.input :name %>
+    <%= f.input :url, :input_html => { :rows => 6 } %>
 
-    <div class="control-group">
-      <%= f.label :url, :class => "control-label" %>
-      <div class="controls">
-        <%= f.text_area :url, :class => "input-xlarge span4", :rows => 6 %>
-      </div>
-    </div>
+    <!-- toggle the relevant option blocks below -->
+    <%= f.input :media_type, :as => :radio, :input_html => { :class => "options-toggle" } %>
 
-    <div class="control-group">
-      <%= f.label :media_type, :class => "control-label" %>
-      <div class="controls">
-        <label class="radio">
-          <%= f.radio_button :media_type, :image, :class => 'options-toggle' %>Image
-        </label>
-        <label class="radio">
-          <%= f.radio_button :media_type, :video, :class => 'options-toggle' %>Video
-        </label>
-        <label class="radio">
-          <%= f.radio_button :media_type, :audio, :class => 'options-toggle' %>Audio
-        </label>
-        <label class="radio">
-          <%= f.radio_button :media_type, :html, :class => 'options-toggle' %>Web URL
-        </label>
-        <!--label class="radio">
-          <%= f.radio_button :media_type, :feed, :class => 'options-toggle' %>Feed URL
-        </label-->
-      </div>
+    <!-- image and html options -->
+    <div class="options-all-media-types options-image options-html" style="display: none;">
+      <%= f.input :display_time, :append => 'seconds' %>
+      <%= f.input :transition, :as => :radio %>
     </div>
+    <!-- /image options -->
 
-<!-- image and html options -->
-<div class="options-all-media-types options-image options-html" style="display: none;">
-    <div class="control-group">
-      <%= f.label :display_time, :class => "control-label" %>
-      <div class="controls input-append">
-        <%= f.text_field :display_time, :class => "input-xlarge span2" %>
-        <span class="add-on">seconds</span>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <%= f.label :transition, :class => "control-label" %>
-      <div class="controls">
-        <%= select("slide", "transition",
-                   Slide.transition_syms.collect { |t, s| [ Slide.transition_names.fetch(s), s ] },
-                   :class => "input-xlarge") %>
-      </div>
-    </div>
-    </div>
-<!-- /image options -->
-
-<!-- video and audio options -->
+    <!-- video and audio options -->
     <div class="options-all-media-types options-video options-audio" style="display: none;">
-    <div class="control-group">
-      <%= f.label :scrub_time, :class => "control-label" %>
-      <div class="controls input-append">
-        <%= f.text_field :scrub_time, :class => "input-xlarge span2" %>
-        <span class="add-on">seconds</span>
-      </div>
+      <%= f.input :scrub_time, :append => 'seconds' %>
     </div>
-    </div>
-<!-- /video options -->
+    <!-- /video options -->
 
-<!-- feed options -->
+    <!-- feed options -->
     <div class="options-all-media-types options-feed" style="display: none;">
-    <div class="control-group">
-      <%= f.label :feed_path, :class => "control-label" %>
-      <div class="controls">
-        <%= f.text_area :feed_path, :class => "input-xlarge span4", :rows => 10 %>
-      </div>
+      <%= f.input :feed_path %>
     </div>
-    </div>
-<!-- /feed options -->
+    <!-- /feed options -->
+  <% end %>
 
-    <div class="form-actions">
-      <%= f.submit :class => "btn btn-primary" %>
-    </div>
-  </fieldset>
+  <%= f.actions do %>
+    <%= f.action :submit, :as => :button %>
+  <% end %>
 <% end %>

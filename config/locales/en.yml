@@ -1,5 +1,14 @@
-# Sample localization file for English. Add more files in this directory for other locales.
-# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
 en:
-  hello: "Hello world"
+  enumerize:
+    slide:
+      media_type:
+        image: "Image"
+        video: "Video"
+        audio: "Audio"
+        html: "Web URL"
+        feed: "Feed URL"
+      transition:
+        none: "None"
+        slide_left: "Slide Left"
+        slide_right: "Slide Right"
+        dissolve: "Dissolve"
