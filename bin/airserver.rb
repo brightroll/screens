@@ -19,7 +19,8 @@ IMGKit.configure do |config|
     :format => :png,
     :height => 1080,
     :width => 1920,
-    :quality => 10
+    :quality => 10,
+    :javascript_delay => 5000,
   }
 end
 
