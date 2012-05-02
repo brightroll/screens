@@ -15,17 +15,5 @@ class Slide < ActiveRecord::Base
   has_many :slideshow_slides
   has_many :slideshows, :through => :slideshow_slides
 
-  attr_accessible :name, :url, :transition, :display_time, :media_type, :feed_path, :scrub_time
-
-  def feed_path=(t)
-  end
-
-  def feed_path
-  end
-
-  def scrub_time=(t)
-  end
-
-  def scrub_time
-  end
+  attr_accessible :name, :url, :transition, :display_time, :media_type, :feed_path, :scrub_time, :stop_time
 end
