@@ -59,7 +59,7 @@ def loop_slideshow(node_name)
   loop do
     slideshow.slides.each do |slide|
       # puts "Displaying slide #{slide.inspect}"
-      case slide.media_type
+      case slide.media_type.to_sym
       when :video
         puts "Sending video #{slide.url}"
         player = airplay.send_video(slide.url) # second arg is scrub position
@@ -72,20 +72,20 @@ def loop_slideshow(node_name)
         player.stop
       when :image
         puts "Sending image #{slide.url}"
-        airplay.send_image(slide.url, slide.transition)
+        airplay.send_image(slide.url, slide.transition.to_sym)
         # sleep while the image is on the screen
         sleep slide.display_time
       else
         begin
           # Anything else gets rendered through WebKit
           puts "Rendering url #{slide.url}"
-          airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition, :raw => true)
+          airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition.to_sym, :raw => true)
           # sleep while the image is on the screen
           sleep slide.display_time
         rescue IMGKit::CommandFailedError
           puts "Failed to render url with IMGKit: #{slide.url}"
-        rescue
-          puts "Failed to render url (other error): #{slide.url}"
+        rescue Exception => e
+          puts "Failed to render url (other error): #{slide.url} #{e}"
         end
       end
     end
