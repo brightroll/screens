@@ -14,6 +14,9 @@ node_pids = {}
 LOOP_TIME = 50
 STANDARD_DISPLAY_TIME = 5
 
+$log = Logger.new(STDERR)
+$log.level = Logger::INFO
+
 IMGKit.configure do |config|
   config.default_options = {
     :format => :png,
@@ -28,7 +31,7 @@ def sleep_while_playing(player)
   for r in 1..5
     scrub = player.scrub
     if scrub and scrub.fetch('duration', 0) > 0
-      puts "Got scrub on try #{r}"
+      $log.debug("Got scrub on try #{r}")
       sleep scrub['duration']
       return
     end
@@ -40,52 +43,52 @@ end
 def loop_slideshow(node_name)
   device = Device.find_by_name(node_name)
   unless device
-    puts "Device #{node_name} is not in the database"
+    $log.debug("Device #{node_name} is not in the database")
     return
   end
 
   slideshow = device.slideshow
   unless slideshow
-    puts "Device #{node_name} has no slideshow"
+    $log.debug("Device #{node_name} has no slideshow")
     return
   end
-  puts "Beginning slideshow #{slideshow.name} on device #{device.name} "
+  $log.info("Beginning slideshow #{slideshow.name} on device #{device.name}")
 
   airplay = Airplay::Client.new node_name
   airplay.password device.password
 
-  puts "Connected to device: #{airplay.inspect}"
+  $log.debug("Connected to device: #{airplay.inspect}")
 
   loop do
     slideshow.slides.each do |slide|
-      # puts "Displaying slide #{slide.inspect}"
+      $log.debug("Displaying slide #{slide.inspect}")
       case slide.media_type.to_sym
       when :video
-        puts "Sending video #{slide.url}"
+        $log.info("Sending video #{slide.url}")
         player = airplay.send_video(slide.url) # second arg is scrub position
         sleep_while_playing player
         player.stop
       when :audio
-        puts "Sending audio #{slide.url}"
+        $log.info("Sending audio #{slide.url}")
         player = airplay.send_audio(slide.url) # second arg is scrub position
         sleep_while_playing player
         player.stop
       when :image
-        puts "Sending image #{slide.url}"
+        $log.info("Sending image #{slide.url}")
         airplay.send_image(slide.url, slide.transition.to_sym)
         # sleep while the image is on the screen
         sleep slide.display_time
       else
         begin
           # Anything else gets rendered through WebKit
-          puts "Rendering url #{slide.url}"
+          $log.info("Rendering url #{slide.url}")
           airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition.to_sym, :raw => true)
           # sleep while the image is on the screen
           sleep slide.display_time
         rescue IMGKit::CommandFailedError
-          puts "Failed to render url with IMGKit: #{slide.url}"
+          $log.error("Failed to render url with IMGKit: #{slide.url}")
         rescue Exception => e
-          puts "Failed to render url (other error): #{slide.url} #{e}"
+          $log.error("Failed to render url (other error): #{slide.url} #{e}")
         end
       end
     end
@@ -96,19 +99,19 @@ def loop_slideshow(node_name)
     slideshow = device.slideshow
   end
 
-  puts "Ending slideshow for #{node_name}"
+  $log.info("Ending slideshow for #{node_name}")
 end
 
 # Special function called by Kernel::at_exit
 def at_exit
   if am_parent
-    puts "Cleaning up children: #{node_pids.inspect}"
+    $log.info("Cleaning up children: #{node_pids.inspect}")
     node_pids.each do |node, pid|
       Process.kill("TERM", pid)
       Process.wait
     end
   else
-    puts "Child exiting for device: #{my_node}."
+    $log.info("Child exiting for device: #{my_node}.")
   end
 end
 
@@ -118,24 +121,26 @@ loop do
   # for that node, spin one up!
 
   airplay = begin
-    puts "Searching for AirPlay devices"
+    $log.info("Searching for AirPlay devices")
     Airplay::Client.new
   rescue Airplay::Client::ServerNotFoundError
-    puts "No devices found, sleeping #{LOOP_TIME} seconds"
+    $log.info("No devices found, sleeping #{LOOP_TIME} seconds")
     sleep LOOP_TIME
     next
   end
 
   airplay.servers.each do |node|
-    # puts node.inspect
+    $log.debug(node.inspect)
     unless node_pids.has_key? node.name
       node_pids[node.name] = Process.fork do
         am_parent = 0
         my_node = node.name
+        $log = Logger.new(STDERR)
+        $log.level = Logger::INFO
         loop_slideshow node.name
       end
     else
-      puts "Slideshow already running on device #{node.name}"
+      $log.debug("Slideshow already running on device #{node.name}")
     end
   end
 
@@ -147,7 +152,7 @@ loop do
       wpid, status = Process.waitpid2(pid, Process::WNOHANG)
 
       if wpid
-        puts "Reaping child for node #{name}: #{status.to_i} #{status.exitstatus}"
+        $log.debug("Reaping child for node #{name}: #{status.to_i} #{status.exitstatus}")
         true
       end
     rescue Errno::ESRCH # No such process
@@ -155,7 +160,7 @@ loop do
     rescue Errno::ECHILD # Process already exited
       true
     rescue # Anything else
-      puts "WARN: Possibly lost track of child pid #{pid}"
+      $log.warn("Possibly lost track of child pid #{pid}")
       true
     end
   end
