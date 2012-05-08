@@ -137,7 +137,8 @@ loop do
         my_node = node.name
         $log = Logger.new(STDERR)
         $log.level = Logger::INFO
-        loop_slideshow node.name
+        $0 = "#{$0} #{my_node}"
+        loop_slideshow my_node
       end
     else
       $log.debug("Slideshow already running on device #{node.name}")
