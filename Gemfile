@@ -13,4 +13,4 @@ gem 'googleapps-auth', '0.0.7.sodabrew', :require => 'googleapps_auth'
 # Core Rails gems
 gem 'mysql2'
 gem 'jquery-rails'
-gem 'rails', '3.2.2'
+gem 'rails', '~>3.2'
