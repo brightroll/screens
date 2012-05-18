@@ -47,22 +47,42 @@ def graphite_dashboard_html(graphite_uri)
 
   graphite = resp.body
 
-  graphs = JsonPath.new('$.state.graphs[:][2]').on(graphite)
-  title = JsonPath.new('$.state.name').on(graphite)[0]
   base_url = 'http://' + uri.hostname
+  title = JsonPath.new('$.state.name').on(graphite)[0]
+  graphs = JsonPath.new('$.state.graphs[:][2]').on(graphite)
+  pages = graphs.length / 4 + (graphs.length % 4 == 0 ? 0 : 1)
+  page = 0
 
-  ERB.new(<<EOF
+  Enumerator.new do |y|
+    loop {
+      ga = graphs[page * 4 + 0]
+      gb = graphs[page * 4 + 1]
+      gc = graphs[page * 4 + 2]
+      gd = graphs[page * 4 + 3]
+      page += 1
+
+      y.yield ERB.new(<<EOF
 <html>
   <head>
     <title><%= title %></title>
     <base href="<%= base_url %>" />
   </head>
   <body bgcolor="black">
-  <% graphs.each do |g| %>  <img src="<%= g %>" />
-  <% end %></body>
+  <table width="1920" height="1000"><tr>
+    <td height="80" colspan="2" style="color: white; font-size: 80px;"><%= title %> <%= page %>/<%= pages %></td>
+  </tr><tr>
+    <td><img width="960" height="500" src="<%= ga %>" /></td>
+    <td><% if gb %><img width="960" height="500" src="<%= gb %>" /><% end %></td>
+  </tr><tr>
+    <td><% if gc %><img width="960" height="500" src="<%= gc %>" /><% end %></td>
+    <td><% if gd %><img width="960" height="500" src="<%= gd %>" /><% end %></td>
+  </table>
+  </body>
 </html>
 EOF
-  ).result binding
+    ).result binding
+    }
+  end
 end
 
 # Take arg by name, rather than by object, to prevent instances crossing pids
@@ -107,10 +127,12 @@ def loop_slideshow(node_name)
       when :graphite
         begin
           $log.info("Rendering Graphite #{slide.url}")
-          img = IMGKit.new(graphite_dashboard_html(slide.url)).to_img
-          airplay.send_image(img, slide.transition.to_sym, :raw => true)
-          # sleep while the image is on the screen
-          sleep slide.display_time
+          graphite_dashboard_html(slide.url).each do |dashboard|
+            img = IMGKit.new(dashboard).to_img
+            airplay.send_image(img, slide.transition.to_sym, :raw => true)
+            # sleep one slide time length for each portion of the dashboard
+            sleep slide.display_time
+          end
         rescue IMGKit::CommandFailedError
           $log.error("Failed to render graphite with IMGKit: #{slide.url}")
         rescue Exception => e

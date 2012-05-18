@@ -5,9 +5,9 @@ en:
         image: "Image"
         video: "Video"
         audio: "Audio"
-        html: "Web URL"
-        feed: "Feed URL"
-        graphite: "Grahpite Dashboard"
+        html: "Web page"
+        feed: "Video feed"
+        graphite: "Grahpite dashboard"
       transition:
         none: "None"
         slide_left: "Slide Left"
