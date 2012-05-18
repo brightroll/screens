@@ -54,7 +54,7 @@ def graphite_dashboard_html(graphite_uri)
   page = 0
 
   Enumerator.new do |y|
-    loop {
+    while page <= pages do
       ga = graphs[page * 4 + 0]
       gb = graphs[page * 4 + 1]
       gc = graphs[page * 4 + 2]
@@ -80,8 +80,8 @@ def graphite_dashboard_html(graphite_uri)
   </body>
 </html>
 EOF
-    ).result binding
-    }
+      ).result binding
+    end
   end
 end
 
