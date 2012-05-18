@@ -9,8 +9,8 @@ class Slide < ActiveRecord::Base
   }, :unless => Proc.new { |a| [:audio, :video, :feed].include? a.media_type } # These types don't need a time
 
   include Enumerize
-  enumerize :transition, :in => [:none, :slide_left, :slide_right, :dissolve], :default => :none
-  enumerize :media_type, :in => [:html, :image, :video, :audio, :feed], :default => :html
+  enumerize :transition, :in => [:none, :slide_left, :slide_right, :dissolve], :default => :dissolve
+  enumerize :media_type, :in => [:html, :image, :video, :audio, :graphite, :feed], :default => :html
 
   has_many :slideshow_slides
   has_many :slideshows, :through => :slideshow_slides

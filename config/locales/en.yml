@@ -7,6 +7,7 @@ en:
         audio: "Audio"
         html: "Web URL"
         feed: "Feed URL"
+        graphite: "Grahpite Dashboard"
       transition:
         none: "None"
         slide_left: "Slide Left"

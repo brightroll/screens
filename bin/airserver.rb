@@ -104,9 +104,9 @@ def loop_slideshow(node_name)
         airplay.send_image(slide.url, slide.transition.to_sym)
         # sleep while the image is on the screen
         sleep slide.display_time
-      when :feed
+      when :graphite
         begin
-          $log.info("Rendering Graphite Feed #{slide.url}")
+          $log.info("Rendering Graphite #{slide.url}")
           img = IMGKit.new(graphite_dashboard_html(slide.url)).to_img
           airplay.send_image(img, slide.transition.to_sym, :raw => true)
           # sleep while the image is on the screen
