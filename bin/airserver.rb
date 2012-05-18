@@ -39,6 +39,32 @@ def sleep_while_playing(player)
   end
 end
 
+# Returns HTML suitable for rendering a Graphite dashboard
+def graphite_dashboard_html(graphite_uri)
+  uri = URI(graphite_uri)
+  req = Net::HTTP::Get.new(uri.request_uri)
+  resp = Net::HTTP.start(uri.hostname, uri.port){ |http| http.request(req) }
+
+  graphite = resp.body
+
+  graphs = JsonPath.new('$.state.graphs[:][2]').on(graphite)
+  title = JsonPath.new('$.state.name').on(graphite)[0]
+  base_url = 'http://' + uri.hostname
+
+  ERB.new(<<EOF
+<html>
+  <head>
+    <title><%= title %></title>
+    <base href="<%= base_url %>" />
+  </head>
+  <body bgcolor="black">
+  <% graphs.each do |g| %>  <img src="<%= g %>" />
+  <% end %></body>
+</html>
+EOF
+  ).result binding
+end
+
 # Take arg by name, rather than by object, to prevent instances crossing pids
 def loop_slideshow(node_name)
   device = Device.find_by_name(node_name)
@@ -78,11 +104,24 @@ def loop_slideshow(node_name)
         airplay.send_image(slide.url, slide.transition.to_sym)
         # sleep while the image is on the screen
         sleep slide.display_time
+      when :feed
+        begin
+          $log.info("Rendering Graphite Feed #{slide.url}")
+          img = IMGKit.new(graphite_dashboard_html(slide.url)).to_img
+          airplay.send_image(img, slide.transition.to_sym, :raw => true)
+          # sleep while the image is on the screen
+          sleep slide.display_time
+        rescue IMGKit::CommandFailedError
+          $log.error("Failed to render graphite with IMGKit: #{slide.url}")
+        rescue Exception => e
+          $log.error("Failed to render graphite (other error): #{slide.url} #{e}")
+        end
       else
         begin
           # Anything else gets rendered through WebKit
           $log.info("Rendering url #{slide.url}")
-          airplay.send_image(IMGKit.new(slide.url).to_img, slide.transition.to_sym, :raw => true)
+          img = IMGKit.new(slide.url).to_img
+          airplay.send_image(img, slide.transition.to_sym, :raw => true)
           # sleep while the image is on the screen
           sleep slide.display_time
         rescue IMGKit::CommandFailedError
