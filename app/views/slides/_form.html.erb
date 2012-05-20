@@ -1,12 +1,12 @@
 <script type="text/javascript">
 $(function() {
   $('.options-toggle').change(function(){
-    $('.options-all-media-types').hide('slow');
-    $('.options-'+$(this).val()).show('slow');
+    $('.options-all-media-types input').prop('disabled', true);
+    $('.options-'+$(this).val() + ' input').prop('disabled', false);
   });
 
   $('input:checked.options-toggle').each(function () {
-    $('.options-'+$(this).val()).show();
+    $('.options-'+$(this).val() + ' input').prop('disabled', false);
   });
 });
 </script>
@@ -29,23 +29,23 @@ $(function() {
     <%= f.input :media_type, :as => :radio, :input_html => { :class => "options-toggle" } %>
 
     <!-- image and html options -->
-    <div class="options-all-media-types options-image options-html" style="display: none;">
-      <%= f.input :display_time, :append => 'seconds' %>
+    <div class="options-all-media-types options-image options-html options-graphite">
+      <%= f.input :display_time, :append => 'seconds', :input_html => { :disabled => true } %>
     </div>
     <!-- /image options -->
 
     <!-- video and audio options -->
-    <div class="options-all-media-types options-video options-audio" style="display: none;">
-      <%= f.input :scrub_time, :append => 'seconds' %>
-      <%= f.input :stop_time, :append => 'seconds' %>
+    <div class="options-all-media-types options-video options-audio">
+      <%= f.input :scrub_time, :append => 'seconds', :input_html => { :disabled => true } %>
+      <%= f.input :stop_time, :append => 'seconds', :input_html => { :disabled => true } %>
     </div>
     <!-- /video options -->
 
-    <!-- feed options -->
-    <div class="options-all-media-types options-feed" style="display: none;">
-      <%= f.input :feed_path %>
+    <!-- feed options --/>
+    <div class="options-all-media-types options-feed">
+      <%= f.input :feed_path, :input_html => { :rows => 6 }, :input_html => { :disabled => true } %>
     </div>
-    <!-- /feed options -->
+    </-- /feed options -->
   <% end %>
 
   <%= f.actions do %>
