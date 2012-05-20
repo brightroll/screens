@@ -40,16 +40,21 @@ def sleep_while_playing(player)
 end
 
 # Returns HTML suitable for rendering a Graphite dashboard
-def graphite_dashboard_html(graphite_uri)
-  uri = URI(graphite_uri)
-  req = Net::HTTP::Get.new(uri.request_uri)
-  resp = Net::HTTP.start(uri.hostname, uri.port){ |http| http.request(req) }
+def graphite_dashboard_fetch(graphite_url)
+  url = URI(graphite_url)
+  req = Net::HTTP::Get.new(url.request_url)
+  resp = Net::HTTP.start(url.hostname, url.port){ |http| http.request(req) }
 
   graphite = resp.body
 
-  base_url = 'http://' + uri.hostname
+  base_url = 'http://' + url.hostname
   title = JsonPath.new('$.state.name').on(graphite)[0]
   graphs = JsonPath.new('$.state.graphs[:][2]').on(graphite)
+
+  return base_url, title, graphs
+end
+
+def graphite_dashboard_html(base_url, title, graphs)
   pages = graphs.length / 4 + (graphs.length % 4 == 0 ? 0 : 1)
   page = 0
 
@@ -68,15 +73,11 @@ def graphite_dashboard_html(graphite_uri)
     <base href="<%= base_url %>" />
   </head>
   <body bgcolor="black">
-  <table width="1920" height="1000"><tr>
-    <td height="80" colspan="2" style="color: white; font-size: 80px;"><%= title %> <%= page %>/<%= pages %></td>
-  </tr><tr>
-    <td><img width="960" height="500" src="<%= ga %>" /></td>
-    <td><% if gb %><img width="960" height="500" src="<%= gb %>" /><% end %></td>
-  </tr><tr>
-    <td><% if gc %><img width="960" height="500" src="<%= gc %>" /><% end %></td>
-    <td><% if gd %><img width="960" height="500" src="<%= gd %>" /><% end %></td>
-  </table>
+    <span style="color: white; font-size: 80px;"><%= title %> <%= page %>/<%= pages %></span>
+    <% if ga %><img style="width: 960px; height: 500px; position: absolute; left: 0px; top: 80px;" src="<%= ga %>" /><% end %>
+    <% if gb %><img style="width: 960px; height: 500px; position: absolute; left: 960px; top: 80px;" src="<%= gb %>" /><% end %>
+    <% if gc %><img style="width: 960px; height: 500px; position: absolute; left: 0px; top: 580px;" src="<%= gc %>" /><% end %>
+    <% if gd %><img style="width: 960px; height: 500px; position: absolute; left: 960px; top: 580px;" src="<%= gd %>" /><% end %>
   </body>
 </html>
 EOF
@@ -127,7 +128,8 @@ def loop_slideshow(node_name)
       when :graphite
         begin
           $log.info("Rendering Graphite #{slide.url}")
-          graphite_dashboard_html(slide.url).each do |dashboard|
+          base_url, title, graphs = graphite_dashboard_fetch(slide.url)
+          graphite_dashboard_html(base_url, title, graphs).each do |dashboard|
             img = IMGKit.new(dashboard).to_img
             airplay.send_image(img, slide.transition.to_sym, :raw => true)
             # sleep one slide time length for each portion of the dashboard
