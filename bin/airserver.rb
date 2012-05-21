@@ -8,9 +8,9 @@ require File.expand_path('../../config/environment',  __FILE__)
 require 'airplay'
 require 'imgkit'
 
-am_parent = 1
-my_node = ""
-node_pids = {}
+$am_parent = 1
+$my_node = ""
+$node_pids = {}
 LOOP_TIME = 50
 STANDARD_DISPLAY_TIME = 5
 
@@ -40,21 +40,21 @@ def sleep_while_playing(player)
 end
 
 # Returns HTML suitable for rendering a Graphite dashboard
-def graphite_dashboard_fetch(graphite_url)
-  url = URI(graphite_url)
-  req = Net::HTTP::Get.new(url.request_url)
-  resp = Net::HTTP.start(url.hostname, url.port){ |http| http.request(req) }
+def graphite_dashboard_fetch(graphite_uri)
+  uri = URI(graphite_uri)
+  req = Net::HTTP::Get.new(uri.request_uri)
+  resp = Net::HTTP.start(uri.hostname, uri.port){ |http| http.request(req) }
 
   graphite = resp.body
 
-  base_url = 'http://' + url.hostname
+  base_uri = 'http://' + uri.hostname
   title = JsonPath.new('$.state.name').on(graphite)[0]
   graphs = JsonPath.new('$.state.graphs[:][2]').on(graphite)
 
-  return base_url, title, graphs
+  return base_uri, title, graphs
 end
 
-def graphite_dashboard_html(base_url, title, graphs)
+def graphite_dashboard_html(base_uri, title, graphs)
   pages = graphs.length / 4 + (graphs.length % 4 == 0 ? 0 : 1)
   page = 0
 
@@ -70,7 +70,7 @@ def graphite_dashboard_html(base_url, title, graphs)
 <html>
   <head>
     <title><%= title %></title>
-    <base href="<%= base_url %>" />
+    <base href="<%= base_uri %>" />
   </head>
   <body bgcolor="black">
     <span style="color: white; font-size: 80px;"><%= title %> <%= page %>/<%= pages %></span>
@@ -167,14 +167,29 @@ end
 
 # Special function called by Kernel::at_exit
 def at_exit
-  if am_parent
-    $log.info("Cleaning up children: #{node_pids.inspect}")
-    node_pids.each do |node, pid|
-      Process.kill("TERM", pid)
+  reap
+end
+
+def on_hup
+  reap
+end
+
+# When the parent gets a sigterm, kill itself
+def on_term
+  reap
+  exit
+end
+
+def reap
+  if $am_parent
+    $log.info("Cleaning up children: #{$node_pids.inspect}")
+    $node_pids.each do |node, pid|
+      Process.kill("KILL", pid)
       Process.wait
     end
   else
-    $log.info("Child exiting for device: #{my_node}.")
+    $log.info("Child exiting for device: #{$my_node}.")
+    shutdown()
   end
 end
 
@@ -182,6 +197,9 @@ loop do
   # Every $loop_time seconds, look for airplay nodes.
   # If a node is found and there isn't a child process
   # for that node, spin one up!
+
+  Signal.trap("HUP", proc { on_hup })
+  Signal.trap("TERM", proc { on_term })
 
   airplay = begin
     $log.info("Searching for AirPlay devices")
@@ -194,14 +212,14 @@ loop do
 
   airplay.servers.each do |node|
     $log.debug(node.inspect)
-    unless node_pids.has_key? node.name
-      node_pids[node.name] = Process.fork do
-        am_parent = 0
-        my_node = node.name
+    unless $node_pids.has_key? node.name
+      $node_pids[node.name] = Process.fork do
+        $am_parent = 0
+        $my_node = node.name
         $log = Logger.new(STDERR)
         $log.level = Logger::INFO
-        $0 = "#{$0} #{my_node}"
-        loop_slideshow my_node
+        $0 = "#{$0} #{$my_node}"
+        loop_slideshow $my_node
       end
     else
       $log.debug("Slideshow already running on device #{node.name}")
@@ -211,7 +229,7 @@ loop do
   # Give the processes a moment to spin up and try connecting
   sleep 10
 
-  node_pids.delete_if do |name, pid|
+  $node_pids.delete_if do |name, pid|
     begin
       wpid, status = Process.waitpid2(pid, Process::WNOHANG)
 
