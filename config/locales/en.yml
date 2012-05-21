@@ -7,7 +7,7 @@ en:
         audio: "Audio"
         html: "Web page"
         feed: "Video feed"
-        graphite: "Grahpite dashboard"
+        graphite: "Graphite dashboard"
       transition:
         none: "None"
         slide_left: "Slide Left"
