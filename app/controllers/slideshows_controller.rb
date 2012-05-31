@@ -38,6 +38,12 @@ class SlideshowsController < ApplicationController
     @slideshow = Slideshow.find(params[:id])
     @slides = @slideshow.slides
     @slide = Slide.new
+
+    respond_to do |format|
+      format.html # edit.html.erb
+      # javascript-encoded partial to go into a hover window
+      format.js { render :inline => "$('<%= params[:update] %>').html('<%= escape_javascript(render :partial => 'slideshows/form' ) %>')" }
+    end
   end
 
   # POST /slideshows
@@ -61,17 +67,9 @@ class SlideshowsController < ApplicationController
   def update
     @slideshow = Slideshow.find(params[:id])
 
-    # Old method with a single multi-select box
-    # @slideshow.slides = params[:existing_slides].map{|es| Slide.find(es)} if params[:existing_slides]
-
     @slideshow.slides += params[:add_slides].map{ |es| Slide.find(es) } if params[:add_slides]
 
-    # Doesn't work: @slideshow.slides -= slide_id
-    if params[:del_slides]
-      params[:del_slides].each do |slide_id|
-        @slideshow.slideshow_slides.where(:slide_id => slide_id).delete_all
-      end
-    end
+    @slideshow.slideshow_slides.where(:slide_id => params[:del_slides]).delete_all
 
     respond_to do |format|
       if @slideshow.update_attributes(params[:slideshow])
