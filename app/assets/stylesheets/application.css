@@ -23,3 +23,8 @@ body {
 .modal-close {
   float: right;
 }
+
+/* Bootstrap has '.breadcrumb .active a' but I want to match this pattern, too: */
+.breadcrumb a.active {
+  color: #333333;
+}
