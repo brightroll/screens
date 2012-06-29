@@ -4,9 +4,24 @@
              link_to('Slideshows: ' + @slideshow.name, '', :class => 'active')
            ],
            :action_links => [
+             link_to('Preview', '#modal_carousel', 'data-toggle' => 'modal'),
              link_to('Edit', edit_slideshow_path(@slideshow))
            ] } %>
 
   <legend>Slideshow: <%= @slideshow.name %></legend>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#modal_carousel').on('shown', function () {
+    $('#ss_carousel .item:first').addClass('active');
+    $('#ss_carousel').carousel({
+        interval: 5000
+    });
+  });
+});
+</script>
+<div class="modal hide" id="modal_carousel" style="width: 800px; margin-left: -400px; height: 500px; margin-top: -250px;">
+<%= render :partial => '/slides/carousel', :locals => { :slides => @slides, :id => 'ss_carousel' } %>
+</div>
 
   <%= render :partial => '/slides/list', :locals => { :slides => @slides } %>
