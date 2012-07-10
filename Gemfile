@@ -13,3 +13,7 @@ gem 'mysql2'
 gem 'jquery-rails'
 gem 'rails', '~>3.2'
 gem 'thin'
+
+group :development, :test do
+  gem 'rspec-rails'
+end
