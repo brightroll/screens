@@ -6,6 +6,7 @@
 :userid: 3004
 :groupid: 3004
 :includes:
+- README
 - Rakefile
 - Gemfile
 - app
@@ -16,5 +17,5 @@
 - config.ru
 - public
 - script
-- vendor/assets
 - vendor/bundle
+- vendor/assets
