@@ -16,4 +16,5 @@
 - config.ru
 - public
 - script
+- vendor/assets
 - vendor/bundle
