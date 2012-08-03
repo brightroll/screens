@@ -1,0 +1,17 @@
+---
+:package_name: airplay_wall
+:package_dir: airplay_wall
+:maintainer: BrightRoll Engineering - Aaron Stone
+:email: aaron@brightroll.com
+:userid: 3004
+:groupid: 3004
+:includes:
+- Rakefile
+- Gemfile
+- app
+- bin
+- db
+- lib
+- config
+- public
+- vendor/bundle
