@@ -1,28 +1,24 @@
 <%= render :partial => 'breadcrumbs' %>
 
-<div class="hero-unit">
-  <h1>Get Started!</h1>
-  <p>Create slideshows that include web pages, images and videos and see them displayed on your Airplay devices.</p>
-  <p><a class="btn btn-primary btn-large" href="/devices">Get started! &raquo;</a></p>
-</div>
+<h1>Now Playing</h1>
 
-<div class="row">
-  <div class="span4">
-    <h2>1. Airplay Devices</h2>
-     <p>See what Airplay devices are available on your network.</p>
-    <p><a class="btn" href="/devices/browse">Browse Network &raquo;</a></p>
- </div>
+<div class="well">
+  <ul class="thumbnails">
 
-  <div class="span4">
-    <h2>2. Slideshows</h2>
-     <p>Create slideshows you would like to see displayed on your Airplay devices. The slides could be images, webpages, or your favorite holiday photos.</p>
-    <p><a class="btn" href="/slideshows/new">Create Slideshow &raquo;</a></p>
+<% @devices.each do |dev| %>
+    <li class="span4">
+      <div class="thumbnail">
+        <img src="/assets/nopreview.png" width=320 height=160 alt="no preview available" />
+        <h3>Device: <%= link_to dev.name, dev %></h3>
+        <p>Slideshow: <%= link_to dev.slideshow.name, dev.slideshow %></p>
+        <div class="progress">
+          <a rel="tooltip" data-placement="bottom" title="Slide 6 of 10">
+            <div class="bar" style="width: 60%;"></div>
+          </a>
+        </div>
+      </div>
+    </li>
+<% end %>
 
-  </div>
-
-  <div class="span4">
-    <h2>3. Map them!</h2>
-    <p>Select  which Slideshows you would like to see on your Airplay wall. Map the slideshows to the devices, sit back, and enjoy the slideshow!</p>
-    <p><a class="btn" href="/devices">View details &raquo;</a></p>
-  </div>
+  </ul>
 </div>
