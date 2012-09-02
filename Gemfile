@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'airplay', '0.2.9.sodabrew'
+gem 'airplay', :git => 'git://github.com/sodabrew/airplay.git', :branch => 'patches-merged', :require => 'airplay'
+# gem 'airplay', :path => '../../airplay-sodabrew', :require => 'airplay'
 gem 'imgkit'
 gem 'enumerize'
 gem 'formtastic', :git => 'git://github.com/justinfrench/formtastic.git', :branch => '2.1-stable', :require => 'formtastic'

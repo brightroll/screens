@@ -15,6 +15,16 @@ GIT
     formtastic (2.1.1)
       actionpack (~> 3.0)
 
+GIT
+  remote: git://github.com/sodabrew/airplay.git
+  revision: 6961b6e85410763275e0e5ffb6e35c425c181a2b
+  branch: patches-merged
+  specs:
+    airplay (0.2.9)
+      dnssd (~> 2.0)
+      net-http-digest_auth (~> 1.2)
+      net-http-persistent (>= 2.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -48,11 +58,6 @@ GEM
     activesupport (3.2.8)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    airplay (0.2.9.sodabrew)
-      dnssd (~> 2.0)
-      net-http-digest_auth (~> 1.2)
-      net-http-persistent (>= 2.6)
-      plist (~> 3.1.0)
     arel (3.0.2)
     builder (3.0.0)
     daemons (1.1.9)
@@ -84,7 +89,6 @@ GEM
     mysql2 (0.3.11)
     net-http-digest_auth (1.2.1)
     net-http-persistent (2.7)
-    plist (3.1.0)
     polyglot (0.3.3)
     rack (1.4.1)
     rack-cache (1.2)
@@ -144,7 +148,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airplay (= 0.2.9.sodabrew)
+  airplay!
   enumerize
   formtastic!
   formtastic-bootstrap!
