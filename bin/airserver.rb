@@ -7,6 +7,7 @@ require File.expand_path('../../config/environment',  __FILE__)
 
 require 'airplay'
 require 'imgkit'
+require 'image_science'
 
 $am_parent = 1
 $my_node = ""
@@ -14,7 +15,7 @@ $node_pids = {}
 LOOP_TIME = 50
 STANDARD_DISPLAY_TIME = 5
 
-$log = Logger.new(STDERR)
+$log = Logger.new('log/airserver.log')
 $log.level = Logger::INFO
 
 IMGKit.configure do |config|
@@ -103,28 +104,46 @@ def loop_slideshow(node_name)
 
   airplay = Airplay::Client.new node_name
   airplay.password device.password
-
   $log.debug("Connected to device: #{airplay.inspect}")
 
   loop do
     slideshow.slides.each do |slide|
       $log.debug("Displaying slide #{slide.inspect}")
-      case slide.media_type.to_sym
+
+      case ( slide.media_type and slide.media_type.to_sym or nil )
       when :video
         $log.info("Sending video #{slide.url}")
         player = airplay.send_video(slide.url) # second arg is scrub position
+        # TODO: video thumbnail...
+        # ImageScience::with_image_from_memory(img).thumbnail(640) do |thumb|
+        #  thumb.save("public/thumbs/#{slide.url.hash}.png")
+        #  FileUtils.cp("public/thumbs/#{slide.url.hash}.png", "public/thumbs/device.#{airplay.active.deviceid}.png")
+        # end
         sleep_while_playing player
         player.stop
+
       when :audio
         $log.info("Sending audio #{slide.url}")
         player = airplay.send_audio(slide.url) # second arg is scrub position
+        # TODO: audio thumbnail...
+        # ImageScience::with_image_from_memory(img).thumbnail(640) do |thumb|
+        #  thumb.save("public/thumbs/#{slide.url.hash}.png")
+        #  FileUtils.cp("public/thumbs/#{slide.url.hash}.png", "public/thumbs/device.#{airplay.active.deviceid}.png")
+        # end
         sleep_while_playing player
         player.stop
+
       when :image
         $log.info("Sending image #{slide.url}")
         airplay.send_image(slide.url, slide.transition.to_sym)
+        # TODO: image url means the image is not local
+        # ImageScience::with_image_from_memory(slide.url).thumbnail(640) do |thumb|
+        #   thumb.save("public/thumbs/#{slide.url.hash}.png")
+        #   FileUtils.cp("public/thumbs/#{slide.url.hash}.png", "public/thumbs/device.#{airplay.active.deviceid}.png")
+        # end
         # sleep while the image is on the screen
         sleep slide.display_time
+
       when :graphite
         begin
           $log.info("Rendering Graphite #{slide.url}")
@@ -132,6 +151,11 @@ def loop_slideshow(node_name)
           graphite_dashboard_html(base_url, title, graphs).each do |dashboard|
             img = IMGKit.new(dashboard).to_img
             airplay.send_image(img, slide.transition.to_sym, :raw => true)
+            # Store a thumbnail of this slide (640 x 360, displayed as 320 x 180)
+            ImageScience::with_image_from_memory(img).thumbnail(640) do |thumb|
+              thumb.save("public/thumbs/#{slide.url.hash}.png")
+              FileUtils.cp("public/thumbs/#{slide.url.hash}.png", "public/thumbs/device.#{airplay.active.deviceid}.png")
+            end
             # sleep one slide time length for each portion of the dashboard
             sleep slide.display_time
           end
@@ -140,12 +164,18 @@ def loop_slideshow(node_name)
         rescue Exception => e
           $log.error("Failed to render graphite (other error): #{slide.url} #{e}")
         end
+
       else
         begin
           # Anything else gets rendered through WebKit
           $log.info("Rendering url #{slide.url}")
           img = IMGKit.new(slide.url).to_img
           airplay.send_image(img, slide.transition.to_sym, :raw => true)
+          # Store a thumbnail of this slide (640 x 360, displayed as 320 x 180)
+          ImageScience::with_image_from_memory(img).thumbnail(640) do |thumb|
+            thumb.save("public/thumbs/#{slide.url.hash}.png")
+            FileUtils.cp("public/thumbs/#{slide.url.hash}.png", "public/thumbs/device.#{airplay.active.deviceid}.png")
+          end
           # sleep while the image is on the screen
           sleep slide.display_time
         rescue IMGKit::CommandFailedError
@@ -153,6 +183,7 @@ def loop_slideshow(node_name)
         rescue Exception => e
           $log.error("Failed to render url (other error): #{slide.url} #{e}")
         end
+
       end
     end
 
@@ -216,7 +247,7 @@ loop do
       $node_pids[node.name] = Process.fork do
         $am_parent = 0
         $my_node = node.name
-        $log = Logger.new(STDERR)
+        $log = Logger.new("log/airserver.#{node.deviceid}.log")
         $log.level = Logger::INFO
         $0 = "#{$0} #{$my_node}"
         loop_slideshow $my_node
