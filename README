@@ -1,16 +1,8 @@
-Get Bundler 1.1.rc, then install gems locally:
-
-$ gem install bundler -v "> 1.0.50" --pre
 $ bundle install --local --standalone
 
 Install imgkit's wkhtmltoimage at /usr/local/bin
 
-$ bundle exec rvmsudo imgkit --install-wkhtmltoimage
-
-Install a set of CA Certificates to verify Google Apps over SSL:
-
-(Max OS X with MacPorts)
-$ sudo port install curl-ca-bundle
+$ bundle exec imgkit --install-wkhtmltoimage
 
 
 Airplay Icon:
