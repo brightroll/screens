@@ -40,6 +40,16 @@ def sleep_while_playing(player)
   end
 end
 
+def thumbnail(img, thumbname, thumbcopy = false)
+  ImageScience::with_image_from_memory(img) do |science|
+    science.thumbnail(640) do |thumb|
+      thumb.save("public/thumbs/#{thumbname}.png")
+      FileUtils.cp("public/thumbs/#{thumbname}.png",
+                   "public/thumbs/#{thumbcopy}.png") if thumbcopy
+    end
+  end
+end
+
 # Returns HTML suitable for rendering a Graphite dashboard
 def graphite_dashboard_fetch(graphite_uri)
   uri = URI(graphite_uri)
@@ -115,10 +125,6 @@ def loop_slideshow(node_name)
         $log.info("Sending video #{slide.url}")
         player = airplay.send_video(slide.url) # second arg is scrub position
         # TODO: video thumbnail...
-        # ImageScience::with_image_from_memory(img).thumbnail(640) do |thumb|
-        #  thumb.save("public/thumbs/#{slide.url.hash}.png")
-        #  FileUtils.cp("public/thumbs/#{slide.url.hash}.png", "public/thumbs/device.#{airplay.active.deviceid}.png")
-        # end
         sleep_while_playing player
         player.stop
 
@@ -126,10 +132,6 @@ def loop_slideshow(node_name)
         $log.info("Sending audio #{slide.url}")
         player = airplay.send_audio(slide.url) # second arg is scrub position
         # TODO: audio thumbnail...
-        # ImageScience::with_image_from_memory(img).thumbnail(640) do |thumb|
-        #  thumb.save("public/thumbs/#{slide.url.hash}.png")
-        #  FileUtils.cp("public/thumbs/#{slide.url.hash}.png", "public/thumbs/device.#{airplay.active.deviceid}.png")
-        # end
         sleep_while_playing player
         player.stop
 
@@ -137,10 +139,6 @@ def loop_slideshow(node_name)
         $log.info("Sending image #{slide.url}")
         airplay.send_image(slide.url, slide.transition.to_sym)
         # TODO: image url means the image is not local
-        # ImageScience::with_image_from_memory(slide.url).thumbnail(640) do |thumb|
-        #   thumb.save("public/thumbs/#{slide.url.hash}.png")
-        #   FileUtils.cp("public/thumbs/#{slide.url.hash}.png", "public/thumbs/device.#{airplay.active.deviceid}.png")
-        # end
         # sleep while the image is on the screen
         sleep slide.display_time
 
@@ -151,11 +149,7 @@ def loop_slideshow(node_name)
           graphite_dashboard_html(base_url, title, graphs).each do |dashboard|
             img = IMGKit.new(dashboard).to_img
             airplay.send_image(img, slide.transition.to_sym, :raw => true)
-            # Store a thumbnail of this slide (640 x 360, displayed as 320 x 180)
-            ImageScience::with_image_from_memory(img).thumbnail(640) do |thumb|
-              thumb.save("public/thumbs/#{slide.url.hash}.png")
-              FileUtils.cp("public/thumbs/#{slide.url.hash}.png", "public/thumbs/device.#{airplay.active.deviceid}.png")
-            end
+            thumbnail(img, slide.url.hash, "device.#{airplay.active.deviceid}")
             # sleep one slide time length for each portion of the dashboard
             sleep slide.display_time
           end
@@ -171,11 +165,7 @@ def loop_slideshow(node_name)
           $log.info("Rendering url #{slide.url}")
           img = IMGKit.new(slide.url).to_img
           airplay.send_image(img, slide.transition.to_sym, :raw => true)
-          # Store a thumbnail of this slide (640 x 360, displayed as 320 x 180)
-          ImageScience::with_image_from_memory(img).thumbnail(640) do |thumb|
-            thumb.save("public/thumbs/#{slide.url.hash}.png")
-            FileUtils.cp("public/thumbs/#{slide.url.hash}.png", "public/thumbs/device.#{airplay.active.deviceid}.png")
-          end
+          thumbnail(img, slide.url.hash, "device.#{airplay.active.deviceid}")
           # sleep while the image is on the screen
           sleep slide.display_time
         rescue IMGKit::CommandFailedError
