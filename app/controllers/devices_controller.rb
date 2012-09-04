@@ -2,7 +2,7 @@ class DevicesController < ApplicationController
   # GET /devices
   # GET /devices.json
   def index
-    @devices = Device.all
+    @devices = Device.find(:all, :order => 'name')
 
     respond_to do |format|
       format.html # index.html.erb

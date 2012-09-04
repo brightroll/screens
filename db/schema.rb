@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(:version => 20120904180340) do
     t.string   "transition",   :limit => 16, :default => "none", :null => false
     t.datetime "created_at",                                     :null => false
     t.datetime "updated_at",                                     :null => false
-    t.string   "media_type",   :limit => 16, :default => "none"
+    t.string   "media_type",   :limit => 16, :default => "none", :null => false
     t.text     "feed_path"
     t.integer  "scrub_time"
     t.integer  "stop_time"

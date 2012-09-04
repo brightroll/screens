@@ -12,6 +12,7 @@
   <tr>
     <th>Name</th>
     <th>Slideshow Name</th>
+    <th>Device ID</th>
     <th colspan="2"></th>
   </tr>
   </thead>
@@ -20,6 +21,7 @@
   <tr>
     <td><%= link_to device.name, device %></td>
     <td><%= device_slideshow_link(device) %></td>
+    <td><%= device.deviceid %></td>
     <td class="col-edit"><%= link_to raw('<i class="icon-edit"></i>'), edit_device_path(device), :class=>'btn btn-mini', :title=>'Edit' %></td>
     <td class="col-delete"><%= link_to raw('<i class="icon-trash"></i>'), device, confirm: "Delete device #{device.name}?", method: :delete, :class=>'btn btn-mini', :title=>'Delete' %></td>
   </tr>
