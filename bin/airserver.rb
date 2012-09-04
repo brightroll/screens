@@ -8,6 +8,7 @@ require File.expand_path('../../config/environment',  __FILE__)
 require 'airplay'
 require 'imgkit'
 require 'image_science'
+require 'digest/md5'
 
 $am_parent = 1
 $my_node = ""
@@ -98,8 +99,8 @@ EOF
 end
 
 # Take arg by name, rather than by object, to prevent instances crossing pids
-def loop_slideshow(node_name)
-  device = Device.find_by_name(node_name)
+def loop_slideshow(node)
+  device = Device.find_by_name(node.name)
   unless device
     $log.debug("Device #{node_name} is not in the database")
     return
@@ -112,7 +113,7 @@ def loop_slideshow(node_name)
   end
   $log.info("Beginning slideshow #{slideshow.name} on device #{device.name}")
 
-  airplay = Airplay::Client.new node_name
+  airplay = Airplay::Client.new node
   airplay.password device.password
   $log.debug("Connected to device: #{airplay.inspect}")
 
@@ -149,7 +150,7 @@ def loop_slideshow(node_name)
           graphite_dashboard_html(base_url, title, graphs).each do |dashboard|
             img = IMGKit.new(dashboard).to_img
             airplay.send_image(img, slide.transition.to_sym, :raw => true)
-            thumbnail(img, slide.url.hash, "device.#{airplay.active.deviceid}")
+            thumbnail(img, Digest::MD5.hexdigest(slide.url))
             # sleep one slide time length for each portion of the dashboard
             sleep slide.display_time
           end
@@ -165,7 +166,7 @@ def loop_slideshow(node_name)
           $log.info("Rendering url #{slide.url}")
           img = IMGKit.new(slide.url).to_img
           airplay.send_image(img, slide.transition.to_sym, :raw => true)
-          thumbnail(img, slide.url.hash, "device.#{airplay.active.deviceid}")
+          thumbnail(img, Digest::MD5.hexdigest(slide.url))
           # sleep while the image is on the screen
           sleep slide.display_time
         rescue IMGKit::CommandFailedError
@@ -206,11 +207,11 @@ def reap
     $log.info("Cleaning up children: #{$node_pids.inspect}")
     $node_pids.each do |node, pid|
       Process.kill("KILL", pid)
-      Process.wait
     end
+    Process.waitall
   else
-    $log.info("Child exiting for device: #{$my_node}.")
-    shutdown()
+    $log.info("Child exiting for device: #{$my_node.name} #{$my_name.deviceid}.")
+    shutdown
   end
 end
 
@@ -233,13 +234,13 @@ loop do
 
   airplay.servers.each do |node|
     $log.debug(node.inspect)
-    unless $node_pids.has_key? node.name
-      $node_pids[node.name] = Process.fork do
+    unless $node_pids.has_key? node.deviceid
+      $node_pids[node.deviceid] = Process.fork do
         $am_parent = 0
-        $my_node = node.name
+        $my_node = node
         $log = Logger.new("log/airserver.#{node.deviceid}.log")
         $log.level = Logger::INFO
-        $0 = "#{$0} #{$my_node}"
+        $0 = "#{$0} #{$my_node.name} #{$my_node.deviceid}"
         loop_slideshow $my_node
       end
     else
