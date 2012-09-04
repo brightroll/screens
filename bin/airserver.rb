@@ -20,6 +20,12 @@ $log = Logger.new('log/airserver.log')
 $log.level = Logger::INFO
 
 IMGKit.configure do |config|
+  config.wkhtmltoimage = [
+        '~/bin/wkhtmltoimage',          # Personal ~/bin
+        '/usr/local/bin/wkhtmltoimage', # Homebrew
+        '/opt/local/bin/wkhtmltoimage', # Macports
+        '/usr/bin/wkhtmltoimage',       # Installed
+       ].select { |f| File.exist? f }.first
   config.default_options = {
     :format => :png,
     :height => 1080,
