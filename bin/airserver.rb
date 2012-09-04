@@ -47,6 +47,8 @@ def thumbnail(img, thumbname, thumbcopy = false)
       thumb.save("public/thumbs/#{thumbname}.png")
       FileUtils.cp("public/thumbs/#{thumbname}.png",
                    "public/thumbs/#{thumbcopy}.png") if thumbcopy
+      # Note the current thumbnail
+      File.open("tmp/pids/device.#{$my_node.deviceid}.slide") { |f| f.write("public/thumbs/${thumbname}.png") }
     end
   end
 end
@@ -102,13 +104,13 @@ end
 def loop_slideshow(node)
   device = Device.find_by_name(node.name)
   unless device
-    $log.debug("Device #{node_name} is not in the database")
+    $log.debug("Device #{node} is not in the database")
     return
   end
 
   slideshow = device.slideshow
   unless slideshow
-    $log.debug("Device #{node_name} has no slideshow")
+    $log.debug("Device #{node} has no slideshow")
     return
   end
   $log.info("Beginning slideshow #{slideshow.name} on device #{device.name}")
@@ -184,7 +186,7 @@ def loop_slideshow(node)
     slideshow = device.slideshow
   end
 
-  $log.info("Ending slideshow for #{node_name}")
+  $log.info("Ending slideshow for #{node}")
 end
 
 # Special function called by Kernel::at_exit
