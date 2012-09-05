@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-$: << File.expand_path(File.join(File.dirname(__FILE__), ".."))
+$: << File.expand_path(File.join(File.dirname(__FILE__), '..'))
 require 'vendor/bundle/bundler/setup.rb'
 
 ENV['RAILS_ENV'] = ARGV.first || ENV['RAILS_ENV'] || 'development'
@@ -11,9 +11,9 @@ require 'image_science'
 require 'digest/md5'
 
 $am_parent = 1
-$my_node = ""
+$my_node = ''
 $node_pids = {}
-$pidfile = ""
+$pidfile = ''
 LOOP_TIME = 50
 STANDARD_DISPLAY_TIME = 5
 
@@ -148,8 +148,12 @@ def loop_slideshow(node)
       when :image
         $log.info("Sending image #{slide.url}")
         airplay.send_image(slide.url, slide.transition.to_sym)
-        # TODO: image url means the image is not local
-        # sleep while the image is on the screen
+        begin
+          img = Net::HTTP.get_response(URI.parse(slide.url)).body
+          thumbnail(img, Digest::MD5.hexdigest(slide.url))
+        rescue Exception => e
+          $log.error("Failed to thumbnail image url: #{slide.url} #{e}")
+        end
         sleep slide.display_time
 
       when :graphite
