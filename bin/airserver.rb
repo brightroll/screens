@@ -243,7 +243,7 @@ loop do
 
   airplay.servers.each do |node|
     $log.debug(node.inspect)
-    unless $node_pids.has_key? node.deviceid
+    unless $node_pids.has_key? node.deviceid.upcase!
       $node_pids[node.deviceid] = Process.fork do
         $am_parent = 0
         $my_node = node
