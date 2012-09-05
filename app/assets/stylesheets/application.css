@@ -1,9 +1,8 @@
 /* CSS Manifest
- *= bootstrap
- *= bootstrap-responsive
- *= formtastic-bootstrap
+ *= require bootstrap
+ *= require bootstrap-responsive
+ *= require formtastic-bootstrap
  *= require_self
- *= require_tree .
  */
 
 /* Body Customizations */
