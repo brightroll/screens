@@ -10,7 +10,7 @@
       <div class="thumbnail">
         <img src="/assets/nopreview.png" width=320 height=160 alt="no preview available" />
         <h3>Device: <%= link_to dev.name, dev %></h3>
-        <p>Slideshow: <%= dev.slideshow ? link_to(dev.slideshow.name, dev.slideshow) : "none" %></p>
+        <p>Slideshow: <%= dev.slideshow_name or "none" %></p>
         <div class="progress">
           <a rel="tooltip" data-placement="bottom" title="Slide 6 of 10">
             <div class="bar" style="width: 60%;"></div>

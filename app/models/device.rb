@@ -1,21 +1,19 @@
 class Device < ActiveRecord::Base
+  include ActiveModel::Validations
   validates :name, :presence => true
-  validates_uniqueness_of :name, :message => "A device with that name already exists"
+  validates :deviceid, :uniqueness => true
   belongs_to :slideshow
 
-  attr_accessible :name, :slideshow_id, :password
+  attr_accessible :name, :slideshow_id, :password, :deviceid
+
+  before_save :upcase_deviceid
 
   def slideshow_name
     slideshow.name if slideshow
   end
 
-  # Returns a hash of the form {<Device Name> => <Device obj>} for all Devices
-  # in the database.
-  def self.saved_device_hash
-    all.inject({}) do |h, dev|
-      h[dev.name] = dev
-      h
-    end
+  def upcase_deviceid
+    self.deviceid and self.deviceid.upcase!
+    true
   end
-
 end

@@ -1,17 +1,20 @@
 <table class="table table-bordered table-striped">
   <thead>
   <tr>
-    <th>Device</th>
+    <th>Name</th>
+    <th>Device ID</th>
   </tr>
   </thead>
   <tbody>
-<% @devices.each do |dev| %>
-  <tr>
-    <td><%= browsed_device_link(dev, @saved_device_hash) %></td>
-  </tr>
-<% end %>
 <% if @devices.empty? %>
-  <tr><td>No devices were found.</td></tr>
+  <tr><td>No devices found.</td></tr>
+<% else %>
+<%   @devices.each do |dev| %>
+  <tr>
+    <td><%= browsed_device_link(dev, @all_devices_by_deviceid) %></td>
+    <td><%= dev.deviceid %></td>
+  </tr>
+<%   end %>
 <% end %>
   </tbody>
 </table>

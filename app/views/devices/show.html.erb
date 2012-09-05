@@ -12,6 +12,6 @@
 <% if @device.slideshow.nil? %>
   <b>No associated slideshow</b>
 <% else %>
-  <b>Slideshow</b>: <%= @device.slideshow.name %><br /><br />
+  <b>Slideshow</b>: <%= @device.slideshow_name %><br /><br />
   <%= render :partial => '/slides/list', :locals => { :slides => @device.slideshow.slides } %>
 <% end %>

@@ -21,13 +21,13 @@
   <tr>
     <td><%= link_to device.name, device %></td>
     <td><%= device_slideshow_link(device) %></td>
-    <td><%= device.deviceid %></td>
+    <td><tt><%= device.deviceid %></tt></td>
     <td class="col-edit"><%= link_to raw('<i class="icon-edit"></i>'), edit_device_path(device), :class=>'btn btn-mini', :title=>'Edit' %></td>
     <td class="col-delete"><%= link_to raw('<i class="icon-trash"></i>'), device, confirm: "Delete device #{device.name}?", method: :delete, :class=>'btn btn-mini', :title=>'Delete' %></td>
   </tr>
 <% end %>
 <% if @devices.empty? %>
-  <tr><td colspan="4">No devices were found.</td></tr>
+  <tr><td colspan="5">No devices configured.</td></tr>
 <% end %>
   </tbody>
 </table>

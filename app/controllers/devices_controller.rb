@@ -30,7 +30,7 @@ class DevicesController < ApplicationController
       flash.now[:error] = "An error occurred while retrieving the list of Airplay devices on the network: " + e.to_s
       []
     end
-    @saved_device_hash = (@devices.empty? ? {} : Device.saved_device_hash)
+    @all_devices_by_deviceid = Hash[Device.all.map { |d| [d.deviceid, d] }]
 
     respond_to do |format|
       format.html # index.html.erb
@@ -41,7 +41,7 @@ class DevicesController < ApplicationController
   # GET /devices/new
   # GET /devices/new.json
   def new
-    @device = Device.new :name => params[:name]
+    @device = Device.new :name => params[:name], :deviceid => params[:deviceid]
 
     respond_to do |format|
       format.html # new.html.erb
@@ -57,7 +57,7 @@ class DevicesController < ApplicationController
   # POST /devices
   # POST /devices.json
   def create
-    @device = Device.new(params[:device])
+    @device = Device.new params[:device]
 
     respond_to do |format|
       if @device.save
