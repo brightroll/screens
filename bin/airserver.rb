@@ -250,6 +250,7 @@ loop do
     unless $node_pids.has_key? node.deviceid
       $node_pids[node.deviceid] = Process.fork do
         $am_parent = 0
+        $node_pids = {}
         $my_node = node
         $pidfile = "tmp/pids/airserver.#{node.deviceid}.pid"
         File.open($pidfile, File::CREAT|File::TRUNC|File::RDWR) { |f| f.write Process.pid }
@@ -258,9 +259,9 @@ loop do
         $0 = "#{$0} #{$my_node.name} #{$my_node.deviceid}"
         loop_slideshow $my_node
       end
-      $log.info("Started airserver for device #{node.deviceid} with pid #{$node_pids[node.deviceid]}")
+      $log.info("Started airserver for device #{node.name} #{node.deviceid} with pid #{$node_pids[node.deviceid]}")
     else
-      $log.debug("Slideshow already running on device #{node.name}")
+      $log.debug("Slideshow already running on device #{node.name} #{node.deviceid}")
     end
   end
 
