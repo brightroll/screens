@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: git://github.com/sodabrew/airplay.git
-  revision: 6961b6e85410763275e0e5ffb6e35c425c181a2b
+  revision: 0b96617af911c0ee0718c444c590aff61c0011d8
   branch: patches-merged
   specs:
     airplay (0.2.9)
