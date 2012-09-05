@@ -55,7 +55,7 @@ def thumbnail(img, thumbname, thumbcopy = false)
       FileUtils.cp("public/thumbs/#{thumbname}.png",
                    "public/thumbs/#{thumbcopy}.png") if thumbcopy
       # Note the current thumbnail
-      File.open("tmp/pids/device.#{$my_node.deviceid}.slide", File::CREAT|File::TRUNC|File::RDWR) { |f| f.write("public/thumbs/${thumbname}.png") }
+      File.open("tmp/pids/device.#{$my_node.deviceid}.slide", File::CREAT|File::TRUNC|File::RDWR) { |f| f.write("public/thumbs/#{thumbname}.png") }
     end
   end
 end
