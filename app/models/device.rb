@@ -1,12 +1,14 @@
 class Device < ActiveRecord::Base
   include ActiveModel::Validations
   validates :name, :presence => true
-  validates :deviceid, :uniqueness => true
+  validates :deviceid, :uniqueness => true,
+            :format => { :with => /([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}/,
+                         :message => "MAC address must match format: 'AB:CD:EF:00:22:33'" }
+  before_save :upcase_deviceid
+
   belongs_to :slideshow
 
   attr_accessible :name, :slideshow_id, :password, :deviceid
-
-  before_save :upcase_deviceid
 
   def slideshow_name
     slideshow.name if slideshow

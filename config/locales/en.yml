@@ -1,4 +1,9 @@
 en:
+  activerecord:
+    attributes:
+      device:
+        deviceid: "Device ID"
+
   enumerize:
     slide:
       media_type:
