@@ -254,6 +254,7 @@ loop do
         $0 = "#{$0} #{$my_node.name} #{$my_node.deviceid}"
         loop_slideshow $my_node
       end
+      $log.info("Started airserver for device #{node.deviceid} with pid #{$node_pids[node.deviceid]}")
     else
       $log.debug("Slideshow already running on device #{node.name}")
     end
