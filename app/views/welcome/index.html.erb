@@ -2,13 +2,19 @@
 
 <h1>Now Playing</h1>
 
-<div class="well">
+<hr/>
+
+<div class="">
   <ul class="thumbnails">
 
 <% @devices.each do |dev| %>
     <li class="span4">
       <div class="thumbnail">
+  <% if @now_playing.include? dev.deviceid %>
+        <img src="<%= @now_playing[dev.deviceid] %>" width=320 height=160 alt="current slide" />
+  <% else %>
         <img src="/assets/nopreview.png" width=320 height=160 alt="no preview available" />
+  <% end %>
         <h3>Device: <%= link_to dev.name, dev %></h3>
         <p>Slideshow: <%= dev.slideshow_name or "none" %></p>
         <div class="progress">
@@ -22,3 +28,5 @@
 
   </ul>
 </div>
+
+<hr/>

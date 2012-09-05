@@ -55,7 +55,7 @@ def thumbnail(img, thumbname, thumbcopy = false)
       FileUtils.cp("public/thumbs/#{thumbname}.png",
                    "public/thumbs/#{thumbcopy}.png") if thumbcopy
       # Note the current thumbnail
-      File.open("tmp/pids/device.#{$my_node.deviceid}.slide", File::CREAT|File::TRUNC|File::RDWR) { |f| f.write("public/thumbs/#{thumbname}.png") }
+      File.open("tmp/pids/device.#{$my_node.deviceid}.slide", File::CREAT|File::TRUNC|File::RDWR) { |f| f.write("thumbs/#{thumbname}.png") }
     end
   end
 end
@@ -243,7 +243,7 @@ loop do
 
   airplay.servers.each do |node|
     $log.debug(node.inspect)
-    unless $node_pids.has_key? node.deviceid.upcase!
+    unless $node_pids.has_key? node.deviceid
       $node_pids[node.deviceid] = Process.fork do
         $am_parent = 0
         $my_node = node
