@@ -109,15 +109,15 @@ end
 
 # Take arg by name, rather than by object, to prevent instances crossing pids
 def loop_slideshow(node)
-  device = Device.find_by_name(node.name)
+  device = Device.find_by_deviceid(node.deviceid)
   unless device
-    $log.debug("Device #{node} is not in the database")
+    $log.debug("Device #{node.name} #{node.deviceid} is not in the database")
     return
   end
 
   slideshow = device.slideshow
   unless slideshow
-    $log.debug("Device #{node} has no slideshow")
+    $log.debug("Device #{node.name} #{node.deviceid} has no slideshow")
     return
   end
   $log.info("Beginning slideshow #{slideshow.name} on device #{device.name}")
@@ -197,7 +197,7 @@ def loop_slideshow(node)
     slideshow = device.slideshow
   end
 
-  $log.info("Ending slideshow for #{node}")
+  $log.info("Ending slideshow for #{node.name} #{node.deviceid}")
 end
 
 # Special function called by Kernel::at_exit
