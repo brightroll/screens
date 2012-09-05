@@ -149,7 +149,7 @@ def loop_slideshow(node)
         $log.info("Sending image #{slide.url}")
         airplay.send_image(slide.url, slide.transition.to_sym)
         begin
-          img = Net::HTTP.get_response(URI.parse(slide.url)).body
+          img = Net::HTTP.get_response(URI(slide.url)).body
           thumbnail(img, Digest::MD5.hexdigest(slide.url))
         rescue Exception => e
           $log.error("Failed to thumbnail image url: #{slide.url} #{e}")
