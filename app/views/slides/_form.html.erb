@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(function() {
-  $('.options-toggle').change(function(){
+  $('input.options-toggle').change(function(){
     $('.options-all-media-types input').prop('disabled', true);
     $('.options-'+$(this).val() + ' input').prop('disabled', false);
   });
