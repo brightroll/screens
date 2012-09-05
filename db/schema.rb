@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120904180340) do
+ActiveRecord::Schema.define(:version => 20120905043624) do
 
   create_table "devices", :force => true do |t|
     t.string   "name"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20120904180340) do
     t.string   "deviceid",     :limit => 20
   end
 
+  add_index "devices", ["deviceid"], :name => "index_devices_on_deviceid"
   add_index "devices", ["name"], :name => "index_devices_on_name"
 
   create_table "slides", :force => true do |t|
