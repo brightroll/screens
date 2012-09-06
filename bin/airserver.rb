@@ -97,9 +97,9 @@ def graphite_dashboard_html(base_uri, title, graphs)
   </head>
   <body bgcolor="black">
     <div style="width: 960px; height: 80px; position: absolute; left: 0px; top: 0px;">
-      <span style="color: white; font-size: 76px; line-height: 80px; vertical-align: bottom;">
+      <span style="color: white; font-size: 76px; line-height: 80px; vertical-align: bottom;"><%= title %> <%= page %>/<%= pages %></span>
     </div>
-    <div style="width: 960px; height: 80px; position: absolute; left: 960px; top: 0px;"><%= title %> <%= page %>/<%= pages %></span>
+    <div style="width: 960px; height: 80px; position: absolute; left: 960px; top: 0px;">
       <span style="color: white; font-size: 48px; line-height: 80px; vertical-align: bottom;"><%= time_fmt %></span>
     </div>
     <% if ga %><img style="width: 960px; height: 500px; position: absolute; left: 0px; top: 80px;" src="<%= ga %>" /><% end %>
