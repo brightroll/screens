@@ -10,7 +10,7 @@ require 'imgkit'
 require 'image_science'
 require 'digest/md5'
 
-$am_parent = 1
+$am_parent = true
 $my_node = ''
 $node_pids = {}
 $pidfile = ''
@@ -256,7 +256,7 @@ loop do
     $log.debug(node.inspect)
     unless $node_pids.has_key? node.deviceid
       $node_pids[node.deviceid] = Process.fork do
-        $am_parent = 0
+        $am_parent = false
         $node_pids = {}
         $my_node = node
         $pidfile = "tmp/pids/airserver.#{node.deviceid}.pid"
