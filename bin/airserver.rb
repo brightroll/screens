@@ -87,6 +87,8 @@ def graphite_dashboard_html(base_uri, title, graphs)
       gd = graphs[page * 4 + 3]
       page += 1
 
+      time_fmt = Time.now.strftime("Rendered at %F %T %Z")
+
       y.yield ERB.new(<<EOF
 <html>
   <head>
@@ -94,7 +96,12 @@ def graphite_dashboard_html(base_uri, title, graphs)
     <base href="<%= base_uri %>" />
   </head>
   <body bgcolor="black">
-    <span style="color: white; font-size: 80px;"><%= title %> <%= page %>/<%= pages %></span>
+    <div style="width: 960px; height: 80px; position: absolute; left: 0px; top: 0px;">
+      <span style="color: white; font-size: 76px; line-height: 80px; vertical-align: bottom;">
+    </div>
+    <div style="width: 960px; height: 80px; position: absolute; left: 960px; top: 0px;"><%= title %> <%= page %>/<%= pages %></span>
+      <span style="color: white; font-size: 48px; line-height: 80px; vertical-align: bottom;"><%= time_fmt %></span>
+    </div>
     <% if ga %><img style="width: 960px; height: 500px; position: absolute; left: 0px; top: 80px;" src="<%= ga %>" /><% end %>
     <% if gb %><img style="width: 960px; height: 500px; position: absolute; left: 960px; top: 80px;" src="<%= gb %>" /><% end %>
     <% if gc %><img style="width: 960px; height: 500px; position: absolute; left: 0px; top: 580px;" src="<%= gc %>" /><% end %>
