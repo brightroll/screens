@@ -11,7 +11,7 @@ $(function() {
 });
 </script>
 
-<%= semantic_form_for(@slide, :html => {:class => 'form-horizontal edit_slide'}) do |f| %>
+<%= semantic_form_for(@slide, :html => {:class => 'form-horizontal edit_slide span10'}) do |f| %>
   <%= f.semantic_errors %>
 
   <% if @slideshow %>
@@ -23,7 +23,7 @@ $(function() {
     <legend>Edit Slide</legend>
 
     <%= f.input :name %>
-    <%= f.input :url, :input_html => { :rows => 6 } %>
+    <%= f.input :url, :input_html => { :rows => 6 }, :hint => raw('<i>Graphite URLs must include the dashboard/load path: http://graphite.example.com/dashboard/load/Your_Dashboard</i>') %>
 
     <!-- toggle the relevant option blocks below -->
     <%= f.input :media_type, :as => :radio, :input_html => { :class => "options-toggle" } %>
