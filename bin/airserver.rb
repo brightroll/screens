@@ -225,7 +225,7 @@ def child_main(node)
   $node_pids = {}
   $my_node = node
   $pidfile = "tmp/pids/airserver.#{node.deviceid}.pid"
-  $slidefile = "tmp/pids/device.#{$my_node.deviceid}.slide"
+  $slidefile = "tmp/pids/device.#{node.deviceid}.slide"
   File.open($pidfile, File::CREAT|File::TRUNC|File::RDWR) { |f| f.write Process.pid }
   $log = Logger.new("log/airserver.#{node.deviceid}.log")
   $log.level = Logger::INFO
