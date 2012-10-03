@@ -120,13 +120,13 @@ def loop_slideshow(node)
   device = Device.find_by_deviceid(node.deviceid)
   unless device
     $log.debug("Device #{node.name} #{node.deviceid} is not in the database")
-    return
+    raise NoDeviceError
   end
 
   slideshow = device.slideshow
   unless slideshow
     $log.debug("Device #{node.name} #{node.deviceid} has no slideshow")
-    return
+    raise NoSlideshowError
   end
   $log.info("Beginning slideshow #{slideshow.name} on device #{device.name}")
 
@@ -217,6 +217,8 @@ def reap(sig)
 end
 
 class Hangup < SignalException; end
+class NoDeviceError < StandardError; end
+class NoSlideshowError < StandardError; end
 
 def child_main(node)
   $am_parent = false
