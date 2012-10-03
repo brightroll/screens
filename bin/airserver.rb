@@ -14,7 +14,7 @@ $am_parent = true
 $my_node = ''
 $node_pids = {}
 $pidfile = ''
-LOOP_TIME = 50
+LOOP_TIME = 30
 STANDARD_DISPLAY_TIME = 5
 
 $log = Logger.new('log/airserver.log')
@@ -158,7 +158,7 @@ def loop_slideshow(node)
         begin
           img = Net::HTTP.get_response(URI(slide.url)).body
           thumbnail(img, Digest::MD5.hexdigest(slide.url))
-        rescue Exception => e
+        rescue StandardError => e
           $log.error("Failed to thumbnail image url: #{slide.url} #{e}")
         end
         sleep slide.display_time
@@ -176,7 +176,7 @@ def loop_slideshow(node)
           end
         rescue IMGKit::CommandFailedError
           $log.error("Failed to render graphite with IMGKit: #{slide.url}")
-        rescue Exception => e
+        rescue StandardError => e
           $log.error("Failed to render graphite (other error): #{slide.url} #{e}")
         end
 
@@ -191,7 +191,7 @@ def loop_slideshow(node)
           sleep slide.display_time
         rescue IMGKit::CommandFailedError
           $log.error("Failed to render url with IMGKit: #{slide.url}")
-        rescue Exception => e
+        rescue StandardError => e
           $log.error("Failed to render url (other error): #{slide.url} #{e}")
         end
 
@@ -207,41 +207,56 @@ def loop_slideshow(node)
   $log.info("Ending slideshow for #{node.name} #{node.deviceid}")
 end
 
-# Special function called by Kernel::at_exit
-def at_exit
-  reap
+def reap(sig)
+  $log.info("Cleaning up children: #{$node_pids.inspect}")
+  $node_pids.each do |node, pid|
+    Process.kill(sig, pid)
+  end
+  Process.waitall
 end
 
-def on_hup
-  reap
-end
+class Hangup < SignalException; end
 
-# When the parent gets a sigterm, kill itself
-def on_term
-  reap
-  exit
-end
-
-def reap
-  if $am_parent
-    $log.info("Cleaning up children: #{$node_pids.inspect}")
-    $node_pids.each do |node, pid|
-      Process.kill("KILL", pid)
+def child_main(node)
+  $am_parent = false
+  $node_pids = {}
+  $my_node = node
+  $pidfile = "tmp/pids/airserver.#{node.deviceid}.pid"
+  File.open($pidfile, File::CREAT|File::TRUNC|File::RDWR) { |f| f.write Process.pid }
+  $log = Logger.new("log/airserver.#{node.deviceid}.log")
+  $log.level = Logger::INFO
+  $0 = "#{$0} #{$my_node.name} #{$my_node.deviceid}"
+  loop do
+    begin
+      loop_slideshow $my_node
+    rescue Hangup
+      $log.info("Restarting slideshow immediately.")
     end
-    Process.waitall
-  else
-    $log.info("Child exiting for device: #{$my_node.name} #{$my_name.deviceid}.")
+  end
+  $log.info("Child exiting for device: #{$my_node.name} #{$my_name.deviceid}.")
+end
+
+# Install signal handlers
+
+at_exit do
+  begin
+    reap(:SIGKILL) if $am_parent
     File.delete($pidfile) if $pidfile
+  rescue # Doesn't matter, we're exiting
   end
 end
+
+trap :SIGHUP do
+  reap(:SIGHUP) if $am_parent
+  raise Hangup unless $am_parent
+end
+
+# Parent main from here on
 
 loop do
   # Every $loop_time seconds, look for airplay nodes.
   # If a node is found and there isn't a child process
   # for that node, spin one up!
-
-  Signal.trap("HUP", proc { on_hup })
-  Signal.trap("TERM", proc { on_term })
 
   airplay = begin
     $log.info("Searching for AirPlay devices")
@@ -256,15 +271,7 @@ loop do
     $log.debug(node.inspect)
     unless $node_pids.has_key? node.deviceid
       $node_pids[node.deviceid] = Process.fork do
-        $am_parent = false
-        $node_pids = {}
-        $my_node = node
-        $pidfile = "tmp/pids/airserver.#{node.deviceid}.pid"
-        File.open($pidfile, File::CREAT|File::TRUNC|File::RDWR) { |f| f.write Process.pid }
-        $log = Logger.new("log/airserver.#{node.deviceid}.log")
-        $log.level = Logger::INFO
-        $0 = "#{$0} #{$my_node.name} #{$my_node.deviceid}"
-        loop_slideshow $my_node
+        child_main node
       end
       $log.info("Started airserver for device #{node.name} #{node.deviceid} with pid #{$node_pids[node.deviceid]}")
     else
@@ -287,8 +294,8 @@ loop do
       true
     rescue Errno::ECHILD # Process already exited
       true
-    rescue # Anything else
-      $log.warn("Possibly lost track of child pid #{pid}")
+    rescue StandardError => e # Anything else
+      $log.warn("Possibly lost track of child pid #{pid}: #{e}")
       true
     end
   end
