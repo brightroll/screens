@@ -13,7 +13,8 @@
     <th>Name</th>
     <th>Slideshow Name</th>
     <th>Device ID</th>
-    <th colspan="2"></th>
+    <th>Running PID</th>
+    <th colspan="3"></th>
   </tr>
   </thead>
   <tbody>
@@ -22,12 +23,14 @@
     <td><%= link_to device.name, device %></td>
     <td><%= device_slideshow_link(device) %></td>
     <td><tt><%= device.deviceid %></tt></td>
-    <td class="col-edit"><%= link_to raw('<i class="icon-edit"></i>'), edit_device_path(device), :class=>'btn btn-mini', :title=>'Edit' %></td>
-    <td class="col-delete"><%= link_to raw('<i class="icon-trash"></i>'), device, confirm: "Delete device #{device.name}?", method: :delete, :class=>'btn btn-mini', :title=>'Delete' %></td>
+    <td><tt><%= device_pid(device) %></tt></td>
+    <td class="col-fire"><%= link_to raw('<i class="icon-fire"></i>'), signal_device_path(device), method: :post, remote: true, class: 'btn btn-mini', title: 'Restart process' %></td>
+    <td class="col-edit"><%= link_to raw('<i class="icon-edit"></i>'), edit_device_path(device), class: 'btn btn-mini', title: 'Edit' %></td>
+    <td class="col-delete"><%= link_to raw('<i class="icon-trash"></i>'), device, confirm: "Delete device #{device.name}?", method: :delete, class: 'btn btn-mini', title: 'Delete' %></td>
   </tr>
 <% end %>
 <% if @devices.empty? %>
-  <tr><td colspan="5">No devices configured.</td></tr>
+  <tr><td colspan="7">No devices configured.</td></tr>
 <% end %>
   </tbody>
 </table>

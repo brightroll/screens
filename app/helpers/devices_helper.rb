@@ -25,4 +25,13 @@ module DevicesHelper
       link_to(link_text, dev)
     end
   end
+
+  # Get the pid of the currently-running airserver for this device
+  def device_pid(device)
+    begin
+      File.open("tmp/pids/airserver.#{device.deviceid}.pid").read.chomp
+    rescue
+      'Not running'
+    end
+  end
 end

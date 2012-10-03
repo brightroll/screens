@@ -6,6 +6,9 @@ HaxAirplayWall::Application.routes.draw do
     collection do
       get 'browse'
     end
+    member do
+      post 'signal'
+    end
   end
 
   resources :slideshows

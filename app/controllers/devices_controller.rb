@@ -97,4 +97,23 @@ class DevicesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  # Signal a running process (default HUP)
+  def signal
+    @device = Device.find(params[:id])
+    @signal = params.fetch(:signal, 'HUP')
+    @pid = device_pid(@device)
+
+    if @signal && @pid
+      Process.kill(@signal, @pid)
+      @signalled = { :signal => @signal, :pid => @pid }
+    else
+      @signalled = { :error => true }
+    end
+
+    respond_to do |format|
+      format.html { render json: @signalled }
+      format.json { render json: @signalled }
+    end
+  end
 end
