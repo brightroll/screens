@@ -1,4 +1,5 @@
 class DevicesController < ApplicationController
+  include DevicesHelper
   # GET /devices
   # GET /devices.json
   def index
@@ -26,7 +27,7 @@ class DevicesController < ApplicationController
       Airplay::Client.new.browse
     rescue Airplay::Client::ServerNotFoundError => e
       []
-    rescue => e
+    rescue StandardError => e
       flash.now[:error] = "An error occurred while retrieving the list of Airplay devices on the network: " + e.to_s
       []
     end
@@ -98,22 +99,23 @@ class DevicesController < ApplicationController
     end
   end
 
-  # Signal a running process (default HUP)
+  # Signal a running process (default TERM)
   def signal
     @device = Device.find(params[:id])
-    @signal = params.fetch(:signal, 'HUP')
+    @signal = params.fetch(:signal, 'TERM')
     @pid = device_pid(@device)
 
     if @signal && @pid
-      Process.kill(@signal, @pid)
-      @signalled = { :signal => @signal, :pid => @pid }
+      begin
+        Process.kill(@signal, @pid)
+        @signalled = { :signal => @signal, :pid => @pid }
+      rescue StandardError => e
+        @signalled = { :error => "Exception: #{e}" }
+      end
     else
-      @signalled = { :error => true }
+      @signalled = { :error => 'Invalid arguments' }
     end
 
-    respond_to do |format|
-      format.html { render json: @signalled }
-      format.json { render json: @signalled }
-    end
+    render json: @signalled
   end
 end

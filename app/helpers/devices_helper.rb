@@ -29,9 +29,10 @@ module DevicesHelper
   # Get the pid of the currently-running airserver for this device
   def device_pid(device)
     begin
-      File.open("tmp/pids/airserver.#{device.deviceid}.pid").read.chomp
-    rescue
-      'Not running'
+      pid = File.open("tmp/pids/airserver.#{device.deviceid}.pid").read.to_i
+      Process.kill 0, pid
+      pid
+    rescue StandardError => e
     end
   end
 end

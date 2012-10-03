@@ -6,7 +6,7 @@ class WelcomeController < ApplicationController
     @devices.each do |d|
       begin
         @now_playing[d.deviceid] = File.open("tmp/pids/device.#{d.deviceid}.slide") { |f| f.read }
-      rescue
+      rescue StandardError
       end
     end
 

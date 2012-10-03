@@ -10,14 +10,14 @@ body {
   padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
 }
 
-.margin_right_8{margin-right: 8px;}
+.margin_right_8 {
+  margin-right: 8px;
+}
 
 /* Table Customizations */
-.table th.col-delete, .table td.col-delete,
-.table th.col-edit,   .table td.col-edit,
-.table th.col-move,   .table td.col-move,
-.table th.col-remove, .table td.col-remove
-{width: 28px;}
+.table th.col-btn-mini, .table td.col-btn-mini {
+  width: 28px;
+}
 
 .modal-close {
   float: right;
