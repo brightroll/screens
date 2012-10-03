@@ -13,7 +13,8 @@ require 'digest/md5'
 $am_parent = true
 $my_node = ''
 $node_pids = {}
-$pidfile = ''
+$pidfile = nil
+$slidefile = nil
 LOOP_TIME = 30
 STANDARD_DISPLAY_TIME = 5
 
@@ -55,7 +56,7 @@ def thumbnail(img, thumbname, thumbcopy = false)
       FileUtils.cp("public/thumbs/#{thumbname}.png",
                    "public/thumbs/#{thumbcopy}.png") if thumbcopy
       # Note the current thumbnail
-      File.open("tmp/pids/device.#{$my_node.deviceid}.slide", File::CREAT|File::TRUNC|File::RDWR) { |f| f.write("thumbs/#{thumbname}.png") }
+      File.open($slidefile, File::CREAT|File::TRUNC|File::RDWR) { |f| f.write("thumbs/#{thumbname}.png") }
     end
   end
 end
@@ -222,6 +223,7 @@ def child_main(node)
   $node_pids = {}
   $my_node = node
   $pidfile = "tmp/pids/airserver.#{node.deviceid}.pid"
+  $slidefile = "tmp/pids/device.#{$my_node.deviceid}.slide"
   File.open($pidfile, File::CREAT|File::TRUNC|File::RDWR) { |f| f.write Process.pid }
   $log = Logger.new("log/airserver.#{node.deviceid}.log")
   $log.level = Logger::INFO
@@ -242,6 +244,7 @@ at_exit do
   begin
     reap(:SIGKILL) if $am_parent
     File.delete($pidfile) if $pidfile
+    File.delete($slidefile) if $slidefile
   rescue # Doesn't matter, we're exiting
   end
 end
