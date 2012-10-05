@@ -5,9 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   def login_required
-    if session[:user]
-      return true
-    end
+    return true if current_user
     flash[:warning] = 'Login required.'
     session[:return_to] = request.fullpath
     redirect_to :controller => "auth", :action => "login"
@@ -17,4 +15,5 @@ class ApplicationController < ActionController::Base
   def current_user
     session[:user]
   end
+  helper_method :current_user
 end
