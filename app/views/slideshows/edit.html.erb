@@ -41,7 +41,8 @@ $(document).ready(function() {
   <div class="modal-body slides">
       <%= render :partial => '/slides/list', :locals => {
             :slides => Slide.where('id not in (?)', (@slideshow.slides.empty? ? '' : @slideshow.slides.map(&:id)) ).all,
-            :action_links => lambda { |slide|
+            :action_count => 1,
+            :action_links => lambda { |slide| [
               link_to(raw('<i class="icon-plus"></i>'),
                       url_for(:action => :update,
                               :id => @slideshow.id,
@@ -49,7 +50,8 @@ $(document).ready(function() {
                       :method => :put,
                       :class => 'btn btn-mini hide_row',
                       :title => 'Add to slideshow',
-                      :remote => true) }
+                      :remote => true)
+              ] }
           } %>
   </div>
   <div class="modal-footer">
@@ -72,13 +74,14 @@ $(document).ready(function() {
 <br /><br />
 <%= render :partial => '/slides/list', :locals => {
       :slides => @slides,
-      :action_links => lambda { |slide|
+      :action_count => 2,
+      :action_links => lambda { |slide| [
         link_to(raw('<i class="icon-edit"></i>'),
                 edit_slide_path(slide, :update => '#edit-slide-body'),
                 :onclick => raw('$(\'#edit-slide-body\').closest(\'div.modal\').modal(\'show\')'),
                 :class => 'btn btn-mini',
                 :title => 'Edit slide',
-                :remote => true) + \
+                :remote => true),
         link_to(raw('<i class="icon-remove"></i>'),
                 url_for(:action => :update,
                         :id => @slideshow.id,
@@ -86,7 +89,8 @@ $(document).ready(function() {
                 :method => :put,
                 :class => 'btn btn-mini hide_row',
                 :title => 'Remove from slideshow',
-                :remote => true) }
+                :remote => true)
+        ] }
     } %>
 <% end %>
 
