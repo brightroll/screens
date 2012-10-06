@@ -1,5 +1,6 @@
 class Device < ActiveRecord::Base
   include ActiveModel::Validations
+  include DevicesHelper
   validates :name, :presence => true
   validates :deviceid, :uniqueness => true,
             :format => { :with => /([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}/,
@@ -9,6 +10,10 @@ class Device < ActiveRecord::Base
   belongs_to :slideshow
 
   attr_accessible :name, :slideshow_id, :password, :deviceid
+
+  def pid
+    device_pid(self)
+  end
 
   def slideshow_name
     slideshow.name if slideshow

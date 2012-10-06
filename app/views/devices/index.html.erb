@@ -33,13 +33,13 @@ $(document).ready(function() {
     <td><%= link_to device.name, device %></td>
     <td><%= device_slideshow_link(device) %></td>
     <td><tt><%= device.deviceid %></tt></td>
-    <td><tt><%= device_pid(device) or '---' %></tt></td>
+    <td><tt><%= device.pid or '---' %></tt></td>
     <td class="col-btn-mini"><%=
       link_to raw('<i class="icon-fire"></i>'),
         signal_device_path(device),
         method: :post,
         remote: true,
-        class: 'fire btn btn-mini' + (current_user && device_pid(device) ? '' : ' disabled'),
+        class: 'fire btn btn-mini' + (current_user && device.pid ? '' : ' disabled'),
         title: 'Restart process' %></td>
     <td class="col-btn-mini"><%=
       link_to raw('<i class="icon-edit"></i>'),

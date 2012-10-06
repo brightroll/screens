@@ -8,9 +8,16 @@
            ] } %>
 
   <legend>Device: <%= @device.name %></legend>
+  <b>Device ID</b>: <%= @device.deviceid %><br />
+  <% pid = @device.pid %>
+  <% if pid %>
+  <b>Running PID</b>: <%= pid %><br />
+  <% else %>
+  <b>Slideshow not running.</b><br />
+  <% end %>
 
 <% if @device.slideshow.nil? %>
-  <b>No associated slideshow</b>
+  <b>No associated slideshow.</b>
 <% else %>
   <b>Slideshow</b>: <%= @device.slideshow_name %><br /><br />
   <%= render :partial => '/slides/list', :locals => { :slides => @device.slideshow.slides } %>

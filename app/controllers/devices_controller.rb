@@ -1,5 +1,4 @@
 class DevicesController < ApplicationController
-  include DevicesHelper
   # GET /devices
   # GET /devices.json
   def index
@@ -102,13 +101,13 @@ class DevicesController < ApplicationController
   # Signal a running process (default TERM)
   def signal
     @device = Device.find(params[:id])
-    @signal = params.fetch(:signal, 'TERM')
-    @pid = device_pid(@device)
+    signal = params.fetch(:signal, 'TERM')
+    pid = @device.pid
 
-    if @signal && @pid
+    if signal && pid
       begin
-        Process.kill(@signal, @pid)
-        @signalled = { :signal => @signal, :pid => @pid }
+        Process.kill(signal, pid)
+        @signalled = { :signal => signal, :pid => pid }
       rescue StandardError => e
         @signalled = { :error => "Exception: #{e}" }
       end
