@@ -1,7 +1,8 @@
 find_mysql_socket: &find_mysql_socket <%=
-       ['/opt/local/var/run/mysql5/mysqld.sock', # darwinports
-        '/opt/local/var/run/mysqld/mysqld.sock', # darwinports, again
-        '/var/run/mysqld/mysqld.sock',           # ubuntu/debian
+       ['/opt/local/var/run/mysql55/mysqld.sock', # macports 5.5
+        '/opt/local/var/run/mysql5/mysqld.sock',  # macports 5.1
+        '/opt/local/var/run/mysqld/mysqld.sock',  # macports again
+        '/var/run/mysqld/mysqld.sock',            # ubuntu/debian
         '/tmp/mysql.sock'].select { |f| File.exist? f }.first %>
 
 development:
@@ -11,7 +12,7 @@ development:
   database: hax_airplay_wall_development
   pool: 5
   username: root
-  password:
+  password: root
   socket: *find_mysql_socket
 
 # Warning: The database defined as "test" will be erased and
