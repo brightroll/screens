@@ -12,7 +12,7 @@ $(document).ready(function() {
     if (this.checked) {
       var refresh_count = 15; // Refresh after 15 seconds
       $('span#refresh_countdown').text(refresh_count);
-      $.cookie('refresh_welcome_page', 'on');
+      $.cookie('refresh_welcome_page', 'on', {'path': '/'});
 
       refresh_timer = setInterval(function() {
         refresh_count--;
