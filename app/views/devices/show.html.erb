@@ -1,11 +1,14 @@
+<% action_links = [ link_to('Edit Device', edit_device_path(@device)) ]
+   unless @device.slideshow.nil? 
+     action_links.unshift link_to('Edit Slideshow', edit_slideshow_path(@device.slideshow))
+   end
+ %>
 <%= render :partial => 'breadcrumbs', :locals => {
            :breadcrumbs => [
              link_to('Devices', '/devices'),
              link_to('Device: ' + @device.name, '', :class => 'active')
            ],
-           :action_links => [
-             link_to('Edit', edit_device_path(@device))
-           ] } %>
+           :action_links => action_links } %>
 
   <legend>Device: <%= @device.name %></legend>
   <b>Device ID</b>: <%= @device.deviceid %><br />
