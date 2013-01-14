@@ -9,9 +9,9 @@ def doTV(tv, power=nil, username='', password='')
   while line = s.recv(100)
     case line
     when /^Login:/
-      s.sendmsg "#{username}\r"
+      s.send "#{username}\r", 0
     when /^Password:/
-      s.sendmsg "#{password}\r"
+      s.send "#{password}\r", 0
     else
       break
     end
@@ -19,38 +19,38 @@ def doTV(tv, power=nil, username='', password='')
 
   case power
   when :on
-    s.sendmsg "POWR1   \r"
+    s.send "POWR1   \r", 0
     puts s.recv(100)
     sleep 1
   when :off
-    s.sendmsg "POWR0   \r"
+    s.send "POWR0   \r", 0
     puts s.recv(100)
     s.close
     return
   when :mute
-    s.sendmsg "MUTE1   \r"
+    s.send "MUTE1   \r", 0
     puts s.recv(100)
   when Integer
-    s.sendmsg "MUTE2   \r"
+    s.send "MUTE2   \r", 0
     puts s.recv(100)
-    s.sendmsg "VOLM%02d  \r" % power
+    s.send "VOLM%02d  \r" % power, 0
     puts "VOLM%02d  \r" % power
     puts s.recv(100)
   end
 
-  s.sendmsg "TVNM1   \r"
+  s.send "TVNM1   \r", 0
   puts s.recv(100)
 
-  s.sendmsg "MNRD1   \r"
+  s.send "MNRD1   \r", 0
   puts s.recv(100)
 
-  s.sendmsg "SWVN1   \r"
+  s.send "SWVN1   \r", 0
   puts s.recv(100)
 
-  s.sendmsg "RSPW2   \r"
+  s.send "RSPW2   \r", 0
   puts s.recv(100)
 
-  s.sendmsg "WIDE8   \r"
+  s.send "WIDE8   \r", 0
   puts s.recv(100)
 
   s.close
