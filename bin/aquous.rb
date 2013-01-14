@@ -1,81 +1,113 @@
 #!/usr/bin/env ruby
 
+require 'logger'
+require 'optparse'
 require 'socket'
 
-def doTV(tv, power=nil, username='', password='')
-  puts "Taking to TV #{tv}"
+$log = Logger.new(STDOUT)
+$log.level = Logger::INFO
+
+def doTV(tv, options={})
+  $log.info "Taking to TV #{tv}"
   s = TCPSocket.new tv, 10002
 
   while line = s.recv(100)
     case line
     when /^Login:/
-      s.send "#{username}\r", 0
+      s.send "#{options[:username]}\r", 0
     when /^Password:/
-      s.send "#{password}\r", 0
+      s.send "#{options[:password]}\r", 0
     else
       break
     end
   end
 
-  case power
+  case options[:power]
   when :on
     s.send "POWR1   \r", 0
-    puts s.recv(100)
+    $log.debug s.recv(100)
     sleep 1
   when :off
     s.send "POWR0   \r", 0
-    puts s.recv(100)
+    $log.debug s.recv(100)
     s.close
     return
+  end
+
+  case options[:volume]
   when :mute
     s.send "MUTE1   \r", 0
-    puts s.recv(100)
+    $log.debug s.recv(100)
   when Integer
     s.send "MUTE2   \r", 0
-    puts s.recv(100)
-    s.send "VOLM%02d  \r" % power, 0
-    puts "VOLM%02d  \r" % power
-    puts s.recv(100)
+    $log.debug s.recv(100)
+    s.send "VOLM%02d  \r" % options[:volume], 0
+    $log.debug s.recv(100)
   end
 
   s.send "TVNM1   \r", 0
-  puts s.recv(100)
+  $log.debug s.recv(100)
 
   s.send "MNRD1   \r", 0
-  puts s.recv(100)
+  $log.debug s.recv(100)
 
   s.send "SWVN1   \r", 0
-  puts s.recv(100)
+  $log.debug s.recv(100)
 
   s.send "RSPW2   \r", 0
-  puts s.recv(100)
+  $log.debug s.recv(100)
 
   s.send "WIDE8   \r", 0
-  puts s.recv(100)
+  $log.debug s.recv(100)
 
   s.close
 rescue Exception => e
-  puts "Failed to handle TV #{tv}: #{e}"
+  $log.warn "Failed to handle TV #{tv}: #{e}"
 end
 
 # Here begins
 
-case ARGV[0] 
-when '--on'
-  power = :on
-  ARGV.shift
-when '--off'
-  power = :off
-  ARGV.shift
-when '--mute'
-  power = :mute
-  ARGV.shift
-when '--volume'
-  ARGV.shift
-  power = ARGV.shift.to_i
+options = {}
+OptionParser.new do |opts|
+  opts.banner = 'Sharp Aquous IP control on/off script'
+
+  opts.on('--on', 'Turn TVs on') do |v|
+    options[:power] = :on
+  end
+  opts.on('--off', 'Turn TVs off') do |v|
+    options[:power] = :off
+  end
+  opts.on('--mute', 'Mute TVs') do |v|
+    options[:volume] = :mute
+  end
+  opts.on('--volume NUM', Integer, 'Volume 0-99') do |v|
+    options[:volume] = v
+  end
+  opts.on('--arp IF', String, 'Arp for TVs on this interface') do |v|
+    options[:arp] = v
+  end
+  opts.on('--verbose', 'Be verbose') do |v|
+    $log.level = Logger::DEBUG
+  end
+  opts.on('--quiet', 'Be quiet') do |v|
+    $log.level = Logger::WARN
+  end
+end.parse!
+
+options[:username] = ''
+options[:password] = ''
+
+if options[:arp]
+  tvs = %x(arp -na -i #{options[:arp]} | awk -F'[()]' '{print \$2}').split
+elsif !ARGV.empty?
+  tvs = ARGV
+else
+  $log.warn "Usage: #{$0} [--on | --off] [--mute | --volume 0-99] <--arp IF | TV IPs>"
+  exit 1
 end
 
-ARGV.each do |tv|
-  fork { doTV tv, power }
+tvs.each do |tv|
+  fork { doTV tv, options }
 end
 
+Process.waitall
