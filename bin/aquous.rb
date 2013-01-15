@@ -8,7 +8,7 @@ $log = Logger.new(STDOUT)
 $log.level = Logger::INFO
 
 def doTV(tv, options={})
-  $log.info "Taking to TV #{tv}"
+  $log.info "Talking to TV #{tv}"
   s = TCPSocket.new tv, 10002
 
   while line = s.recv(100)
