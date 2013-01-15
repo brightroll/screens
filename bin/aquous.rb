@@ -98,7 +98,7 @@ options[:username] = ''
 options[:password] = ''
 
 if options[:arp]
-  tvs = %x(arp -na -i #{options[:arp]} | awk -F'[()]' '{print \$2}').split
+  tvs = %x(/usr/sbin/arp -na -i #{options[:arp]} | awk -F'[()]' '{print \$2}').split
 elsif !ARGV.empty?
   tvs = ARGV
 else
