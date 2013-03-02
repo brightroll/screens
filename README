@@ -8,8 +8,8 @@ $ bundle exec imgkit --install-wkhtmltoimage
 Airplay Icon:
 http://images.apple.com/ipad/features/airplay/images/airplay_icon.jpg
 
-Cron jobs for Sharp Aquous displays:
+Cron jobs for Sharp Aquos displays:
   # Turn screens on at 9:30am local time Monday - Friday
-  30 9 * * 1-5   bin/aquous.rb --quiet --arp en3 --on
+  30 9 * * 1-5   bin/aquos.rb --quiet --arp en3 --on
   # Turn screens off at 6:30pm local time every day
-  30 18 * * *    bin/aquous.rb --quiet --arp en3 --off
+  30 18 * * *    bin/aquos.rb --quiet --arp en3 --off

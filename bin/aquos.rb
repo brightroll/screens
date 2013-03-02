@@ -69,7 +69,7 @@ end
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = 'Sharp Aquous IP control on/off script'
+  opts.banner = 'Sharp Aquos IP control on/off script'
 
   opts.on('--on', 'Turn TVs on') do |v|
     options[:power] = :on
