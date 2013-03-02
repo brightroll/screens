@@ -29,31 +29,22 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
           <a class="brand" href="/">Airplay Wall</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li<%= raw is_current_controller('devices') %>><a href="/devices">Devices</a></li>
-              <li<%= raw is_current_controller('slideshows') %>><a href="/slideshows">Slideshows</a></li>
-              <li<%= raw is_current_controller('slides') %>><a href="/slides">Slides</a></li>
-            </ul>
-            <ul class="nav pull-right">
-              <% if session[:user] %>
-              <li><a href="/auth/logout">Logout <%= session[:user] %></a></li>
-              <% else %>
-              <li><a href="/auth/login">Login</a></li>
-              <% end %>
-            </ul>
-          </div><!--/.nav-collapse -->
+          <ul class="nav">
+            <li<%= raw is_current_controller('devices') %>><a href="/devices">Devices</a></li>
+            <li<%= raw is_current_controller('slideshows') %>><a href="/slideshows">Slideshows</a></li>
+            <li<%= raw is_current_controller('slides') %>><a href="/slides">Slides</a></li>
+          </ul>
+          <ul class="nav pull-right">
+            <% if session[:user] %>
+            <li><a href="/auth/logout">Logout <%= session[:user] %></a></li>
+            <% else %>
+            <li><a href="/auth/login">Login</a></li>
+            <% end %>
+          </ul>
         </div>
       </div>
-
-    </div>
+    </div> <!-- /navbar -->
 
     <div class="container">
       <% flash.each do |key, value| -%>
