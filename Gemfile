@@ -12,6 +12,7 @@ gem 'googleapps-auth', :require => "googleapps_auth"
 
 # Core Rails gems
 gem 'mysql2'
+gem 'sqlite3'
 gem 'jquery-rails'
 gem 'rails', '~>3.2'
 gem 'thin'
