@@ -1,42 +1,10 @@
 <%= render :partial => 'breadcrumbs', :locals => {
-      :action_links => [ '<label><input type="checkbox" name="refresh" style="vertical-align: baseline;" /> Refresh this page automatically? <span id="refresh_countdown" style="display: inline-block; width: 1em; text-align: right;">&nbsp;</span></label>'
+      :action_links => [
+        '<label><input type="checkbox" name="refresh" style="vertical-align: baseline;" /> Refresh this page automatically?
+         <span id="refresh_countdown" style="display: inline-block; width: 1em; text-align: right;">&nbsp;</span></label>'
       ]
     }
  %>
-
-<script type="text/javascript">
-$(document).ready(function() {
-  var refresh_timer;
-
-  $('input[name="refresh"]').change(function() {
-    if (this.checked) {
-      var refresh_count = 15; // Refresh after 15 seconds
-      $('span#refresh_countdown').text(refresh_count);
-      $.cookie('refresh_welcome_page', 'on', {'path': '/'});
-
-      refresh_timer = setInterval(function() {
-        refresh_count--;
-        if (refresh_count == 1) {
-          $('span#refresh_countdown').html('&hellip;');
-        } else if (refresh_count == 0) {
-          window.location.reload();
-        } else {
-          $('span#refresh_countdown').text(refresh_count);
-        }
-      }, 1000);
-    } else {
-      clearInterval(refresh_timer);
-      $('span#refresh_countdown').text('');
-      $.removeCookie('refresh_welcome_page');
-    }
-  });
-
-  if ($.cookie('refresh_welcome_page')) {
-    $('input[name="refresh"]').prop('checked', true);
-    $('input[name="refresh"]').change(); // prop does not fire events
-  }
-});
-</script>
 
 <h1>Now Playing</h1>
 
@@ -47,20 +15,16 @@ $(document).ready(function() {
 
 <% @devices.each do |dev| %>
     <li class="span4">
+      <div class="caption">
+        <%= link_to(dev.name, dev) %> &mdash;
+        <%= dev.slideshow.nil? ? 'none' : link_to(dev.slideshow_name, dev.slideshow) %>
+      </div>
       <div class="thumbnail">
   <% if @now_playing.include? dev.deviceid %>
         <img src="<%= @now_playing[dev.deviceid] %>" width="320" height="160" alt="current slide" />
   <% else %>
         <img src="/assets/nopreview.png" width="320" height="160" alt="no preview available" />
   <% end %>
-        <h3>Device: <%= link_to(dev.name, dev) %></h3>
-        <p>Slideshow: <%= dev.slideshow.nil? ? 'none' : link_to(dev.slideshow_name, dev.slideshow) %></p>
-     
-        <div class="progress">
-          <a rel="tooltip" data-placement="bottom" title="Slide 6 of 10">
-            <div class="bar" style="width: 60%;"></div>
-          </a>
-        </div>
       </div>
     </li>
 <% end %>
