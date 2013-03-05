@@ -11,6 +11,10 @@ class Device < ActiveRecord::Base
 
   attr_accessible :name, :slideshow_id, :password, :deviceid
 
+  def thumbnail
+    device_thumbnail(self)
+  end
+
   def pid
     device_pid(self)
   end

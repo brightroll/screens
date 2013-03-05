@@ -32,7 +32,12 @@ module DevicesHelper
       pid = File.open("tmp/pids/airserver.#{device.deviceid}.pid").read.to_i
       Process.kill 0, pid
       pid
-    rescue StandardError => e
+    rescue
     end
+  end
+
+  # Get the thumbnail that airserver generates for each slide change
+  def device_thumbnail(device)
+    File.open("tmp/pids/device.#{device.deviceid}.slide").read rescue nil
   end
 end

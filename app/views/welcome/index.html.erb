@@ -20,11 +20,7 @@
         <%= dev.slideshow.nil? ? 'none' : link_to(dev.slideshow_name, dev.slideshow) %>
       </div>
       <div class="thumbnail">
-  <% if @now_playing.include? dev.deviceid %>
-        <img src="<%= @now_playing[dev.deviceid] %>" width="320" height="160" alt="current slide" />
-  <% else %>
-        <img src="/assets/nopreview.png" width="320" height="160" alt="no preview available" />
-  <% end %>
+        <img src="<%= dev.thumbnail or "/assets/nopreview.png" %>" width="320" height="160" alt="" />
       </div>
     </li>
 <% end %>
