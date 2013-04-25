@@ -8,6 +8,8 @@ gem 'image_science'
 gem 'ZenTest', '~> 4.6.0' # required by image_science, newest versions are compatible with Ruby 2.0 and break everything else
 
 gem 'googleapps-auth', :require => "googleapps_auth"
+gem 'ruby-openid', '~> 2.2.0' # has support for dalli
+gem 'dalli' # a pure-ruby memcached client
 
 gem 'rails', '~> 3.2'
 gem 'rake', '< 10'

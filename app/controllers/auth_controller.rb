@@ -1,3 +1,5 @@
+require 'openid/store/memcache'
+
 class AuthController < ApplicationController
   skip_before_filter :login_required
 
@@ -25,9 +27,9 @@ class AuthController < ApplicationController
   end
 
 # Default is in-memory store. Uncomment this method to use another OpenID store.
-#  protected
-#  def store
-#    OpenID::Store::Memcache.new(MemCache.new('localhost:11211'))
-#    # or OpenID::Store::Filesystem.new(Rails.root.join('tmp/openids'))
-#  end
+  protected
+  def store
+    OpenID::Store::Memcache.new(Dalli::Client.new('localhost:11211'))
+    # or OpenID::Store::Filesystem.new(Rails.root.join('tmp/openids'))
+  end
 end
