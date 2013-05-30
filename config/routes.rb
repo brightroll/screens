@@ -23,6 +23,8 @@ HaxAirplayWall::Application.routes.draw do
     end
   end
 
-  mount Ckeditor::Engine => "/ckeditor"
+  mount Ckeditor::Engine => '/ckeditor'
+
+  mount Rack::Directory.new(::File.join(Rails.root, 'public', 'files')) => '/files'
 
 end
