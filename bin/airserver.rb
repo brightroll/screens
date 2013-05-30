@@ -9,6 +9,8 @@ require 'airplay'
 require 'imgkit'
 require 'image_science'
 require 'digest/md5'
+require 'socket'
+require 'mime/types'
 
 $am_parent = true
 $my_node = ''
@@ -115,6 +117,13 @@ EOF
   end
 end
 
+def file_name_url(url)
+  if url && !url.starts_with?('http://', 'https://')
+    url = 'http://' + Socket.gethostname + url
+  end
+  url
+end
+
 # Take arg by name, rather than by object, to prevent instances crossing pids
 def loop_slideshow(node)
   device = Device.find_by_deviceid(node.deviceid)
@@ -141,26 +150,42 @@ def loop_slideshow(node)
       case ( slide.media_type and slide.media_type.to_sym or nil )
       when :video
         $log.info("Sending video #{slide.url}")
-        player = airplay.send_video(slide.url) # second arg is scrub position
+        url = file_name_url(slide.url)
+        player = airplay.send_video(url) # second arg is scrub position
         # TODO: video thumbnail...
         sleep_while_playing player
         player.stop
 
+      when :feed
+        # For now, a feed is a directory path to videos
+        Dir.glob(File.join('public', slide.url, '**')).each do |movie|
+          movie_file = File.join('public', slide.url, movie)
+          next unless MIME::Types.type_for(movie_file).find(/video/)
+          url = file_name_url(movie.gsub(/public/, ''))
+          puts url
+          player = airplay.send_video(url) # second arg is scrub position
+          # TODO: video thumbnail...
+          sleep_while_playing player
+          player.stop
+        end
+
       when :audio
         $log.info("Sending audio #{slide.url}")
-        player = airplay.send_audio(slide.url) # second arg is scrub position
+        url = file_name_url(slide.url)
+        player = airplay.send_audio(url) # second arg is scrub position
         # TODO: audio thumbnail...
         sleep_while_playing player
         player.stop
 
       when :image
         $log.info("Sending image #{slide.url}")
-        airplay.send_image(slide.url, slide.transition.to_sym)
+        url = file_name_url(slide.url)
+        airplay.send_image(url, slide.transition.to_sym)
         begin
-          img = Net::HTTP.get_response(URI(slide.url)).body
-          thumbnail(img, Digest::MD5.hexdigest(slide.url))
+          img = Net::HTTP.get_response(URI(url)).body
+          thumbnail(img, Digest::MD5.hexdigest(url))
         rescue StandardError => e
-          $log.error("Failed to thumbnail image url: #{slide.url} #{e}")
+          $log.error("Failed to thumbnail image url: #{url} #{e}")
         end
         sleep slide.display_time
 
