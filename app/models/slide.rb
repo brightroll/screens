@@ -6,7 +6,7 @@ class Slide < ActiveRecord::Base
     :only_integer => true,
     :greater_than => 0, # At least 1 second
     :less_than => 1800 # And up to 30 minutes
-  }, :unless => Proc.new { |a| [:audio, :video, :feed].include? a.media_type } # These types don't need a time
+  }, :unless => Proc.new { |a| [:audio, :video, :feed].include? a.media_type.to_sym } # These types don't need a time
 
   include Enumerize
   enumerize :transition, :in => [:none, :slide_left, :slide_right, :dissolve], :default => :dissolve
