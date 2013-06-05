@@ -52,7 +52,7 @@ def sleep_while_playing(player)
 end
 
 def video_thumbnail(file, thumbname, thumbcopy = false)
-  $log.error("ffmpeg -i #{file} -vframes 1 -s 640x360 public/thumbs/#{thumbname}.png")
+  $log.info("ffmpeg -i #{file} -vframes 1 -s 640x360 public/thumbs/#{thumbname}.png")
   if %x{ ffmpeg -i #{file} -vframes 1 -s 640x360 public/thumbs/#{thumbname}.png }
     FileUtils.cp("public/thumbs/#{thumbname}.png",
                  "public/thumbs/#{thumbcopy}.png") if thumbcopy
@@ -60,7 +60,7 @@ def video_thumbnail(file, thumbname, thumbcopy = false)
     File.open($slidefile, File::CREAT|File::TRUNC|File::RDWR) { |f| f.write("thumbs/#{thumbname}.png") }
   end
 rescue StandardError => e
-  $log.error("Failed to generate thumbnail for #{file} at #{thumbnail}: #{e}")
+  $log.error("Failed to generate thumbnail for #{file} at #{thumbname}: #{e}")
 end
 
 def thumbnail(img, thumbname, thumbcopy = false)
