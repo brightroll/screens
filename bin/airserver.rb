@@ -51,6 +51,18 @@ def sleep_while_playing(player)
   end
 end
 
+def video_thumbnail(file, thumbname, thumbcopy = false)
+  $log.error("ffmpeg -i #{file} -vframes 1 -s 640x360 public/thumbs/#{thumbname}.png")
+  if %x{ ffmpeg -i #{file} -vframes 1 -s 640x360 public/thumbs/#{thumbname}.png }
+    FileUtils.cp("public/thumbs/#{thumbname}.png",
+                 "public/thumbs/#{thumbcopy}.png") if thumbcopy
+      # Note the current thumbnail
+    File.open($slidefile, File::CREAT|File::TRUNC|File::RDWR) { |f| f.write("thumbs/#{thumbname}.png") }
+  end
+rescue StandardError => e
+  $log.error("Failed to generate thumbnail for #{file} at #{thumbnail}: #{e}")
+end
+
 def thumbnail(img, thumbname, thumbcopy = false)
   ImageScience::with_image_from_memory(img) do |science|
     science.thumbnail(640) do |thumb|
@@ -159,12 +171,11 @@ def loop_slideshow(node)
       when :feed
         # For now, a feed is a directory path to videos
         Dir.glob(File.join('public', slide.url, '**')).each do |movie|
-          movie_file = File.join('public', slide.url, movie)
-          next unless MIME::Types.type_for(movie_file).find(/video/)
+          $log.info("Sending video file #{movie}")
+          next unless MIME::Types.type_for(movie).find(/video/)
           url = file_name_url(movie.gsub(/public/, ''))
-          puts url
           player = airplay.send_video(url) # second arg is scrub position
-          # TODO: video thumbnail...
+          video_thumbnail(movie, Digest::MD5.hexdigest(slide.url))
           sleep_while_playing player
           player.stop
         end
