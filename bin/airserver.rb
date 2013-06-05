@@ -53,10 +53,10 @@ end
 
 def video_thumbnail(file, thumbname, thumbcopy = false)
   $log.info("ffmpeg -i #{file} -vframes 1 -s 640x360 public/thumbs/#{thumbname}.png")
-  if system(%W{ffmpeg -i #{file} -vframes 1 -s 640x360 public/thumbs/#{thumbname}.png})
+  if system(*%W{ffmpeg -i #{file} -vframes 1 -s 640x360 public/thumbs/#{thumbname}.png})
     FileUtils.cp("public/thumbs/#{thumbname}.png",
                  "public/thumbs/#{thumbcopy}.png") if thumbcopy
-      # Note the current thumbnail
+    # Note the current thumbnail
     File.open($slidefile, File::CREAT|File::TRUNC|File::RDWR) { |f| f.write("thumbs/#{thumbname}.png") }
   end
 rescue StandardError => e
