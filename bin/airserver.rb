@@ -2,7 +2,7 @@
 $: << File.expand_path(File.join(File.dirname(__FILE__), '..'))
 require 'vendor/bundle/bundler/setup.rb'
 
-ENV['RAILS_ENV'] = ARGV.first || ENV['RAILS_ENV'] || 'development'
+ENV['RAILS_ENV'] ||= 'development'
 require File.expand_path('../../config/environment',  __FILE__)
 
 require 'airplay'
