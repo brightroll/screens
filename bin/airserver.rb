@@ -52,8 +52,9 @@ def sleep_while_playing(player)
 end
 
 def video_thumbnail(file, thumbname, thumbcopy = false)
-  $log.info("ffmpeg -i #{file} -vframes 1 -s 640x360 public/thumbs/#{thumbname}.png")
-  if system(*%W{ffmpeg -i #{file} -vframes 1 -s 640x360 public/thumbs/#{thumbname}.png})
+  cmd = ["ffmpeg", "-loglevel", "quiet", "-i", file, "-vframes", "1", "-s", "640x360", "public/thumbs/#{thumbname}.png"]
+  $log.debug(cmd.join(' '))
+  if system(*cmd)
     FileUtils.cp("public/thumbs/#{thumbname}.png",
                  "public/thumbs/#{thumbcopy}.png") if thumbcopy
     # Note the current thumbnail
