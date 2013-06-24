@@ -5,6 +5,7 @@ HaxAirplayWall::Application.routes.draw do
   resources :devices do
     collection do
       get 'browse'
+      get 'power'
     end
     member do
       post 'signal'

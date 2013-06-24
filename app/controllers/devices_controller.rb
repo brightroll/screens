@@ -21,6 +21,16 @@ class DevicesController < ApplicationController
     end
   end
 
+  def power
+    case params['state']
+    when 'on'
+      %x{bin/aquos.rb --quiet --arp en3 --on}
+    when 'off'
+      %x{bin/aquos.rb --quiet --arp en3 --off}
+    end
+    redirect url_for(:devices)
+  end
+
   def browse
     @devices = begin
       Airplay::Client.new.browse

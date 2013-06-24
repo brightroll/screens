@@ -4,7 +4,9 @@
            ],
            :action_links => [
              link_to('New Device', new_device_path),
-             link_to('Browse Network', '/devices/browse')
+             link_to('Browse Network', '/devices/browse'),
+             link_to('Power ON', '/devices/power?state=on'),
+             link_to('Power OFF', '/devices/power?state=off'),
            ] } %>
 
 <script type="text/javascript">
