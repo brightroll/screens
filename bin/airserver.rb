@@ -162,19 +162,19 @@ def loop_slideshow(node)
 
       case ( slide.media_type and slide.media_type.to_sym or nil )
       when :video
-        $log.info("Sending video #{slide.url}")
         url = file_name_url(slide.url)
+        $log.info("Sending video #{url}")
         player = airplay.send_video(url) # second arg is scrub position
-        # TODO: video thumbnail...
+        video_thumbnail(movie, Digest::MD5.hexdigest(slide.url))
         sleep_while_playing player
         player.stop
 
       when :feed
         # For now, a feed is a directory path to videos
         Dir.glob(File.join('public', slide.url, '**')).each do |movie|
-          $log.info("Sending video file #{movie}")
           next unless MIME::Types.type_for(movie).find(/video/)
           url = file_name_url(movie.gsub(/public/, ''))
+          $log.info("Sending video file #{url}")
           player = airplay.send_video(url) # second arg is scrub position
           video_thumbnail(movie, Digest::MD5.hexdigest(slide.url))
           sleep_while_playing player
@@ -190,8 +190,8 @@ def loop_slideshow(node)
         player.stop
 
       when :image
-        $log.info("Sending image #{slide.url}")
         url = file_name_url(slide.url)
+        $log.info("Sending image #{url}")
         airplay.send_image(url, slide.transition.to_sym)
         begin
           img = Net::HTTP.get_response(URI(url)).body
@@ -294,7 +294,6 @@ trap :SIGHUP do
 end
 
 # Parent main from here on
-
 loop do
   # Every $loop_time seconds, look for airplay nodes.
   # If a node is found and there isn't a child process
@@ -308,6 +307,14 @@ loop do
     sleep LOOP_TIME
     next
   end
+
+  # Just run a child straight away
+  # if ARGV.length
+  #  name = ARGV.shift
+  #  node = airplay.use name
+  #  puts "Direct connection to #{node.name}"
+  #  exit child_main node
+  # end
 
   airplay.servers.each do |node|
     $log.debug(node.inspect)

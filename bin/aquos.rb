@@ -9,6 +9,7 @@ $log.level = Logger::INFO
 
 def doTV(tv, options={})
   $log.info "Talking to TV #{tv}"
+  $0 = tv
   s = TCPSocket.new tv, 10002
 
   while line = s.recv(100)
