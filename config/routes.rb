@@ -1,4 +1,4 @@
-HaxAirplayWall::Application.routes.draw do
+Screens::Application.routes.draw do
 
   root :to => 'welcome#index'
 

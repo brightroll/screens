@@ -7,17 +7,17 @@ find_mysql_socket: &find_mysql_socket <%=
 
 development:
   adapter: sqlite3
-  database: hax_airplay_wall_development
+  database: screens_development
 
 test:
   adapter: sqlite3
-  database: hax_airplay_wall_test
+  database: screens_test
 
 production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: hax_airplay_wall_production
+  database: screens_production
   pool: 5
   username: root
   password:

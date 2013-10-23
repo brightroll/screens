@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-HaxAirplayWall::Application.load_tasks
+Screens::Application.load_tasks
