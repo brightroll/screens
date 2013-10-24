@@ -13,6 +13,7 @@ require 'digest/md5'
 $am_parent = 1
 $my_node = ""
 $node_pids = {}
+$pidfile = ""
 LOOP_TIME = 50
 STANDARD_DISPLAY_TIME = 5
 
@@ -54,7 +55,7 @@ def thumbnail(img, thumbname, thumbcopy = false)
       FileUtils.cp("public/thumbs/#{thumbname}.png",
                    "public/thumbs/#{thumbcopy}.png") if thumbcopy
       # Note the current thumbnail
-      File.open("tmp/pids/device.#{$my_node.deviceid}.slide") { |f| f.write("public/thumbs/${thumbname}.png") }
+      File.open("tmp/pids/device.#{$my_node.deviceid}.slide", File::CREAT|File::TRUNC|File::RDWR) { |f| f.write("public/thumbs/${thumbname}.png") }
     end
   end
 end
@@ -219,7 +220,7 @@ def reap
     Process.waitall
   else
     $log.info("Child exiting for device: #{$my_node.name} #{$my_name.deviceid}.")
-    shutdown
+    File.delete($pidfile) if $pidfile
   end
 end
 
@@ -246,6 +247,8 @@ loop do
       $node_pids[node.deviceid] = Process.fork do
         $am_parent = 0
         $my_node = node
+        $pidfile = "tmp/pids/airserver.#{node.deviceid}.pid"
+        File.open($pidfile, File::CREAT|File::TRUNC|File::RDWR) { |f| f.write Process.pid }
         $log = Logger.new("log/airserver.#{node.deviceid}.log")
         $log.level = Logger::INFO
         $0 = "#{$0} #{$my_node.name} #{$my_node.deviceid}"
