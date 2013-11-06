@@ -27,6 +27,8 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.2.1)
+    active_model_serializers (0.8.1)
+      activemodel (>= 3.0)
     activemodel (3.2.12)
       activesupport (= 3.2.12)
       builder (~> 3.0.0)
@@ -152,6 +154,7 @@ PLATFORMS
 
 DEPENDENCIES
   ZenTest (~> 4.8.3)
+  active_model_serializers
   airplay!
   bootstrap-sass (~> 2.3.0)
   ckeditor (~> 4.0)

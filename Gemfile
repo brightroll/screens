@@ -16,6 +16,7 @@ gem 'rake', '< 10'
 gem 'thin'
 gem 'mysql2'
 gem 'sqlite3'
+gem 'active_model_serializers'
 
 group :assets do
   gem 'jquery-rails',         '~> 2.2.1'
