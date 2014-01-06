@@ -13,7 +13,7 @@ GEM
   specs:
     RubyInline (3.12.1)
       ZenTest (~> 4.3)
-    ZenTest (4.6.2)
+    ZenTest (4.8.4)
     actionmailer (3.2.12)
       actionpack (= 3.2.12)
       mail (~> 2.4.4)
@@ -56,6 +56,7 @@ GEM
       activesupport (>= 3.2)
     erubis (2.7.0)
     eventmachine (1.0.1)
+    execjs (2.0.2)
     formtastic (2.2.1)
       actionpack (>= 3.0)
     formtastic-bootstrap (2.1.1)
@@ -142,12 +143,15 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.36)
+    uglifier (2.2.1)
+      execjs (>= 0.3.0)
+      multi_json (~> 1.0, >= 1.0.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  ZenTest (~> 4.6.0)
+  ZenTest (~> 4.8.3)
   airplay!
   bootstrap-sass (~> 2.3.0)
   ckeditor (~> 4.0)
@@ -167,3 +171,4 @@ DEPENDENCIES
   sass-rails
   sqlite3
   thin
+  uglifier (~> 2.2.0)

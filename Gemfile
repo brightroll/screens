@@ -5,7 +5,7 @@ gem 'enumerize'
 
 gem 'imgkit'
 gem 'image_science'
-gem 'ZenTest', '~> 4.6.0' # required by image_science, newest versions are compatible with Ruby 2.0 and break everything else
+gem 'ZenTest', '~> 4.8.3'
 
 gem 'googleapps-auth', :require => "googleapps_auth"
 gem 'ruby-openid', '~> 2.2.0' # has support for dalli
@@ -24,6 +24,7 @@ group :assets do
   gem 'formtastic',           '~> 2.2.0'
   gem 'formtastic-bootstrap', '~> 2.0'
   gem 'ckeditor',             '~> 4.0'
+  gem 'uglifier',             '~> 2.2.0'
 end
 
 group :development, :test do
