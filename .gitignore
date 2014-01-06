@@ -20,3 +20,4 @@
 
 # Ignore the generated thumbnails
 /public/thumbs/*
+/public/assets/*
