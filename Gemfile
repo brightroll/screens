@@ -5,7 +5,7 @@ gem 'enumerize'
 
 gem 'imgkit'
 gem 'image_science'
-gem 'ZenTest', '~> 4.8.3'
+gem 'ZenTest', '~> 4.8.3', :require => false
 
 gem 'googleapps-auth', :require => "googleapps_auth", :github => 'sodabrew/rails-googleapps-auth', :branch => 'patch-1'
 gem 'ruby-openid', '~> 2.2.0' # has support for dalli
