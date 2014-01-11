@@ -267,6 +267,10 @@ def child_main(node)
   $log = Logger.new("log/airserver.#{node.deviceid}.log")
   $log.level = Logger::INFO
   $0 = "#{$0} #{$my_node.name} #{$my_node.deviceid}"
+
+  # Force a fresh database handle after the fork
+  ActiveRecord::Base.clear_all_connections!
+
   loop do
     begin
       loop_slideshow $my_node
@@ -274,6 +278,7 @@ def child_main(node)
       $log.info("Restarting slideshow immediately.")
     end
   end
+
   $log.info("Child exiting for device: #{$my_node.name} #{$my_name.deviceid}.")
 end
 
