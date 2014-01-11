@@ -33,7 +33,7 @@ class DevicesController < ApplicationController
 
   def browse
     @devices = begin
-      Airplay::Client.new.browse
+      Airplay.devices
     rescue Airplay::Client::ServerNotFoundError => e
       []
     rescue StandardError => e

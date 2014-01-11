@@ -16,10 +16,10 @@ module DevicesHelper
   #   <a href="/devices/new?name=IndikaAirplay"><i class="icon-eye-open" title="Device seen on network"></i>IndikaAirplay</a>
   def browsed_device_link(device, all_devices_by_deviceid)
     device_name = device.name
-    dev = all_devices_by_deviceid[device.deviceid]
+    dev = all_devices_by_deviceid[(device.info.mac_address rescue device.address)]
     if dev.nil?
       link_text = raw('<i class="icon-edit margin_right_8" title="Add this device"></i>') + h(device_name)
-      link_to(link_text, new_device_path(:name => device_name, :deviceid => device.deviceid))
+      link_to(link_text, new_device_path(:name => device_name, :deviceid => device.info.mac_address))
     else
       link_text = raw('<i class="icon-check margin_right_8" title="Device seen on network is also in the database"></i>') + h(device_name)
       link_to(link_text, dev)

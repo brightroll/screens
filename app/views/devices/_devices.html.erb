@@ -12,7 +12,7 @@
 <%   @devices.each do |dev| %>
   <tr>
     <td><%= browsed_device_link(dev, @all_devices_by_deviceid) %></td>
-    <td><%= dev.deviceid %></td>
+    <td><%= dev.info.mac_address rescue dev.address %></td>
   </tr>
 <%   end %>
 <% end %>

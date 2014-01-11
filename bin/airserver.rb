@@ -137,27 +137,21 @@ def file_name_url(url)
   url
 end
 
-# Take arg by name, rather than by object, to prevent instances crossing pids
-def loop_slideshow(node)
-  device = Device.find_by_deviceid(node.deviceid)
-  unless device
-    $log.debug("Device #{node.name} #{node.deviceid} is not in the database")
-    raise NoDeviceError
-  end
-
+def loop_slideshow(device)
   slideshow = device.slideshow
   unless slideshow
-    $log.debug("Device #{node.name} #{node.deviceid} has no slideshow")
+    $log.debug("Device #{device.name} #{device.deviceid} has no slideshow")
     raise NoSlideshowError
   end
   $log.info("Beginning slideshow #{slideshow.name} on device #{device.name}")
 
-  airplay = Airplay::Client.new node
-  airplay.password device.password
+  airplay = Airplay[device.name]
+  airplay.password = device.password
   $log.debug("Connected to device: #{airplay.inspect}")
 
   loop do
     slideshow.slides.each do |slide|
+      $log.info("Displaying slide #{slide.inspect}")
       $log.debug("Displaying slide #{slide.inspect}")
 
       case ( slide.media_type and slide.media_type.to_sym or nil )
@@ -192,7 +186,7 @@ def loop_slideshow(node)
       when :image
         url = file_name_url(slide.url)
         $log.info("Sending image #{url}")
-        airplay.send_image(url, slide.transition.to_sym)
+        airplay.view(url, :transition => slide.transition.to_s)
         begin
           img = Net::HTTP.get_response(URI(url)).body
           thumbnail(img, Digest::MD5.hexdigest(url))
@@ -207,13 +201,13 @@ def loop_slideshow(node)
           base_url, title, graphs = graphite_dashboard_fetch(slide.url)
           graphite_dashboard_html(base_url, title, graphs).each do |dashboard|
             img = IMGKit.new(dashboard).to_img
-            airplay.send_image(img, slide.transition.to_sym, :raw => true)
+            airplay.view(img, :transition => slide.transition.to_s)
             thumbnail(img, Digest::MD5.hexdigest(slide.url))
             # sleep one slide time length for each portion of the dashboard
             sleep slide.display_time
           end
-        rescue IMGKit::CommandFailedError
-          $log.error("Failed to render graphite with IMGKit: #{slide.url}")
+        rescue IMGKit::CommandFailedError => e
+          $log.error("Failed to render graphite with IMGKit: #{slide.url} #{e}")
         rescue StandardError => e
           $log.error("Failed to render graphite (other error): #{slide.url} #{e}")
         end
@@ -223,12 +217,12 @@ def loop_slideshow(node)
           # Anything else gets rendered through WebKit
           $log.info("Rendering url #{slide.url}")
           img = IMGKit.new(slide.url).to_img
-          airplay.send_image(img, slide.transition.to_sym, :raw => true)
+          airplay.view(img, :transition => slide.transition.to_s)
           thumbnail(img, Digest::MD5.hexdigest(slide.url))
           # sleep while the image is on the screen
           sleep slide.display_time
-        rescue IMGKit::CommandFailedError
-          $log.error("Failed to render url with IMGKit: #{slide.url}")
+        rescue IMGKit::CommandFailedError => e
+          $log.error("Failed to render url with IMGKit: #{slide.url} #{e}")
         rescue StandardError => e
           $log.error("Failed to render url (other error): #{slide.url} #{e}")
         end
@@ -236,13 +230,11 @@ def loop_slideshow(node)
       end
     end
 
-    # Reload the device as it may have a new slideshow associated
-    device.reload
-    # Reload the slideshow to pick up slide changes
-    slideshow = device.slideshow
+    # Reload to pick up changes for the next loop around
+    slideshow = device.reload.slideshow
   end
 
-  $log.info("Ending slideshow for #{node.name} #{node.deviceid}")
+  $log.info("Ending slideshow for #{device.name} #{device.deviceid}")
 end
 
 def reap(sig)
@@ -300,28 +292,21 @@ end
 
 # Parent main from here on
 loop do
-  # Every $loop_time seconds, look for airplay nodes.
-  # If a node is found and there isn't a child process
-  # for that node, spin one up!
+  # Every $loop_time seconds, query the database for devices
+  # If a node is found and there isn't a child process for that node, spin one up!
 
-  airplay = begin
-    $log.info("Searching for AirPlay devices")
-    Airplay::Client.new
-  rescue Airplay::Client::ServerNotFoundError
-    $log.info("No devices found, sleeping #{LOOP_TIME} seconds")
-    sleep LOOP_TIME
-    next
-  end
+  devices = Device.includes(:slideshow).where('slideshow_id IS NOT NULL')
 
   # Just run a child straight away
-  # if ARGV.length
-  #  name = ARGV.shift
-  #  node = airplay.use name
-  #  puts "Direct connection to #{node.name}"
-  #  exit child_main node
-  # end
+  unless ARGV.empty?
+   name = ARGV.shift
+   node = Device.includes(:slideshow).where(:name => name).first
+   abort "Cannot find device for #{name}" unless node
+   puts "Direct connection to #{node.name}"
+   exit child_main node
+  end
 
-  airplay.servers.each do |node|
+  devices.each do |node|
     $log.debug(node.inspect)
     unless $node_pids.has_key? node.deviceid
       $node_pids[node.deviceid] = Process.fork do
