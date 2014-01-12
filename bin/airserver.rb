@@ -1,7 +1,4 @@
 #!/usr/bin/env ruby
-$: << File.expand_path(File.join(File.dirname(__FILE__), '..'))
-require 'vendor/bundle/bundler/setup.rb'
-
 ENV['RAILS_ENV'] ||= 'development'
 require File.expand_path('../../config/environment',  __FILE__)
 
