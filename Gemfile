@@ -1,15 +1,15 @@
 source 'https://rubygems.org'
 
-gem 'airplay', :git => 'git://github.com/sodabrew/airplay.git', :branch => 'patches-merged', :require => 'airplay'
+gem 'airplay', '~> 1.0'
 gem 'enumerize'
 
 gem 'imgkit'
 gem 'image_science'
-gem 'ZenTest', '~> 4.8.3'
+gem 'ZenTest', '~> 4.8.3', :require => false
 
-gem 'googleapps-auth', :require => "googleapps_auth"
-gem 'ruby-openid', '~> 2.2.0' # has support for dalli
-gem 'dalli' # a pure-ruby memcached client
+gem 'googleapps-auth', :require => "googleapps_auth", :github => 'sodabrew/rails-googleapps-auth', :branch => 'patch-1'
+gem 'ruby-openid', '~> 2.3.0' # has support for dalli
+gem 'dalli', '~> 2.6.0' # a pure-ruby memcached client
 
 gem 'rails', '~> 3.2'
 gem 'rake', '< 10'
