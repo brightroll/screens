@@ -69,7 +69,7 @@ GEM
     cuba (3.1.0)
       rack
     daemons (1.1.9)
-    dalli (2.7.0)
+    dalli (2.6.4)
     diff-lcs (1.2.5)
     dnssd (2.0)
     enumerize (0.7.0)
@@ -156,7 +156,7 @@ GEM
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
-    ruby-openid (2.2.3)
+    ruby-openid (2.3.0)
     sass (3.2.13)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -194,7 +194,7 @@ DEPENDENCIES
   airplay (~> 1.0)
   bootstrap-sass (~> 2.3.0)
   ckeditor (~> 4.0)
-  dalli
+  dalli (~> 2.6.0)
   enumerize
   formtastic (~> 2.2.0)
   formtastic-bootstrap (~> 2.0)
@@ -206,7 +206,7 @@ DEPENDENCIES
   rails (~> 3.2)
   rake (< 10)
   rspec-rails
-  ruby-openid (~> 2.2.0)
+  ruby-openid (~> 2.3.0)
   sass-rails
   sqlite3
   thin
