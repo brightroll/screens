@@ -52,6 +52,7 @@ Requirements:
 * Ruby 1.9.3 or higher
 
 Setup:
+
     bundle install
     bundle exec imgkit --install-wkhtmltoimage
     bundle exec rake db:setup
