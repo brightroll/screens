@@ -1,5 +1,5 @@
-Screens - digital signage on AirPlay devices
-============================================
+Screens - information radiators on AirPlay devices
+==================================================
 
 Have you ever watched a movie about space missions, with the giant screens on
 the wall displaying astronaut and ship status? Have you ever walked into a tech
