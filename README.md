@@ -42,20 +42,26 @@ An alternative target device is the Raspberry Pi running OpenELEC.tv. At some
 point I'd like to use the RPi's HDMI CEC support for screen power control.
 
 
-Setup
------
+Quick Start
+-----------
 
-I wrote Screens as a Ruby on Rails application and that's why you're here.
-This project sets up like most modern Ruby apps using Bundler:
+Requirements:
+* A bunch of Apple TV or Raspberry Pi devices!
+* Recent Mac OS X or Linux with Avahi/Zeroconf
+* MySQL or SQLite
+* Ruby 1.9.3 or higher
 
-1. Check out the screens code repo
-2. `cd screens`
-3. `bundle install`
-4. `bundle exec imgkit --install-wkhtmltoimage`
-5. `bundle exec rake db:setup`
-6. `bundle exec rails s`
+Setup:
+    bundle install
+    bundle exec imgkit --install-wkhtmltoimage
+    bundle exec rake db:setup
+    bundle exec thin start
+    bundle exec bin/airserver.rb &
 
-OpenID for Apps authentication is included in the box, and optional to use.
+An OpenID authentication method is included in the box, but is optional to use.
+
+By default, thin runs on port 3000. You may want to run nginx as a reverse proxy
+on standard HTTP or HTTPS ports.
 
 
 Power control for Sharp Aquos displays
@@ -66,9 +72,7 @@ Aquos displays. In this example, the script will discover all devices on
 interface en3 from the arp table and attempt to telnet to port 10002. This
 works well if you put the screens themselves on a separate network.
 
-```
-  # Turn screens on at 9:30am local time Monday - Friday
-  30 9 * * 1-5   bin/aquos.rb --quiet --arp en3 --on
-  # Turn screens off at 6:30pm local time every day
-  30 18 * * *    bin/aquos.rb --quiet --arp en3 --off
-```
+    # Turn screens on at 9:30am local time Monday - Friday
+    30 9 * * 1-5   bin/aquos.rb --quiet --arp en3 --on
+    # Turn screens off at 6:30pm local time every day
+    30 18 * * *    bin/aquos.rb --quiet --arp en3 --off
