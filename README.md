@@ -30,8 +30,9 @@ Quick Start
     bundle exec thin start
     bundle exec bin/airserver.rb &
 
-Download and install either [wkhtmltopdf] or [PhantomJS]. See the respective
-sites for instructions.
+Download and install either [wkhtmltopdf][] or [PhantomJS][]. See the respective
+sites for instructions. If you are using PhantomJS, the [pjhtmltopdf][] script
+is required as well.
 
 An OpenID authentication method is included in the box, but is optional to use.
 
@@ -67,12 +68,16 @@ works well if you put the screens themselves on a separate network.
 Thanks
 ------
 
-This app wouldn't be possible without the
-[airplay rubygem](https://github.com/elcuervo/airplay) by @elcuervo.
+This app wouldn't be possible without the [Airplay Rubygem][] by @elcuervo.
 
-Web page rendering uses [wkhtmltopdf](http://github.com/wkhtmltopdf/wkhtmltopdf)
-or [PhantomJS](http://phantomjs.org)
+Web page rendering uses the `wkhtmltoimage` tool from [wkhtmltopdf][] by
+@antialize. Optionally [PhantomJS][] can be used instead.
 
 An excellent alternative to Apple TV is [XBMC](http://xbmc.org)
 running on a small computer like the [Raspberry Pi](http://raspberrypi.org).
 I recommend the [OpenELEC.tv](http://openelec.tv) distribution.
+
+[Airplay Rubygem]: https://github.com/elcuervo/airplay
+[wkhtmltopdf]: http://github.com/wkhtmltopdf/wkhtmltopdf
+[pjhtmltopdf]: http://github.com/sodabrew/pjhtmltopdf
+[PhantomJS]: http://phantomjs.org
