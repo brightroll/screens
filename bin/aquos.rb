@@ -7,11 +7,8 @@ require 'socket'
 $log = Logger.new(STDOUT)
 $log.level = Logger::INFO
 
-def doTV(tv, options={})
-  $log.info "Talking to TV #{tv}"
-  $0 = tv
-  s = TCPSocket.new tv, 10002
-
+def loginTV(socket, username, password)
+  $log.info "Login as #{username}"
   while line = s.recv(100)
     case line
     when /^Login:/
@@ -22,44 +19,49 @@ def doTV(tv, options={})
       break
     end
   end
+end
+
+def sendTV(socket, command)
+  $log.debug ("%-8s\r" % command)
+  socket.send ("%-8s\r" % command), 0
+  $log.debug socket.recv(100)
+end
+
+def doTV(tv, options={})
+  $log.info "Talking to TV #{tv}"
+  $0 = tv
+  s = TCPSocket.new tv, 10002
+
+  # The TV only sends a login prompt if a username/password is set
+  # PEEK does not advance the read pointer, just checks if there's data
+  # If there's nothing to read, recv_nonblock raises EWOULDBLOCK
+  if (s.recv_nonblock(1, Socket::MSG_PEEK) rescue false)
+    loginTV(s, options[:username], options[:password])
+  end
 
   case options[:power]
   when :on
-    s.send "POWR1   \r", 0
-    $log.debug s.recv(100)
-    sleep 1
+    sendTV(s, "POWR1")
+    sleep 1 # Give the TV a second to power up
   when :off
-    s.send "POWR0   \r", 0
-    $log.debug s.recv(100)
-    s.close
+    sendTV(s, "POWR0")
+    s.close # TV is off, so we're done here
     return
   end
 
   case options[:volume]
   when :mute
-    s.send "MUTE1   \r", 0
-    $log.debug s.recv(100)
+    sendTV(s, "MUTE1")
   when Integer
-    s.send "MUTE2   \r", 0
-    $log.debug s.recv(100)
-    s.send "VOLM%02d  \r" % options[:volume], 0
-    $log.debug s.recv(100)
+    sendTV(s, "MUTE2")
+    sendTV(s, "VOLM%02d" % options[:volume])
   end
 
-  s.send "TVNM1   \r", 0
-  $log.debug s.recv(100)
-
-  s.send "MNRD1   \r", 0
-  $log.debug s.recv(100)
-
-  s.send "SWVN1   \r", 0
-  $log.debug s.recv(100)
-
-  s.send "RSPW2   \r", 0
-  $log.debug s.recv(100)
-
-  s.send "WIDE8   \r", 0
-  $log.debug s.recv(100)
+  sendTV(s, "TVNM1")
+  sendTV(s, "MNRD1")
+  sendTV(s, "SWVN1")
+  sendTV(s, "RSPW2")
+  sendTV(s, "WIDE8")
 
   s.close
 rescue Exception => e
@@ -99,6 +101,7 @@ options[:username] = ''
 options[:password] = ''
 
 if options[:arp]
+  # This arp command line might be specific to Mac OS X
   tvs = %x(/usr/sbin/arp -na -i #{options[:arp]} | awk -F'[()]' '{print \$2}').split
 elsif !ARGV.empty?
   tvs = ARGV
