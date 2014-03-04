@@ -70,8 +70,10 @@ end
 
 # Here begins
 
-options = {}
-OptionParser.new do |opts|
+options = {
+  :timeout => 30
+}
+opts = OptionParser.new do |opts|
   opts.banner = 'Sharp Aquos IP control on/off script'
 
   opts.on('--on', 'Turn TVs on') do |v|
@@ -84,10 +86,13 @@ OptionParser.new do |opts|
     options[:volume] = :mute
   end
   opts.on('--volume NUM', Integer, 'Volume 0-99') do |v|
-    options[:volume] = v
+    options[:volume] = v.to_i
   end
   opts.on('--arp IF', String, 'Arp for TVs on this interface') do |v|
     options[:arp] = v
+  end
+  opts.on('--timeout NUM', 'Timeout to talk to TVs (default 30s)') do |v|
+    options[:timeout] = v.to_i
   end
   opts.on('--verbose', 'Be verbose') do |v|
     $log.level = Logger::DEBUG
@@ -95,7 +100,9 @@ OptionParser.new do |opts|
   opts.on('--quiet', 'Be quiet') do |v|
     $log.level = Logger::WARN
   end
-end.parse!
+end
+
+opts.parse!
 
 options[:username] = ''
 options[:password] = ''
@@ -106,12 +113,16 @@ if options[:arp]
 elsif !ARGV.empty?
   tvs = ARGV
 else
-  $log.warn "Usage: #{$0} [--on | --off] [--mute | --volume 0-99] <--arp IF | TV IPs>"
+  $stderr.puts opts.help
   exit 1
 end
 
 tvs.each do |tv|
-  fork { doTV tv, options }
+  fork do
+    Timeout::timeout(options[:timeout]) do
+      doTV tv, options
+    end
+  end
 end
 
 Process.waitall
