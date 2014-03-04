@@ -9,12 +9,12 @@ $log.level = Logger::INFO
 
 def loginTV(socket, username, password)
   $log.info "Login as #{username}"
-  while line = s.recv(100)
+  while line = socket.recv(100)
     case line
     when /^Login:/
-      s.send "#{options[:username]}\r", 0
+      socket.send "#{username}\r", 0
     when /^Password:/
-      s.send "#{options[:password]}\r", 0
+      socket.send "#{password}\r", 0
     else
       break
     end
