@@ -94,6 +94,12 @@ opts = OptionParser.new do |opts|
   opts.on('--timeout NUM', 'Timeout to talk to TVs (default 30s)') do |v|
     options[:timeout] = v.to_i
   end
+  opts.on('--username NUM', 'TV username') do |v|
+    options[:username] = v
+  end
+  opts.on('--password NUM', 'TV password') do |v|
+    options[:password] = v
+  end
   opts.on('--verbose', 'Be verbose') do |v|
     $log.level = Logger::DEBUG
   end
@@ -103,9 +109,6 @@ opts = OptionParser.new do |opts|
 end
 
 opts.parse!
-
-options[:username] = ''
-options[:password] = ''
 
 if options[:arp]
   # This arp command line might be specific to Mac OS X
