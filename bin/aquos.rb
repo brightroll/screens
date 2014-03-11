@@ -32,6 +32,9 @@ def doTV(tv, options={})
   $0 = tv
   s = TCPSocket.new tv, 10002
 
+  # The onboard firmware is pretty slow, wait for it
+  sleep 1
+
   # The TV only sends a login prompt if a username/password is set
   # PEEK does not advance the read pointer, just checks if there's data
   # If there's nothing to read, recv_nonblock raises EWOULDBLOCK
