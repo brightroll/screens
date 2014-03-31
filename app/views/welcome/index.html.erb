@@ -20,7 +20,7 @@
         <%= dev.slideshow.nil? ? 'none' : link_to(dev.slideshow_name, dev.slideshow) %>
       </div>
       <div class="thumbnail">
-        <img src="<%= dev.thumbnail or "/assets/nopreview.png" %>" width="320" height="160" alt="" />
+        <img src="<%= dev.thumbnail or "/assets/nopreview.png" %>" class="fixed-320-180" />
       </div>
     </li>
 <% end %>

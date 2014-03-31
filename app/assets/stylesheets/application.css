@@ -27,3 +27,12 @@ body {
 .breadcrumb a.active {
   color: #333333;
 }
+
+/* Force the front page thumbnail dimensions if the images are a different size */
+.fixed-320-180 {
+  width: 320px;
+  height: 180px;
+  max-width: 320px;
+  max-height: 180px;
+  overflow: hidden;
+}
