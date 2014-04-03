@@ -8,6 +8,10 @@ require 'image_science'
 require 'digest/md5'
 require 'socket'
 require 'mime/types'
+require 'uri'
+require 'net/http'
+require 'net/https'
+require 'jsonpath'
 
 $am_parent = true
 $my_node = ''
