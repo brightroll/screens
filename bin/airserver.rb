@@ -36,18 +36,6 @@ IMGKit.configure do |config|
   }
 end
 
-def sleep_while_playing(player)
-  for r in 1..5
-    scrub = player.scrub
-    if scrub and scrub.fetch('duration', 0) > 0
-      $log.debug("Got scrub on try #{r}")
-      sleep scrub['duration']
-      return
-    end
-    sleep 1
-  end
-end
-
 def video_thumbnail(file, thumbname, thumbcopy = false)
   cmd = ["ffmpeg", "-loglevel", "quiet", "-i", file, "-vframes", "1", "-s", "640x360", "public/thumbs/#{thumbname}.png"]
   $log.debug(cmd.join(' '))
@@ -155,20 +143,21 @@ def loop_slideshow(device)
       when :video
         url = file_name_url(slide.url)
         $log.info("Sending video #{url}")
-        player = airplay.send_video(url) # second arg is scrub position
-        video_thumbnail(movie, Digest::MD5.hexdigest(slide.url))
-        sleep_while_playing player
+        player = airplay.play(url) # second arg is scrub position
+        video_thumbnail(slide.url, Digest::MD5.hexdigest(slide.url))
+        player.wait
         player.stop
 
       when :feed
         # For now, a feed is a directory path to videos
+        # TODO: Use airplay gem 1.0 playlists!
         Dir.glob(File.join('public', slide.url, '**')).each do |movie|
           next unless MIME::Types.type_for(movie).find(/video/)
           url = file_name_url(movie.gsub(/public/, ''))
           $log.info("Sending video file #{url}")
           player = airplay.send_video(url) # second arg is scrub position
           video_thumbnail(movie, Digest::MD5.hexdigest(slide.url))
-          sleep_while_playing player
+          player.wait
           player.stop
         end
 
@@ -177,7 +166,7 @@ def loop_slideshow(device)
         url = file_name_url(slide.url)
         player = airplay.send_audio(url) # second arg is scrub position
         # TODO: audio thumbnail...
-        sleep_while_playing player
+        player.wait
         player.stop
 
       when :image
@@ -292,8 +281,6 @@ loop do
   # Every $loop_time seconds, query the database for devices
   # If a node is found and there isn't a child process for that node, spin one up!
 
-  devices = Device.includes(:slideshow).where('slideshow_id IS NOT NULL')
-
   # Just run a child straight away
   unless ARGV.empty?
    name = ARGV.shift
@@ -303,6 +290,7 @@ loop do
    exit child_main node
   end
 
+  devices = Device.includes(:slideshow).where('slideshow_id IS NOT NULL')
   devices.each do |node|
     $log.debug(node.inspect)
     unless $node_pids.has_key? node.deviceid
