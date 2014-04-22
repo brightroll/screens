@@ -27,4 +27,23 @@ class Device < ActiveRecord::Base
     self.deviceid and self.deviceid.upcase!
     true
   end
+
+  def to_param
+    self.deviceid
+  end
+
+  # Allow lookup by /devices/1 or /devices/devname
+  def self.find(*args)
+    if args.length == 1
+      ident = args.first
+      case ident
+      when Integer, /^\d+$/
+        find_by_id!(ident)
+      else
+        find_by_deviceid!(ident.upcase)
+      end
+    else
+      super
+    end
+  end
 end
