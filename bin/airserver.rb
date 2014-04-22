@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
-ENV['RAILS_ENV'] ||= 'development'
-require File.expand_path('../../config/environment',  __FILE__)
 
 require 'airplay'
 require 'imgkit'
@@ -20,6 +18,7 @@ $pidfile = nil
 $slidefile = nil
 LOOP_TIME = 30
 STANDARD_DISPLAY_TIME = 5
+SERVER = Socket.gethostname
 
 $log = Logger.new('log/airserver.log')
 $log.level = Logger::INFO
@@ -121,7 +120,7 @@ end
 
 def file_name_url(url)
   if url && !url.starts_with?('http://', 'https://')
-    url = 'http://' + Socket.gethostname + url
+    url = 'http://' + SERVER + url
   end
   url
 end
