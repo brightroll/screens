@@ -1,6 +1,11 @@
 module DevicesHelper
+  # Given a Device object, returns a link to its location if a location exists, or
+  # else returns an empty string.
+  def device_location_link(device)
+    device.location ? link_to(device.location_name, device.location) : ''
+  end
 
-  # Given a Device model object, returns a link to its slideshow if a slideshow exists, or
+  # Given a Device object, returns a link to its slideshow if a slideshow exists, or
   # else returns an empty string.
   def device_slideshow_link(device)
     device.slideshow ? link_to(device.slideshow_name, device.slideshow) : ''
@@ -8,7 +13,7 @@ module DevicesHelper
 
   # Given an Airplay Device object and a hash {:name => <Device>}, it returns
   # link tag. If the Airplay Device name is pesent in the hash as a key, the associated
-  # device model object is used to create the link. Otherwise a link with the URL
+  # device object is used to create the link. Otherwise a link with the URL
   # /devices/new?name=<name> is returned.
   #
   # Sample Output:

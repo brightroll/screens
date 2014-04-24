@@ -23,6 +23,7 @@ $(document).ready(function() {
   <thead>
   <tr>
     <th>Name</th>
+    <th>Location</th>
     <th>Slideshow Name</th>
     <th>Device ID</th>
     <th>Running PID</th>
@@ -33,6 +34,7 @@ $(document).ready(function() {
 <% @devices.each do |device| %>
   <tr>
     <td><%= link_to device.name, device %></td>
+    <td><%= device_location_link(device) %></td>
     <td><%= device_slideshow_link(device) %></td>
     <td><tt><%= device.deviceid %></tt></td>
     <td><tt><%= device.pid or '---' %></tt></td>
