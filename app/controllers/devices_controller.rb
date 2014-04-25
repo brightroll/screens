@@ -2,7 +2,14 @@ class DevicesController < ApplicationController
   # GET /devices
   # GET /devices.json
   def index
-    @devices = Device.find(:all, :order => 'name')
+    @devices = if params[:location]
+      @location = Location.find_by_name(params[:location])
+      Device.where(:location_id => @location.id).order(:name) if @location
+    else
+      Device.find(:all, :order => 'name')
+    end
+
+    @devices ||= []
 
     respond_to do |format|
       format.html # index.html.erb

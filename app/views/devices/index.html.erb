@@ -62,7 +62,11 @@ $(document).ready(function() {
   </tr>
 <% end %>
 <% if @devices.empty? %>
+<%   if @location %>
+  <tr><td colspan="7">No devices found in location <%= @location.name %>.</td></tr>
+<%   else %>
   <tr><td colspan="7">No devices configured.</td></tr>
+<%   end %>
 <% end %>
   </tbody>
 </table>
