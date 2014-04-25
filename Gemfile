@@ -12,12 +12,13 @@ gem 'googleapps-auth', :require => "googleapps_auth", :github => 'sodabrew/rails
 gem 'ruby-openid', '~> 2.3.0' # has support for dalli
 gem 'dalli', '~> 2.6.0' # a pure-ruby memcached client
 
-gem 'rails', '~> 3.2'
+gem 'rails', '~> 4.1.0'
 gem 'rake', '< 10'
 gem 'thin'
 gem 'mysql2'
 gem 'sqlite3'
 gem 'active_model_serializers'
+gem 'activeresource', '~> 4.0'
 
 group :assets do
   gem 'jquery-rails',         '~> 2.2.1'
