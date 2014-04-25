@@ -8,8 +8,9 @@ class Device < ActiveRecord::Base
   before_save :upcase_deviceid
 
   belongs_to :slideshow
+  belongs_to :location
 
-  attr_accessible :name, :slideshow_id, :password, :deviceid
+  attr_accessible :name, :location_id, :slideshow_id, :password, :deviceid
 
   def thumbnail
     device_thumbnail(self)
@@ -21,6 +22,10 @@ class Device < ActiveRecord::Base
 
   def slideshow_name
     slideshow.name if slideshow
+  end
+
+  def location_name
+    location.name if location
   end
 
   def upcase_deviceid

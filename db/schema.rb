@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120905043624) do
+ActiveRecord::Schema.define(:version => 20140424052505) do
 
   create_table "devices", :force => true do |t|
     t.string   "name"
@@ -20,10 +20,19 @@ ActiveRecord::Schema.define(:version => 20120905043624) do
     t.integer  "slideshow_id"
     t.string   "password"
     t.string   "deviceid",     :limit => 20
+    t.integer  "location_id"
   end
 
   add_index "devices", ["deviceid"], :name => "index_devices_on_deviceid"
   add_index "devices", ["name"], :name => "index_devices_on_name"
+
+  create_table "locations", :force => true do |t|
+    t.string   "name",       :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "locations", ["name"], :name => "index_locations_on_name", :unique => true
 
   create_table "slides", :force => true do |t|
     t.string   "name"

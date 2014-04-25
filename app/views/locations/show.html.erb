@@ -1,0 +1,18 @@
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Devices', '/devices'),
+             link_to('Locations', '/locations'),
+             link_to('Location: ' + @location.name, '', :class => 'active')
+           ],
+           :action_links => [
+             link_to('Edit Location', edit_location_path(@location))
+           ] } %>
+
+  <legend>Location: <%= @location.name %></legend>
+
+<div class="well">
+<p>
+  <b>Name:</b>
+  <%= @location.name %>
+</p>
+</div>
