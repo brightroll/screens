@@ -15,6 +15,8 @@ Screens::Application.routes.draw do
     end
   end
 
+  resources :locations
+
   resources :slideshows
 
   resources :slides

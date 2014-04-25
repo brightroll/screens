@@ -1,0 +1,39 @@
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Devices', '/devices'),
+             link_to('Locations', '/locations', :class => 'active')
+           ],
+           :action_links => [
+            link_to('New Location', new_location_path)
+           ] } %>
+
+<table class="table table-bordered table-striped">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
+  <tbody>
+<% @locations.each do |location| %>
+  <tr>
+    <td><%= link_to location.name, location %></td>
+    <td class="col-btn-mini"><%=
+      link_to raw('<i class="icon-edit"></i>'),
+        edit_location_path(location),
+        class: 'btn btn-mini',
+        title: 'Edit' %></td>
+    <td class="col-btn-mini"><%=
+      link_to raw('<i class="icon-trash"></i>'),
+        location,
+        confirm: "Delete location #{location.name}?",
+        method: :delete,
+        class: 'btn btn-mini',
+        title: 'Delete' %></td>
+  </tr>
+<% end %>
+<% if @locations.empty? %>
+  <tr><td colspan="7">No locations configured.</td></tr>
+<% end %>
+  </tbody>
+</table>

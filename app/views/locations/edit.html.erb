@@ -1,0 +1,8 @@
+<%= render :partial => 'breadcrumbs', :locals => {
+           :breadcrumbs => [
+             link_to('Devices', '/devices'),
+             link_to('Locations', '/locations'),
+             link_to('Location: ' + @location.name, '', :class => 'active')
+           ] } %>
+
+<%= render 'form' %>

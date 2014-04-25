@@ -1,0 +1,13 @@
+<%= semantic_form_for(@location, :html => {:class => 'form-horizontal edit_location'}) do |f| %>
+  <%= f.semantic_errors %>
+
+  <%= f.inputs do %>
+    <legend>Edit Location</legend>
+    <%= f.input :name %>
+  <% end %>
+
+  <%= f.actions do %>
+    <%= f.action :submit, :as => :button %>
+  <% end %>
+
+<% end %>

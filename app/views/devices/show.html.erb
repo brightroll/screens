@@ -12,6 +12,7 @@
 
   <legend>Device: <%= @device.name %></legend>
   <b>Device ID</b>: <%= @device.deviceid %><br />
+  <b>Location</b>: <%= @device.location_name%><br />
   <% pid = @device.pid %>
   <% if pid %>
   <b>Running PID</b>: <%= pid %><br />
