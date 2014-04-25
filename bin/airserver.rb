@@ -11,6 +11,23 @@ require 'net/http'
 require 'net/https'
 require 'jsonpath'
 
+require 'active_resource'
+
+class Device < ActiveResource::Base
+  self.site = "http://screens.brightroll.com"
+  self.include_format_in_path = false
+end
+
+class Slideshow < ActiveResource::Base
+  self.site = "http://screens.brightroll.com"
+  self.include_format_in_path = false
+end
+
+class Slide < ActiveResource::Base
+  self.site = "http://screens.brightroll.com"
+  self.include_format_in_path = false
+end
+
 $am_parent = true
 $my_node = ''
 $node_pids = {}
@@ -126,7 +143,7 @@ def file_name_url(url)
 end
 
 def loop_slideshow(device)
-  slideshow = device.slideshow
+  slideshow = Slideshow.find(device.slideshow_id)
   unless slideshow
     $log.debug("Device #{device.name} #{device.deviceid} has no slideshow")
     raise NoSlideshowError
@@ -249,9 +266,6 @@ def child_main(node)
   $log.level = Logger::INFO
   $0 = "#{$0} #{$my_node.name} #{$my_node.deviceid}"
 
-  # Force a fresh database handle after the fork
-  ActiveRecord::Base.clear_all_connections!
-
   loop do
     begin
       loop_slideshow $my_node
@@ -287,7 +301,7 @@ loop do
   # Just run a child straight away
   unless ARGV.empty?
    name = ARGV.shift
-   node = Device.includes(:slideshow).where(:name => name).first
+   node = Device.find(name)
    abort "Cannot find device for #{name}" unless node
    puts "Direct connection to #{node.name}"
    exit child_main node
