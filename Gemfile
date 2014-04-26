@@ -25,7 +25,7 @@ group :assets do
   gem 'sass-rails'
   gem 'bootstrap-sass',       '~> 2.3.0'
   gem 'formtastic',           '~> 2.2.0'
-  gem 'formtastic-bootstrap', '~> 2.0'
+  gem 'formtastic-bootstrap', '~> 3.0'
   gem 'ckeditor',             '~> 4.0'
   gem 'uglifier',             '~> 2.2.0'
 end
