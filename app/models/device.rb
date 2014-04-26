@@ -12,6 +12,11 @@ class Device < ActiveRecord::Base
 
   attr_accessible :name, :location_id, :slideshow_id, :password, :deviceid
 
+  scope :location, -> loc do
+    @location = Location.find_by_name(params[:location])
+    where(location_id: @location.id).order(:name) if @location
+  end
+
   def thumbnail
     device_thumbnail(self)
   end

@@ -20,6 +20,7 @@ gem 'sqlite3'
 gem 'active_model_serializers'
 gem 'activeresource', '~> 4.0'
 gem 'protected_attributes'
+gem 'inherited_resources', '~> 1.0'
 
 group :assets do
   gem 'jquery-rails',         '~> 2.2.1'

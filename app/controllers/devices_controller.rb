@@ -1,31 +1,12 @@
+require 'has_scope'
+
 class DevicesController < ApplicationController
-  # GET /devices
-  # GET /devices.json
+  inherit_resources
+
+  has_scope :location
+
   def index
-    @devices = if params[:location]
-      @location = Location.find_by_name(params[:location])
-      Device.where(:location_id => @location.id).order(:name) if @location
-    else
-      Device.find(:all, :order => 'name')
-    end
-
-    @devices ||= []
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @devices }
-    end
-  end
-
-  # GET /devices/1
-  # GET /devices/1.json
-  def show
-    @device = Device.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @device }
-    end
+    @devices = apply_scopes(Device).all
   end
 
   def power
@@ -55,66 +36,6 @@ class DevicesController < ApplicationController
     end
   end
 
-  # GET /devices/new
-  # GET /devices/new.json
-  def new
-    @device = Device.new :name => params[:name], :deviceid => params[:deviceid]
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @device }
-    end
-  end
-
-  # GET /devices/1/edit
-  def edit
-    @device = Device.find(params[:id])
-  end
-
-  # POST /devices
-  # POST /devices.json
-  def create
-    @device = Device.new params[:device]
-
-    respond_to do |format|
-      if @device.save
-        format.html { redirect_to @device, notice: 'Device was successfully created.' }
-        format.json { render json: @device, status: :created, location: @device }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @device.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /devices/1
-  # PUT /devices/1.json
-  def update
-    @device = Device.find(params[:id])
-
-    respond_to do |format|
-      if @device.update_attributes(params[:device])
-        format.html { redirect_to @device, notice: 'Device was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @device.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /devices/1
-  # DELETE /devices/1.json
-  def destroy
-    @device = Device.find(params[:id])
-    @device.destroy
-
-    respond_to do |format|
-      format.html { redirect_to devices_url }
-      format.json { head :no_content }
-    end
-  end
-
   # Signal a running process (default TERM)
   def signal
     @device = Device.find(params[:id])
@@ -133,5 +54,10 @@ class DevicesController < ApplicationController
     end
 
     render json: @signalled
+  end
+
+  private
+  def resource
+    get_resource_ivar || set_resource_ivar(end_of_association_chain.find_by_slug!(params[:id]))
   end
 end
