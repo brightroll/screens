@@ -1,6 +1,8 @@
 class Device < ActiveRecord::Base
   include ActiveModel::Validations
   include DevicesHelper
+  extend FindBySlugHelper
+
   validates :name, :presence => true
   validates :deviceid, :uniqueness => true,
             :format => { :with => /([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}/,
@@ -13,8 +15,8 @@ class Device < ActiveRecord::Base
   attr_accessible :name, :location_id, :slideshow_id, :password, :deviceid
 
   scope :location, -> loc do
-    @location = Location.find_by_name(params[:location])
-    where(location_id: @location.id).order(:name) if @location
+    @location = Location.find_by_name(loc)
+    @location ? where(location_id: @location.id).order(:name) : none
   end
 
   def thumbnail
@@ -40,20 +42,5 @@ class Device < ActiveRecord::Base
 
   def to_param
     self.deviceid
-  end
-
-  # Allow lookup by /devices/1 or /devices/devname
-  def self.find(*args)
-    if args.length == 1
-      ident = args.first
-      case ident
-      when Integer, /^\d+$/
-        find_by_id!(ident)
-      else
-        find_by_deviceid!(ident.upcase)
-      end
-    else
-      super
-    end
   end
 end
