@@ -8,7 +8,7 @@ class Slide < ActiveRecord::Base
     :less_than => 1800 # And up to 30 minutes
   }, :unless => Proc.new { |a| [:audio, :video, :feed].include? a.media_type.to_sym } # These types don't need a time
 
-  include Enumerize
+  extend Enumerize
   enumerize :transition, :in => [:none, :slide_left, :slide_right, :dissolve], :default => :dissolve
   enumerize :media_type, :in => [:html, :image, :video, :audio, :graphite, :feed], :default => :html
 
