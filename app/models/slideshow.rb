@@ -5,6 +5,6 @@ class Slideshow < ActiveRecord::Base
   has_many :slides, :through => :slideshow_slides
 
   attr_accessible :name
-  
+
   accepts_nested_attributes_for :slides, :slideshow_slides
 end
