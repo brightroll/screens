@@ -35,7 +35,7 @@ class DevicesController < ApplicationController
     when 'off'
       %x{bin/aquos.rb --quiet --arp en3 --off}
     end
-    redirect url_for(:devices)
+    redirect_to url_for(:devices)
   end
 
   def browse
