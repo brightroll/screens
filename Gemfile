@@ -24,7 +24,7 @@ group :assets do
   gem 'jquery-rails',         '~> 2.2.1'
   gem 'sass-rails'
   gem 'bootstrap-sass',       '~> 2.3.0'
-  gem 'formtastic',           '~> 2.2.0'
+  gem 'formtastic',           '~> 2.3.0rc3' # Rails 4.1 support
   gem 'formtastic-bootstrap', '~> 3.0'
   gem 'ckeditor',             '~> 4.0'
   gem 'uglifier',             '~> 2.2.0'

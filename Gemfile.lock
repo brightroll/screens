@@ -80,7 +80,7 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.3)
     execjs (2.0.2)
-    formtastic (2.2.1)
+    formtastic (2.3.0.rc3)
       actionpack (>= 3.0)
     formtastic-bootstrap (3.0.0)
       formtastic (>= 2.2)
@@ -105,7 +105,7 @@ GEM
     micromachine (1.0.4)
     mime-types (1.25.1)
     minitest (5.3.3)
-    multi_json (1.9.2)
+    multi_json (1.9.3)
     mysql2 (0.3.15)
     net-http-digest_auth (1.2.1)
     net-ptth (0.0.17)
@@ -204,7 +204,7 @@ DEPENDENCIES
   ckeditor (~> 4.0)
   dalli (~> 2.6.0)
   enumerize
-  formtastic (~> 2.2.0)
+  formtastic (~> 2.3.0rc3)
   formtastic-bootstrap (~> 3.0)
   googleapps-auth!
   image_science
