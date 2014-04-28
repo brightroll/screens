@@ -2,11 +2,15 @@ require 'has_scope'
 
 class DevicesController < ApplicationController
   inherit_resources
+  respond_to :json
 
   has_scope :location
 
   def index
-    @devices = apply_scopes(Device).all
+    index! do |format|
+      format.html
+      format.json
+    end
   end
 
   def power
