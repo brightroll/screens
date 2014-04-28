@@ -138,7 +138,7 @@ EOF
 end
 
 def file_name_url(url)
-  if url && !url.starts_with?('http://', 'https://')
+  if url && !url.start_with?('http://', 'https://')
     url = 'http://' + SERVER + url
   end
   url
