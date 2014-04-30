@@ -1,6 +1,6 @@
 class WelcomeController < ApplicationController
   def index
-    @devices = Device.find(:all, :order => 'name')
+    @devices = Device.all.order(:name)
 
     respond_to do |format|
       format.html # index.html.erb
