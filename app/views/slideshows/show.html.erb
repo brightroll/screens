@@ -21,7 +21,7 @@ $(document).ready(function() {
 });
 </script>
 <div class="modal hide" id="modal_carousel" style="width: 800px; margin-left: -400px; height: 500px; margin-top: -250px;">
-<%= render :partial => '/slides/carousel', :locals => { :slides => @slides, :id => 'ss_carousel' } %>
+<%= render :partial => '/slides/carousel', :locals => { :slides => @slideshow.slides, :id => 'ss_carousel' } %>
 </div>
 
-  <%= render :partial => '/slides/list', :locals => { :slides => @slides } %>
+  <%= render :partial => '/slides/list', :locals => { :slides => @slideshow.slides } %>

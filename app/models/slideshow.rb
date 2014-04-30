@@ -7,4 +7,8 @@ class Slideshow < ActiveRecord::Base
   attr_accessible :name
 
   accepts_nested_attributes_for :slides, :slideshow_slides
+
+  scope :default, -> do
+    includes(:slides)
+  end
 end

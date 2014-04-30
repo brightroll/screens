@@ -9,20 +9,9 @@ class SlideshowsController < ApplicationController
     end
   end
 
-  def show
-    @slideshow = Slideshow.find(params[:id])
-    @slides = @slideshow.slides
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @slideshow }
-    end
-  end
-
   # GET /slideshows/1/edit
   def edit
     @slideshow = Slideshow.find(params[:id])
-    @slides = @slideshow.slides
     @slide = Slide.new
 
     respond_to do |format|

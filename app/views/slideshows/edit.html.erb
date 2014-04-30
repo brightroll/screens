@@ -70,10 +70,10 @@ $(document).ready(function() {
   </div>
 </div>
 
-<% unless @slides.empty?%>
+<% unless @slideshow.slides.empty?%>
 <br /><br />
 <%= render :partial => '/slides/list', :locals => {
-      :slides => @slides,
+      :slides => @slideshow.slides,
       :action_count => 2,
       :action_links => lambda { |slide| [
         link_to(raw('<i class="icon-edit"></i>'),
