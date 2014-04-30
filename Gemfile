@@ -12,19 +12,22 @@ gem 'googleapps-auth', :require => "googleapps_auth", :github => 'sodabrew/rails
 gem 'ruby-openid', '~> 2.3.0' # has support for dalli
 gem 'dalli', '~> 2.6.0' # a pure-ruby memcached client
 
-gem 'rails', '~> 3.2'
+gem 'rails', '~> 4.1.0'
 gem 'rake', '< 10'
 gem 'thin'
 gem 'mysql2'
 gem 'sqlite3'
 gem 'active_model_serializers'
+gem 'activeresource', '~> 4.0'
+gem 'protected_attributes'
+gem 'inherited_resources', '~> 1.0'
 
 group :assets do
   gem 'jquery-rails',         '~> 2.2.1'
   gem 'sass-rails'
   gem 'bootstrap-sass',       '~> 2.3.0'
-  gem 'formtastic',           '~> 2.2.0'
-  gem 'formtastic-bootstrap', '~> 2.0'
+  gem 'formtastic',           '~> 2.3.0rc3' # Rails 4.1 support
+  gem 'formtastic-bootstrap', '~> 3.0'
   gem 'ckeditor',             '~> 4.0'
   gem 'uglifier',             '~> 2.2.0'
 end

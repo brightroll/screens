@@ -145,18 +145,23 @@ def file_name_url(url)
 end
 
 def loop_slideshow(device)
-  slideshow = Slideshow.find(device.slideshow_id)
-  unless slideshow
-    $log.debug("Device #{device.name} #{device.deviceid} has no slideshow")
-    raise NoSlideshowError
-  end
-  $log.info("Beginning slideshow #{slideshow.name} on device #{device.name}")
-
   airplay = Airplay[device.name]
+  fail unless airplay
   airplay.password = device.password
   $log.debug("Connected to device: #{airplay.inspect}")
 
   loop do
+    # Reload on every loop in case the slideshow or slides have changed
+    slideshow = Slideshow.find(device.reload.slideshow_id)
+    unless slideshow
+      $log.debug("Device #{device.name} #{device.deviceid} has no slideshow")
+      raise NoSlideshowError
+    end
+    $log.info("Beginning slideshow #{slideshow.name} on device #{device.name}")
+
+    # Prevent slamming the server if there is no slideshow for this device
+    sleep 5 if slideshow.slides.empty?
+
     slideshow.slides.each do |slide|
       $log.info("Displaying slide #{slide.inspect}")
       $log.debug("Displaying slide #{slide.inspect}")
@@ -237,9 +242,6 @@ def loop_slideshow(device)
 
       end
     end
-
-    # Reload to pick up changes for the next loop around
-    slideshow = device.reload.slideshow
   end
 
   $log.info("Ending slideshow for #{device.name} #{device.deviceid}")

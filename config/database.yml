@@ -1,10 +1,3 @@
-find_mysql_socket: &find_mysql_socket <%=
-       ['/opt/local/var/run/mysql55/mysqld.sock', # macports 5.5
-        '/opt/local/var/run/mysql5/mysqld.sock',  # macports 5.1
-        '/opt/local/var/run/mysqld/mysqld.sock',  # macports again
-        '/var/run/mysqld/mysqld.sock',            # ubuntu/debian
-        '/tmp/mysql.sock'].select { |f| File.exist? f }.first %>
-
 development:
   adapter: sqlite3
   database: screens_development
@@ -21,4 +14,10 @@ production:
   pool: 5
   username: root
   password:
-  socket: *find_mysql_socket
+  socket: <%=
+       ['/opt/local/var/run/mysql55/mysqld.sock', # macports 5.5
+        '/opt/local/var/run/mysql5/mysqld.sock',  # macports 5.1
+        '/opt/local/var/run/mysqld/mysqld.sock',  # macports again
+        '/var/run/mysqld/mysqld.sock',            # ubuntu/debian
+        '/tmp/mysql.sock'].select { |f| File.exist? f }.first %>
+
