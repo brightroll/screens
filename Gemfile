@@ -23,15 +23,14 @@ gem 'activeresource', '~> 4.0'
 gem 'protected_attributes'
 gem 'inherited_resources', '~> 1.0'
 
-group :assets do
-  gem 'jquery-rails',         '~> 2.2.1'
-  gem 'sass-rails'
-  gem 'bootstrap-sass',       '~> 2.3.0'
-  gem 'formtastic',           '~> 2.3.0rc3' # Rails 4.1 support
-  gem 'formtastic-bootstrap', '~> 3.0'
-  gem 'ckeditor',             '~> 4.0'
-  gem 'uglifier',             '~> 2.2.0'
-end
+# The gems formerly in the :assets group
+gem 'jquery-rails',         '~> 2.2.1'
+gem 'sass-rails'
+gem 'bootstrap-sass',       '~> 2.3.0'
+gem 'formtastic',           '~> 2.3.0rc3' # Rails 4.1 support
+gem 'formtastic-bootstrap', '~> 3.0'
+gem 'ckeditor',             '~> 4.0'
+gem 'uglifier',             '~> 2.2.0'
 
 group :development, :test do
   gem 'rspec-rails'
