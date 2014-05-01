@@ -1,20 +1,4 @@
 GIT
-  remote: git://github.com/elcuervo/airplay.git
-  revision: fc4b454b58d9d7351a4e0830beccd2ecfa57e1dd
-  specs:
-    airplay (1.0.2)
-      CFPropertyList (~> 2.2.0)
-      celluloid (>= 0.15.0)
-      cuba (~> 3.1.0)
-      dnssd (~> 2.0)
-      log4r (~> 1.1.10)
-      micromachine (~> 1.0.4)
-      mime-types (>= 1.16)
-      net-http-digest_auth (~> 1.2.1)
-      net-ptth (= 0.0.17)
-      reel-rack (~> 0.1.0)
-
-GIT
   remote: git://github.com/sodabrew/rails-googleapps-auth.git
   revision: 3d1399d657b93befab8673d3aed5f7d879f68c4e
   branch: patch-1
@@ -27,7 +11,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (2.2.7)
-    RubyInline (3.12.2)
+    RubyInline (3.12.3)
       ZenTest (~> 4.3)
     ZenTest (4.8.4)
     actionmailer (4.1.0)
@@ -62,6 +46,17 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    airplay (1.0.3)
+      CFPropertyList (~> 2.2.0)
+      celluloid (>= 0.15.0)
+      cuba (~> 3.1.0)
+      dnssd (~> 2.0)
+      log4r (~> 1.1.10)
+      micromachine (~> 1.0.4)
+      mime-types (>= 1.16)
+      net-http-digest_auth (~> 1.2.1)
+      net-ptth (= 0.0.17)
+      reel-rack (~> 0.1.0)
     arel (5.0.1.20140414130214)
     bootstrap-sass (2.3.2.2)
       sass (~> 3.2)
@@ -215,7 +210,7 @@ DEPENDENCIES
   ZenTest (~> 4.8.3)
   active_model_serializers
   activeresource (~> 4.0)
-  airplay!
+  airplay
   bootstrap-sass (~> 2.3.0)
   ckeditor (~> 4.0)
   dalli (~> 2.6.0)

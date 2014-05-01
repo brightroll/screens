@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'airplay', :github => 'elcuervo/airplay'
+gem 'airplay'
 gem 'enumerize'
 gem 'jsonpath'
 gem 'docopt'
