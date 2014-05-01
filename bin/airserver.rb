@@ -11,6 +11,7 @@ require 'net/http'
 require 'net/https'
 require 'jsonpath'
 require 'docopt'
+require 'erb'
 require 'active_resource'
 
 DOCOPT = <<END
