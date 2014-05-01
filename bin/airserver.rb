@@ -22,7 +22,7 @@ Use the --location option to drive an entire site; one child will fork per airpl
 
 Usage:
   #{__FILE__} --location=<location> [--server=<server>] [--loop=<time>] [--logfile=<file>] [--verbose]
-  #{__FILE__} --device=<deviceid>   [--server=<server>] [--verbose]
+  #{__FILE__} --device=<deviceid>   [--server=<server>]                 [--logfile=<file>] [--verbose]
 
 Options:
   --server=<server>  Screen server url [default: http://#{Socket.gethostname}/]
