@@ -10,24 +10,50 @@ require 'uri'
 require 'net/http'
 require 'net/https'
 require 'jsonpath'
-
+require 'docopt'
 require 'active_resource'
 
-SERVER = Socket.gethostname
-PORT = 3000
+DOCOPT = <<END
+Screens Server
+
+Run this on the remote headend for each display location.
+Use the --screen option to drive a single airplay target in the foreground.
+Use the --location option to drive an entire site; one child will fork per airplay target.
+
+Usage:
+  #{__FILE__} --location=<location> [--server=<server>] [--loop=<time>] [--logfile=<file>] [--verbose]
+  #{__FILE__} --screen=<screen>     [--server=<server>] [--verbose]
+
+Options:
+  --server=<server>  Screen server url [default: http://#{Socket.gethostname}/]
+  --loop=<time>      Airplay device discovery loop time in seconds [default: 30]
+  --logfile=<file>   Log file (can be 'STDOUT') [default: log/airserver.log]
+  --verbose          Verbose logging
+  -h --help          Show this help text
+  --version          Show the version
+END
+
+begin
+  $opts = Docopt::docopt(DOCOPT)
+rescue Docopt::Exit => e
+  puts e.message
+  exit 1
+end
+
+puts $opts.inspect
 
 class Device < ActiveResource::Base
-  self.site = "http://#{SERVER}:#{PORT}"
+  self.site = $opts['--server']
   self.include_format_in_path = false
 end
 
 class Slideshow < ActiveResource::Base
-  self.site = "http://#{SERVER}:#{PORT}"
+  self.site = $opts['--server']
   self.include_format_in_path = false
 end
 
 class Slide < ActiveResource::Base
-  self.site = "http://#{SERVER}:#{PORT}"
+  self.site = $opts['--server']
   self.include_format_in_path = false
 end
 
@@ -36,11 +62,10 @@ $my_node = ''
 $node_pids = {}
 $pidfile = nil
 $slidefile = nil
-LOOP_TIME = 30
-STANDARD_DISPLAY_TIME = 5
 
-$log = Logger.new('log/airserver.log')
-$log.level = Logger::INFO
+$opts['--logfile'] = STDOUT if $opts['--logfile'] == 'STDOUT'
+$log = Logger.new($opts['--logfile'])
+$log.level = $opts['--verbose'] ? Logger::DEBUG : Logger::INFO
 
 IMGKit.configure do |config|
   config.wkhtmltoimage = [
@@ -139,7 +164,7 @@ end
 
 def file_name_url(url)
   if url && !url.start_with?('http://', 'https://')
-    url = 'http://' + SERVER + url
+    url = $opts['--server'] + url
   end
   url
 end
@@ -298,20 +323,21 @@ trap :SIGHUP do
 end
 
 # Parent main from here on
+
+if $opts['--screen']
+  # Just run a child straight away
+ name = $opts['--screen']
+ node = Device.find(name)
+ abort "Cannot find device for #{name}" unless node
+ puts "Direct connection to #{node.name}"
+ exit child_main node
+end
+
 loop do
   # Every $loop_time seconds, query the database for devices
   # If a node is found and there isn't a child process for that node, spin one up!
 
-  # Just run a child straight away
-  unless ARGV.empty?
-   name = ARGV.shift
-   node = Device.find(name)
-   abort "Cannot find device for #{name}" unless node
-   puts "Direct connection to #{node.name}"
-   exit child_main node
-  end
-
-  devices = Device.all
+  devices = Device.find(:all, :params => { :location => $opts['--location'] })
   devices.each do |node|
     $log.debug(node.inspect)
     unless $node_pids.has_key? node.deviceid
@@ -345,5 +371,5 @@ loop do
     end
   end
 
-  sleep LOOP_TIME
+  sleep $opts['--loop']
 end

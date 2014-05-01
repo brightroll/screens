@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'airplay', '~> 1.0'
 gem 'enumerize'
 gem 'jsonpath'
+gem 'docopt'
 
 gem 'imgkit'
 gem 'image_science'

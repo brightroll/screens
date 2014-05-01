@@ -75,6 +75,7 @@ GEM
     dalli (2.6.4)
     diff-lcs (1.2.5)
     dnssd (2.0)
+    docopt (0.5.0)
     enumerize (0.8.0)
       activesupport (>= 3.2)
     erubis (2.7.0)
@@ -213,6 +214,7 @@ DEPENDENCIES
   bootstrap-sass (~> 2.3.0)
   ckeditor (~> 4.0)
   dalli (~> 2.6.0)
+  docopt
   enumerize
   formtastic (~> 2.3.0rc3)
   formtastic-bootstrap (~> 3.0)
