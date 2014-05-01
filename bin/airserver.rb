@@ -371,5 +371,5 @@ loop do
     end
   end
 
-  sleep $opts['--loop']
+  sleep $opts['--loop'].to_i
 end
