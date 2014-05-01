@@ -17,12 +17,12 @@ DOCOPT = <<END
 Screens Server
 
 Run this on the remote headend for each display location.
-Use the --screen option to drive a single airplay target in the foreground.
+Use the --device option to drive a single airplay target in the foreground.
 Use the --location option to drive an entire site; one child will fork per airplay target.
 
 Usage:
   #{__FILE__} --location=<location> [--server=<server>] [--loop=<time>] [--logfile=<file>] [--verbose]
-  #{__FILE__} --screen=<screen>     [--server=<server>] [--verbose]
+  #{__FILE__} --device=<deviceid>   [--server=<server>] [--verbose]
 
 Options:
   --server=<server>  Screen server url [default: http://#{Socket.gethostname}/]
@@ -324,13 +324,13 @@ end
 
 # Parent main from here on
 
-if $opts['--screen']
+if $opts['--device']
   # Just run a child straight away
- name = $opts['--screen']
- node = Device.find(name)
- abort "Cannot find device for #{name}" unless node
- puts "Direct connection to #{node.name}"
- exit child_main node
+  name = $opts['--device']
+  node = Device.find(name)
+  abort "Cannot find device for #{name}" unless node
+  puts "Direct connection to #{node.name}"
+  exit child_main node
 end
 
 loop do
