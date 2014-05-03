@@ -18,55 +18,67 @@ $(document).ready(function() {
 });
 </script>
 
-<a class="btn" data-toggle="modal" href="#add-new">Add new slide</a>
-<a class="btn" data-toggle="modal" href="#add-existing">Add existing slide</a>
+<a class="btn btn-default" data-toggle="modal" href="#add-new">Add new slide</a>
+<a class="btn btn-default" data-toggle="modal" href="#add-existing">Add existing slide</a>
 
-<div class="modal hide fade" id="add-new">
-  <div class="modal-header">
-    <a class="btn btn-primary modal-close" data-dismiss="modal">Close</a>
-    <h3>Create new slide</h3>
-  </div>
-  <div class="modal-body">
-      <%= render :partial => '/slides/form' %>
-  </div>
-  <div class="modal-footer">
+<div class="modal fade" id="add-new">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a class="btn btn-primary modal-close" data-dismiss="modal">Close</a>
+        <h3>Create new slide</h3>
+      </div>
+      <div class="modal-body">
+          <%= render :partial => '/slides/form' %>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="modal hide fade" id="add-existing" style="width: 800px; left: 40%;">
-  <div class="modal-header">
-    <a class="btn btn-primary modal-close" data-dismiss="modal">Close</a>
-    <h3>Choose a slide</h3>
-  </div>
-  <div class="modal-body slides">
-      <%= render :partial => '/slides/list', :locals => {
-            :slides => Slide.where('id not in (?)', (@slideshow.slides.empty? ? '' : @slideshow.slides.map(&:id)) ).all,
-            :action_count => 1,
-            :action_links => lambda { |slide| [
-              link_to(raw('<span class="glyphicon glyphicon-plus"></span>'),
-                      url_for(:action => :update,
-                              :id => @slideshow.id,
-                              :add_slides => [ slide.id ]),
-                      :method => :put,
-                      :class => 'btn btn-default btn-xs hide_row',
-                      :title => 'Add to slideshow',
-                      :remote => true)
-              ] }
-          } %>
-  </div>
-  <div class="modal-footer">
+<div class="modal fade" id="add-existing">
+  <div class="modal-dialog" style="width: 80%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a class="btn btn-primary modal-close" data-dismiss="modal">Close</a>
+        <h3>Choose a slide</h3>
+      </div>
+      <div class="modal-body slides">
+          <%= render :partial => '/slides/list', :locals => {
+                :slides => Slide.where('id not in (?)', (@slideshow.slides.empty? ? '' : @slideshow.slides.map(&:id)) ).all,
+                :action_count => 1,
+                :action_links => lambda { |slide| [
+                  link_to(raw('<span class="glyphicon glyphicon-plus"></span>'),
+                          url_for(:action => :update,
+                                  :id => @slideshow.id,
+                                  :add_slides => [ slide.id ]),
+                          :method => :put,
+                          :class => 'btn btn-default btn-xs hide_row',
+                          :title => 'Add to slideshow',
+                          :remote => true)
+                  ] }
+              } %>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="modal hide fade" id="edit-slide">
-  <div class="modal-header">
-    <a class="btn btn-primary modal-close" data-dismiss="modal">Close</a>
-    <h3>Edit slide</h3>
-  </div>
-  <div class="modal-body" id="edit-slide-body">
+<div class="modal fade" id="edit-slide">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+         <a class="btn btn-primary modal-close" data-dismiss="modal">Close</a>
+         <h3>Edit slide</h3>
+      </div>
+      <div class="modal-body" id="edit-slide-body">
 
-  </div>
-  <div class="modal-footer">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
   </div>
 </div>
 
