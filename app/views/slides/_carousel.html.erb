@@ -2,14 +2,17 @@
   # Render a set of slides using Bootstrap Carousel
   # Supports: Images
   # TODO: Hacks for Graphite, embedded video, external sites
+id = 'myCarousel' unless defined?(id)
 %>
 
 <% if !slides.nil? and !slides.empty? %>
-<div id="<%= defined?(id) && id || 'myCarousel' %>" class="carousel slide <%= defined?(html_class) && html_class %>">
+<div id="<%= id %>" class="carousel slide <%= defined?(html_class) && html_class %>">
   <div class="carousel-inner">
+<% first = true %>
 <%   slides.each do |slide| %>
 <%     next unless slide.media_type == 'image' %>
-    <div class="item">
+    <div class="item <%= 'active' if first %>">
+<% first = false %>
       <img src="<%= slide.url %>" alt="">
       <div class="carousel-caption">
         <h4><%= slide.name %></h4>
@@ -17,7 +20,7 @@
     </div>
 <%   end %>
   </div>
-  <a class="left carousel-control" href="#<%= defined?(id) && id || 'myCarousel' %>" data-slide="prev">&lsaquo;</a>
-  <a class="right carousel-control" href="#<%= defined?(id) && id || 'myCarousel' %>" data-slide="next">&rsaquo;</a>
+  <a class="left carousel-control" href="#<%= id %>" data-slide="prev">&lsaquo;</a>
+  <a class="right carousel-control" href="#<%= id %>" data-slide="next">&rsaquo;</a>
 </div>
 <% end %>

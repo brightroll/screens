@@ -20,8 +20,20 @@ $(document).ready(function() {
   });
 });
 </script>
-<div class="modal hide" id="modal_carousel" style="width: 800px; margin-left: -400px; height: 500px; margin-top: -250px;">
+<div class="modal" id="modal_carousel">
+  <div class="modal-dialog" style="width: 80%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a class="btn btn-primary modal-close" data-dismiss="modal">Close</a>
+        <h3>Preview</h3>
+      </div>
+      <div class="modal-body" style="height: 500px;">
 <%= render :partial => '/slides/carousel', :locals => { :slides => @slideshow.slides, :id => 'ss_carousel' } %>
+      </div>
+     <div class="modal-footer">
+     </div>
+    </div>
+  </div>
 </div>
 
   <%= render :partial => '/slides/list', :locals => { :slides => @slideshow.slides } %>
