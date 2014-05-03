@@ -18,17 +18,17 @@
 <% @locations.each do |location| %>
   <tr>
     <td><%= link_to location.name, location %></td>
-    <td class="col-btn-mini"><%=
-      link_to raw('<i class="icon-edit"></i>'),
+    <td class="col-btn-xs"><%=
+      link_to raw('<span class="glyphicon glyphicon-edit"></span>'),
         edit_location_path(location),
-        class: 'btn btn-mini',
+        class: 'btn btn-default btn-xs',
         title: 'Edit' %></td>
-    <td class="col-btn-mini"><%=
-      link_to raw('<i class="icon-trash"></i>'),
+    <td class="col-btn-xs"><%=
+      link_to raw('<span class="glyphicon glyphicon-trash"></span>'),
         location,
         confirm: "Delete location #{location.name}?",
         method: :delete,
-        class: 'btn btn-mini',
+        class: 'btn btn-default btn-xs',
         title: 'Delete' %></td>
   </tr>
 <% end %>

@@ -43,12 +43,12 @@ $(document).ready(function() {
             :slides => Slide.where('id not in (?)', (@slideshow.slides.empty? ? '' : @slideshow.slides.map(&:id)) ).all,
             :action_count => 1,
             :action_links => lambda { |slide| [
-              link_to(raw('<i class="icon-plus"></i>'),
+              link_to(raw('<span class="glyphicon glyphicon-plus"></span>'),
                       url_for(:action => :update,
                               :id => @slideshow.id,
                               :add_slides => [ slide.id ]),
                       :method => :put,
-                      :class => 'btn btn-mini hide_row',
+                      :class => 'btn btn-default btn-xs hide_row',
                       :title => 'Add to slideshow',
                       :remote => true)
               ] }
@@ -76,18 +76,18 @@ $(document).ready(function() {
       :slides => @slideshow.slides,
       :action_count => 2,
       :action_links => lambda { |slide| [
-        link_to(raw('<i class="icon-edit"></i>'),
+        link_to(raw('<span class="glyphicon glyphicon-edit"></span>'),
                 edit_slide_path(slide, :update => '#edit-slide-body'),
                 :onclick => raw('$(\'#edit-slide-body\').closest(\'div.modal\').modal(\'show\')'),
-                :class => 'btn btn-mini',
+                :class => 'btn btn-default btn-xs',
                 :title => 'Edit slide',
                 :remote => true),
-        link_to(raw('<i class="icon-remove"></i>'),
+        link_to(raw('<span class="glyphicon glyphicon-remove"></span>'),
                 url_for(:action => :update,
                         :id => @slideshow.id,
                         :del_slides => [ slide.id ]),
                 :method => :put,
-                :class => 'btn btn-mini hide_row',
+                :class => 'btn btn-default btn-xs hide_row',
                 :title => 'Remove from slideshow',
                 :remote => true)
         ] }

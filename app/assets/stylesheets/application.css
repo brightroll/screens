@@ -14,7 +14,7 @@ body {
 }
 
 /* Table Customizations */
-.table th.col-btn-mini, .table td.col-btn-mini {
+.table th.col-btn-xs, .table td.col-btn-xs {
   width: 28px;
 }
 
