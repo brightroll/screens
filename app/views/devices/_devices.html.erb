@@ -9,10 +9,24 @@
 <% if @devices.empty? %>
   <tr><td>No devices found.</td></tr>
 <% else %>
-<%   @devices.each do |dev| %>
+<%   @devices.each do |device| %>
   <tr>
-    <td><%= browsed_device_link(dev, @all_devices_by_deviceid) %></td>
-    <td><%= dev.info.mac_address rescue dev.address %></td>
+    <td><%=
+      # If the Airplay Device name is pesent in the hash as a key, the associated
+      # device object is used to create the link. Otherwise a link with the URL
+      # /devices/new?name=<name> is returned.
+      dev = @all_devices_by_deviceid[(device.info.mac_address rescue device.address)]
+      puts dev
+      if dev.nil?
+        link_text = raw('<span class="glyphicon glyphicon-plus margin_right_8" title="Add this device to Screens"></span>') + h(device.name)
+        link_to(link_text, new_device_path(:name => device.name, :deviceid => device.info.mac_address))
+      else
+        link_text = raw('<span class="glyphicon glyphicon-edit margin_right_8" title="Edit this device (already added to Screens)"></span>') + h(device.name)
+        link_to(link_text, dev)
+      end
+    %>
+    </td>
+    <td><%= device.info.mac_address rescue device.address %></td>
   </tr>
 <%   end %>
 <% end %>
