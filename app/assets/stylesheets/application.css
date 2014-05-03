@@ -28,6 +28,15 @@ body {
   color: #333333;
 }
 
+.breadcrumb .breadcrumb-right {
+  float: right;
+}
+
+/* Override the breadcrumb left separator on right-side crumbs */
+.breadcrumb .breadcrumb-right:before {
+  content: none !important;
+}
+
 /* Force the front page thumbnail dimensions if the images are a different size */
 .fixed-320-180 {
   width: 320px;
