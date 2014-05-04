@@ -14,6 +14,8 @@ class Device < ActiveRecord::Base
 
   attr_accessible :name, :location_id, :slideshow_id, :password, :deviceid
 
+  default_scope -> { order(:name) }
+
   scope :location, -> loc do
     @location = Location.find_by_name(loc)
     @location ? where(location_id: @location.id).order(:name) : none

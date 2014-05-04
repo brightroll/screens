@@ -3,4 +3,5 @@ class Location < ActiveRecord::Base
   validates_uniqueness_of :name, :message => "A location already exists with that name"
   has_many :devices
   attr_accessible :name
+  default_scope -> { order(:name) }
 end
