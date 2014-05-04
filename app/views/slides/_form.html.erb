@@ -11,7 +11,7 @@ $(function() {
 });
 </script>
 
-<%= semantic_form_for(@slide, :html => {:class => 'form-horizontal edit_slide span10'}) do |f| %>
+<%= semantic_form_for(@slide, :html => {:class => 'edit_slide'}) do |f| %>
   <%= f.semantic_errors %>
 
   <% if @slideshow %>

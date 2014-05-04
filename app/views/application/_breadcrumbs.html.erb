@@ -15,7 +15,7 @@
     </li>
 
 <% if defined? action_links and action_links %>
-    <li style="float:right;">
+    <li class="breadcrumb-right">
       <% action_links[0..-2].each do |action| %>
         <%= raw action %>
         <span class="divider"><%= separator %></span>

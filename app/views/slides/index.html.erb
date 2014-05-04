@@ -10,14 +10,14 @@
       :slides => @slides,
       :action_count => 2,
       :action_links => lambda { |slide| [
-        link_to(raw('<i class="icon-edit"></i>'),
+        link_to(raw('<span class="glyphicon glyphicon-edit"></span>'),
                 edit_slide_path(slide),
-                class: 'btn btn-mini',
+                class: 'btn btn-default btn-xs',
                 title: 'Edit'),
-        link_to(raw('<i class="icon-trash"></i>'),
+        link_to(raw('<span class="glyphicon glyphicon-trash"></span>'),
                 slide,
                 confirm: "Delete slide #{slide.name}?",
                 method: :delete,
-                class: 'btn btn-mini',
+                class: 'btn btn-default btn-xs',
                 title: 'Delete')
         ] } } %>
