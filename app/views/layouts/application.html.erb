@@ -26,25 +26,23 @@
 
   <body>
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="/">Screens</a>
-          <ul class="nav">
-            <li<%= raw is_current_controller('devices') %>><a href="/devices">Devices</a></li>
-            <li<%= raw is_current_controller('slideshows') %>><a href="/slideshows">Slideshows</a></li>
-            <li<%= raw is_current_controller('slides') %>><a href="/slides">Slides</a></li>
-          </ul>
-          <ul class="nav pull-right">
-            <% if session[:user] %>
-            <li><a href="/auth/logout">Logout <%= session[:user] %></a></li>
-            <% else %>
-            <li><a href="/auth/login">Login</a></li>
-            <% end %>
-          </ul>
-        </div>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <a class="navbar-brand" href="/">Screens</a>
+        <ul class="nav navbar-nav">
+          <li class="<%= 'active' if params[:controller] == 'devices' %>"><a href="/devices">Devices</a></li>
+          <li class="<%= 'active' if params[:controller] == 'slideshows' %>"><a href="/slideshows">Slideshows</a></li>
+          <li class="<%= 'active' if params[:controller] == 'slides' %>"><a href="/slides">Slides</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <% if session[:user] %>
+          <li><a href="/auth/logout">Logout <%= session[:user] %></a></li>
+          <% else %>
+          <li><a href="/auth/login">Login</a></li>
+          <% end %>
+        </ul>
       </div>
-    </div> <!-- /navbar -->
+    </nav>
 
     <div class="container">
       <% flash.each do |key, value| -%>

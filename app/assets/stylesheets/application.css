@@ -1,6 +1,5 @@
 /* CSS Manifest
  *= require bootstrap
- *= require bootstrap-responsive
  *= require formtastic-bootstrap
  *= require_self
  */
@@ -15,7 +14,7 @@ body {
 }
 
 /* Table Customizations */
-.table th.col-btn-mini, .table td.col-btn-mini {
+.table th.col-btn-xs, .table td.col-btn-xs {
   width: 28px;
 }
 
@@ -26,6 +25,15 @@ body {
 /* Bootstrap has '.breadcrumb .active a' but I want to match this pattern, too: */
 .breadcrumb a.active {
   color: #333333;
+}
+
+.breadcrumb .breadcrumb-right {
+  float: right;
+}
+
+/* Override the breadcrumb left separator on right-side crumbs */
+.breadcrumb .breadcrumb-right:before {
+  content: none !important;
 }
 
 /* Force the front page thumbnail dimensions if the images are a different size */

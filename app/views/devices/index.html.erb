@@ -40,24 +40,25 @@ $(document).ready(function() {
     <td><%= device_slideshow_link(device) %></td>
     <td><tt><%= device.deviceid %></tt></td>
     <td><tt><%= device.pid or '---' %></tt></td>
-    <td class="col-btn-mini"><%=
-      link_to raw('<i class="icon-fire"></i>'),
+
+    <td class="col-btn-xs"><%=
+      link_to raw('<span class="glyphicon glyphicon-fire"></span>'),
         signal_device_path(device),
         method: :post,
         remote: true,
-        class: 'fire btn btn-mini' + (current_user && device.pid ? '' : ' disabled'),
+        class: 'fire btn btn-default btn-xs' + (current_user && device.pid ? '' : ' disabled'),
         title: 'Restart process' %></td>
-    <td class="col-btn-mini"><%=
-      link_to raw('<i class="icon-edit"></i>'),
+    <td class="col-btn-xs"><%=
+      link_to raw('<span class="glyphicon glyphicon-edit"></span>'),
         edit_device_path(device),
-        class: 'btn btn-mini',
+        class: 'btn btn-default btn-xs',
         title: 'Edit' %></td>
-    <td class="col-btn-mini"><%=
-      link_to raw('<i class="icon-trash"></i>'),
+    <td class="col-btn-xs"><%=
+      link_to raw('<span class="glyphicon glyphicon-trash"></span>'),
         device,
         confirm: "Delete device #{device.name}?",
         method: :delete,
-        class: 'btn btn-mini',
+        class: 'btn btn-default btn-xs',
         title: 'Delete' %></td>
   </tr>
 <% end %>
