@@ -1,13 +1,13 @@
 <%= semantic_form_for(@location, :html => {:class => 'edit_location'}) do |f| %>
   <%= f.semantic_errors %>
 
-  <%= f.inputs do %>
-    <legend>Edit Location</legend>
-    <%= f.input :name %>
-  <% end %>
+  <legend>Edit Location</legend>
 
-  <%= f.actions do %>
-    <%= f.action :submit, :as => :button %>
-  <% end %>
+  <div class="well">
+    <%= f.inputs do %>
+      <%= f.input :name %>
+      <%= f.action :submit, :as => :button %>
+    <% end %>
+  </div>
 
 <% end %>
