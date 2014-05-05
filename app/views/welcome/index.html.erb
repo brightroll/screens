@@ -6,17 +6,14 @@
     }
  %>
 
-<h1>Now Playing</h1>
-
 <hr/>
 
+<% @devices_by_location.each do |location, devices| %>
+<h2>Now Playing <%= location.name if location %></h2>
 <div class="row">
-<% @devices.each do |dev| %>
+  <% devices.each do |dev| %>
   <div class="col-lg-4">
     <div class="caption">
-    <% unless dev.location.nil? -%>
-      <%= link_to(dev.location_name, dev.location) %> &mdash;
-    <% end -%>
       <%= link_to(dev.name, dev) %> &mdash;
       <%= dev.slideshow.nil? ? 'none' : link_to(dev.slideshow_name, dev.slideshow) %>
     </div>
@@ -24,7 +21,8 @@
       <img src="<%= dev.thumbnail or "/assets/nopreview.png" %>" class="fixed-320-180" />
     </div>
   </div>
-<% end %>
+  <% end %>
 </div>
+<% end %>
 
 <hr/>

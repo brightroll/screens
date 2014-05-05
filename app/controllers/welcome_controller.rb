@@ -5,7 +5,12 @@ class WelcomeController < ApplicationController
 
   def index
     @devices = apply_scopes(Device).all
-    @locations = Location.joins(:devices).all
+
+    @devices_by_location = {}
+    @devices.each do |device|
+      @devices_by_location[device.location] ||= []
+      @devices_by_location[device.location] << device
+    end
 
     respond_to do |format|
       format.html # index.html.erb
