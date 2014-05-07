@@ -8,7 +8,5 @@ class Slideshow < ActiveRecord::Base
 
   accepts_nested_attributes_for :slides, :slideshow_slides
 
-  scope :default, -> do
-    includes(:slides)
-  end
+  default_scope -> { includes(:slides).order(:name) }
 end

@@ -16,4 +16,6 @@ class Slide < ActiveRecord::Base
   has_many :slideshows, :through => :slideshow_slides
 
   attr_accessible :name, :url, :transition, :display_time, :media_type, :feed_path, :scrub_time, :stop_time
+
+  default_scope -> { order(:name) }
 end

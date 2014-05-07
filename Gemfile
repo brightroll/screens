@@ -29,10 +29,12 @@ gem 'sass-rails'
 gem 'bootstrap-sass'
 gem 'sprockets', '~> 2.11.0'
 gem 'sprockets-rails', :require => 'sprockets/railtie'
-gem 'formtastic',           '~> 2.3.0rc3' # Rails 4.1 support
-gem 'formtastic-bootstrap', '~> 3.0'
-gem 'ckeditor',             '~> 4.0'
-gem 'uglifier',             '~> 2.2'
+gem 'formtastic',              '~> 2.3.0rc3' # Rails 4.1 support
+gem 'formtastic-bootstrap',    '~> 3.0'
+gem 'will_paginate',           '~> 3.0'
+gem 'will_paginate-bootstrap', '~> 1.0'
+gem 'ckeditor',                '~> 4.0'
+gem 'uglifier',                '~> 2.2'
 
 group :development, :test do
   gem 'rspec-rails'

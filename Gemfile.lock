@@ -202,6 +202,9 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     websocket_parser (0.1.6)
+    will_paginate (3.0.5)
+    will_paginate-bootstrap (1.0.0)
+      will_paginate (>= 3.0.3)
 
 PLATFORMS
   ruby
@@ -236,3 +239,5 @@ DEPENDENCIES
   sqlite3
   thin
   uglifier (~> 2.2)
+  will_paginate (~> 3.0)
+  will_paginate-bootstrap (~> 1.0)
