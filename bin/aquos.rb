@@ -3,6 +3,7 @@
 require 'logger'
 require 'optparse'
 require 'socket'
+require 'timeout'
 
 $log = Logger.new(STDOUT)
 $log.level = Logger::INFO
