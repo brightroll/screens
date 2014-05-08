@@ -9,6 +9,17 @@ class SlidesController < ApplicationController
     end
   end
 
+  # GET /slides/1/edit
+  def edit
+    @slide = Slide.find(params[:id])
+
+    respond_to do |format|
+      format.html # edit.html.erb
+      # javascript-encoded partial to go into a hover window
+      format.js { render :inline => "$('<%= params[:update] %>').html('<%= escape_javascript(render :partial => 'slides/form' ) %>')" }
+    end
+  end
+
   def create
     @slide = Slide.new(params[:slide])
 
