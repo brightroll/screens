@@ -37,5 +37,5 @@ gem 'ckeditor',                '~> 4.0'
 gem 'uglifier',                '~> 2.2'
 
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 2.14.0'
 end
