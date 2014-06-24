@@ -22,6 +22,7 @@ gem 'active_model_serializers'
 gem 'activeresource', '~> 4.0'
 gem 'protected_attributes'
 gem 'inherited_resources', '~> 1.0'
+gem 'lograge'
 
 # The gems formerly in the :assets group
 gem 'jquery-rails'

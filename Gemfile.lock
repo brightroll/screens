@@ -106,6 +106,10 @@ GEM
     jsonpath (0.5.6)
       multi_json
     log4r (1.1.10)
+    lograge (0.3.0)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -227,6 +231,7 @@ DEPENDENCIES
   inherited_resources (~> 1.0)
   jquery-rails
   jsonpath
+  lograge
   mysql2
   protected_attributes
   rails (~> 4.1.0)
