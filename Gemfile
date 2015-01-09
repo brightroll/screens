@@ -8,7 +8,7 @@ gem 'docopt'
 gem 'imgkit'
 gem 'image_science'
 
-gem "omniauth-google-oauth2"
+gem 'omniauth-google-oauth2'
 
 gem 'rails', '~> 4.1.0'
 gem 'rake', '< 10'

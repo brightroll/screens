@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   def login_required
     return true if current_user
     session[:return_to] = request.fullpath
-    redirect_to '/auth/google_oauth2'
+    redirect_to login_path
     return false
   end
 
@@ -15,4 +15,9 @@ class ApplicationController < ActionController::Base
     session[:user]
   end
   helper_method :current_user
+
+  def login_path
+    '/auth/google_oauth2'
+  end
+  helper_method :login_path
 end

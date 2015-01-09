@@ -38,7 +38,7 @@
           <% if session[:user] %>
           <li><a href="/auth/logout">Logout <%= session[:user] %></a></li>
           <% else %>
-          <li><a href="/auth/login">Login</a></li>
+          <li><a href="<%= login_path %>">Login</a></li>
           <% end %>
         </ul>
       </div>
