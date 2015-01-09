@@ -1,12 +1,7 @@
-require 'openid/store/memcache'
+require 'omniauth/google_oauth2'
 
 class AuthController < ApplicationController
   skip_before_filter :login_required
-
-  def login
-    session[:return_to] ||= request.referer
-    google_apps_auth_begin :attrs => [:firstname, :lastname, :email]
-  end
 
   def logout
     reset_session
@@ -14,22 +9,25 @@ class AuthController < ApplicationController
   end
 
   def finish
-    response = google_apps_auth_finish
-    if response.failed? or response.canceled?
-      flash[:notice] = "Could not authenticate: #{response.error}"
+    email = request.env['omniauth.auth'].to_hash['info']['email'].to_s.downcase
+    if valid_email?(email)
+      session[:user] = email
+      flash[:notice] = "Thanks for logging in, #{email.split('@').first.capitalize}."
+      redirect_to (session[:return_to] || '/')
     else
-      # start a session, log user in.  AX values are arrays, get first.
-      session[:user] = response[:email].first
-      flash[:notice] = "Thanks for logging in, #{response[:email].first}"
+      session.delete(:user)
+      flash[:notice] = "Could not authenticate: #{response.error}"
+      redirect_to (session[:return_to] || '/')
     end
-
-    redirect_to session[:return_to]
   end
 
-# Default is in-memory store. Uncomment this method to use another OpenID store.
   protected
-  def store
-    OpenID::Store::Memcache.new(Dalli::Client.new('localhost:11211'))
-    # or OpenID::Store::Filesystem.new(Rails.root.join('tmp/openids'))
+  def valid_email?(email)
+    domain = email.split('@').last
+    valid_email_domains.empty? || (domain && valid_email_domains.include?(domain))
+  end
+
+  def valid_email_domains
+    @valid_email_domains ||= (ENV['SCREENS_VALID_EMAIL_DOMAINS'] || '').split(',').map(&:downcase)
   end
 end
