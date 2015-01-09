@@ -34,7 +34,11 @@ Download and install either [wkhtmltopdf][] or [PhantomJS][]. See the respective
 sites for instructions. If you are using PhantomJS, the [pjhtmltopdf][] script
 is required as well.
 
-An OpenID authentication method is included in the box, but is optional to use.
+A Google OAuth2 authentication method is included in the box, but is optional to use.
+To use it, specify the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment
+variables. To authenticate users belonging to a finite set of Google Apps domains,
+set the `SCREENS_VALID_EMAIL_DOMAINS` environment variable to a comma-delimited
+list of accepted domains.
 
 By default, thin runs on port 3000. You may want to run nginx as a reverse proxy
 on standard HTTP or HTTPS ports.
