@@ -6,9 +6,8 @@ class ApplicationController < ActionController::Base
 
   def login_required
     return true if current_user
-    flash[:warning] = 'Login required.'
     session[:return_to] = request.fullpath
-    redirect_to :controller => "auth", :action => "login"
+    redirect_to '/auth/google_oauth2'
     return false
   end
 
