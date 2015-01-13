@@ -1,7 +1,6 @@
-# You can use your system's CA bundle or provide a private bundle.
-# Since this app is often deployed on OS X, which uses Keychain to store certs,
-# a local copy of Curl's public CA bundle is included.
-GoogleAppsAuth.certificate_authority_file = "config/curl-ca-bundle.crt"
-
-# Set this to your company's domain to restrict logins
-# GoogleAppsAuth.default_domain = "example.com"
+Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_CLIENT_SECRET"], {
+    scope:  'email',
+    prompt: 'select_account'
+  }
+end

@@ -28,6 +28,8 @@ Screens::Application.routes.draw do
       get 'finish'
     end
   end
+  get  'auth/google_oauth2/callback' => 'auth#finish'
+  post 'auth/google_oauth2/callback' => 'auth#finish'
 
   mount Ckeditor::Engine => '/ckeditor'
 
