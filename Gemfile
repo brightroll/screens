@@ -7,6 +7,7 @@ gem 'docopt'
 
 gem 'imgkit'
 gem 'image_science'
+gem 'ZenTest', '~> 4.8.3', :require => false
 
 gem 'omniauth-google-oauth2'
 
