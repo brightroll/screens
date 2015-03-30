@@ -27,8 +27,9 @@ Quick Start
 
     bundle install
     bundle exec rake db:setup
+    bundle exec rake assets:precompile
     bundle exec thin start
-    bundle exec bin/airserver.rb &
+    bundle exec bin/airserver.rb --location=HERE &
 
 Download and install either [wkhtmltopdf][] or [PhantomJS][]. See the respective
 sites for instructions. If you are using PhantomJS, the [pjhtmltopdf][] script
@@ -42,6 +43,26 @@ list of accepted domains.
 
 By default, thin runs on port 3000. You may want to run nginx as a reverse proxy
 on standard HTTP or HTTPS ports.
+
+
+Multiple Site Support
+---------------------
+
+Screens is divided into two components: a web interface for managing the
+screens, slideshows, and slides, and the `airserver` site daemon for rendering
+slides onto the target devices. Each device, e.g. an Airplay target, can be
+assigned to a location name, allowing a single web view and a single database of
+slides across many offices.
+
+The `airserver` instance for each site should have its own site name provided as
+a command-line argument (the `--location=HERE` argument above). The site daemon
+will contact the web interface on http://localhost by default. Use option
+`--server=http://yourscreens.example.com` to point the site daemon at your web
+interface.
+
+Currently, rendering takes place at each site. Either wkhtmltopdf or PhantomJS
+must be installed on each site server, but not on the central web server.  This
+may change in the future to centralize rendering - PRs welcome!
 
 
 Screenshots
